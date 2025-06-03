@@ -1,28 +1,20 @@
 #!/bin/bash
 
-TASK_SUBDIR=$1
-
-if [ -z "$TASK_SUBDIR" ]; then
-  echo "Usage: $0 <task_subdir>"
-  exit 1
+if [ -z "$1" ]; then
+    echo "Usage: $0 <task_subdir>"
+    exit 1
 fi
 
-TASK_PATH="./scripts/$TASK_SUBDIR"
+TASK_DIR="$1"
 
-if [ ! -d "$TASK_PATH" ]; then
-  echo "Directory $TASK_PATH does not exist."
-  exit 1
+if [ ! -d "$TASK_DIR" ]; then
+    echo "Error: Directory $TASK_DIR does not exist."
+    exit 1
 fi
 
-# Make all files executable
-chmod +x "$TASK_PATH"/*
+echo "Running all .sh scripts under $TASK_DIR..."
 
-# Run all files
-for script in "$TASK_PATH"/*; do
-  if [ -f "$script" ]; then
-    echo "Running $script..."
-    "$script"
-    echo "Finished $script"
-    echo "-----------------"
-  fi
+find "$TASK_DIR" -type f -iname "*.sh" | while read script; do
+    echo "Running: $script"
+    bash "$script"
 done
