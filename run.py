@@ -1,4 +1,6 @@
 import argparse
+import gc
+import os
 import random
 
 import numpy as np
@@ -10,6 +12,7 @@ from exp.exp_classification import Exp_Classification
 from exp.exp_imputation import Exp_Imputation
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
 from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
+
 # from utils.print_args import print_args
 
 if __name__ == "__main__":
@@ -382,11 +385,15 @@ if __name__ == "__main__":
             exp.train(setting)
 
             print(">>>>>>>testing")
-            exp.test(setting)
+            ckpt = exp.test(setting)
             if args.gpu_type == "mps":
                 torch.backends.mps.empty_cache()
             elif args.gpu_type == "cuda":
                 torch.cuda.empty_cache()
+
+            gc.collect()
+            os.remove(ckpt)
+            print("-------------------------------------------------")
     else:
         exp = Exp(args)  # set experiments
         ii = 0

@@ -204,11 +204,10 @@ class Exp_Short_Term_Forecast(Exp_Basic):
         x = torch.tensor(x, dtype=torch.float32).to(self.device)
         x = x.unsqueeze(-1)
 
+        PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
             print("loading model")
-            self.model.load_state_dict(
-                torch.load(os.path.join("./checkpoints/" + setting, "checkpoint.pth"))
-            )
+            self.model.load_state_dict(torch.load(PATH))
 
         self.model.eval()
         with torch.no_grad():
@@ -283,3 +282,4 @@ class Exp_Short_Term_Forecast(Exp_Basic):
             print(
                 "After all 6 tasks are finished, you can calculate the averaged index"
             )
+        return PATH

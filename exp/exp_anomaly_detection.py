@@ -131,11 +131,11 @@ class Exp_Anomaly_Detection(Exp_Basic):
     def test(self, setting, test=0):
         test_data, test_loader = self._get_data(flag="test")
         train_data, train_loader = self._get_data(flag="train")
+
+        PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
             print("loading model")
-            self.model.load_state_dict(
-                torch.load(os.path.join("./checkpoints/" + setting, "checkpoint.pth"))
-            )
+            self.model.load_state_dict(torch.load(PATH))
 
         attens_energy = []
 
@@ -198,3 +198,4 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
         save_preds(setting, pred, gt)
         save_results("anomaly_detection", setting, metrics)
+        return PATH
