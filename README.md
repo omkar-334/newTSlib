@@ -29,7 +29,8 @@ Till March 2024, the top three models for five different tasks are:
 | 🥈 2nd            | [iTransformer](https://arxiv.org/abs/2310.06625) | [PatchTST](https://github.com/yuqinie98/PatchTST)     | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [FEDformer](https://github.com/MAZiqing/FEDformer) |
 | 🥉 3rd            | [TimeMixer](https://openreview.net/pdf?id=7oLshfEIC2)          | [DLinear](https://arxiv.org/pdf/2205.13504.pdf)       | [FEDformer](https://github.com/MAZiqing/FEDformer)           | [Autoformer](https://github.com/thuml/Autoformer)            | [Informer](https://github.com/zhouhaoyi/Informer2020)        | [Autoformer](https://github.com/thuml/Autoformer)  |
 
-**Note: We will keep updating this leaderboard.** If you have proposed advanced and awesome models, you are welcome to send your paper/code link to us or raise a pull request. We will add them to this repo and update the leaderboard as soon as possible.
+
+**Note: We will keep updating this leaderboard.** If you have proposed advanced and awesome models, you can send us your paper/code link or raise a pull request. We will add them to this repo and update the leaderboard as soon as possible.
 
 **Compared models of this leaderboard.** ☑ means that their codes have already been included in this repo.
   - [x] **TimeXer** - TimeXer: Empowering Transformers for Time Series Forecasting with Exogenous Variables [[NeurIPS 2024]](https://arxiv.org/abs/2402.19072) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TimeXer.py)
@@ -141,7 +142,7 @@ Previous:
 - Haoran Zhang (Master student, z-hr20@mails.tsinghua.edu.cn)
 - Jiawei Guo (Undergraduate, guo-jw21@mails.tsinghua.edu.cn)
 
-or describe it in Issues. Recently, Jiawei Guo is the main maintainer of this library 😊.
+Or describe it in Issues.
 
 ## Acknowledgement
 
@@ -155,7 +156,7 @@ This library is constructed based on the following repos:
 
 - Classification: https://github.com/thuml/Flowformer.
 
-All the experiment datasets are public and we obtain them from the following links:
+All the experiment datasets are public, and we obtain them from the following links:
 
 - Long-term Forecasting and Imputation: https://github.com/thuml/Autoformer.
 
