@@ -1,6 +1,7 @@
+import math
+
 import torch
 import torch.nn as nn
-import math
 from einops import rearrange
 
 from layers.SelfAttention_Family import AttentionLayer, FullAttention
@@ -100,53 +101,45 @@ class Model(nn.Module):
         self.padding_patch_layer3 = nn.ReplicationPad1d((0, self.stride3))
         self.padding_patch_layer4 = nn.ReplicationPad1d((0, self.stride4))
 
-        self.shared_MHA = nn.ModuleList(
-            [
-                AttentionLayer(
-                    FullAttention(mask_flag=self.mask),
-                    d_model=self.d_model,
-                    n_heads=self.n_heads,
-                )
-                for _ in range(self.N)
-            ]
-        )
+        self.shared_MHA = nn.ModuleList([
+            AttentionLayer(
+                FullAttention(mask_flag=self.mask),
+                d_model=self.d_model,
+                n_heads=self.n_heads,
+            )
+            for _ in range(self.N)
+        ])
 
-        self.shared_MHA_ch = nn.ModuleList(
-            [
-                AttentionLayer(
-                    FullAttention(mask_flag=self.mask),
-                    d_model=self.d_model,
-                    n_heads=self.n_heads,
-                )
-                for _ in range(self.N)
-            ]
-        )
+        self.shared_MHA_ch = nn.ModuleList([
+            AttentionLayer(
+                FullAttention(mask_flag=self.mask),
+                d_model=self.d_model,
+                n_heads=self.n_heads,
+            )
+            for _ in range(self.N)
+        ])
 
-        self.encoder_list = nn.ModuleList(
-            [
-                Encoder(
-                    d_model=self.d_model,
-                    mha=self.shared_MHA[ll],
-                    d_hidden=self.d_hidden,
-                    dropout=self.dropout,
-                    channel_wise=False,
-                )
-                for ll in range(self.N)
-            ]
-        )
+        self.encoder_list = nn.ModuleList([
+            Encoder(
+                d_model=self.d_model,
+                mha=self.shared_MHA[ll],
+                d_hidden=self.d_hidden,
+                dropout=self.dropout,
+                channel_wise=False,
+            )
+            for ll in range(self.N)
+        ])
 
-        self.encoder_list_ch = nn.ModuleList(
-            [
-                Encoder(
-                    d_model=self.d_model,
-                    mha=self.shared_MHA_ch[0],
-                    d_hidden=self.d_hidden,
-                    dropout=self.dropout,
-                    channel_wise=True,
-                )
-                for ll in range(self.N)
-            ]
-        )
+        self.encoder_list_ch = nn.ModuleList([
+            Encoder(
+                d_model=self.d_model,
+                mha=self.shared_MHA_ch[0],
+                d_hidden=self.d_hidden,
+                dropout=self.dropout,
+                channel_wise=True,
+            )
+            for ll in range(self.N)
+        ])
 
         pe = torch.zeros(self.patch_num1, self.d_model)
         for pos in range(self.patch_num1):

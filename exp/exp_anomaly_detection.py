@@ -1,20 +1,22 @@
+import torch.multiprocessing
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
+from utils.metrics import save_preds, save_results
 from utils.tools import EarlyStopping, adjust_learning_rate, adjustment
-from sklearn.metrics import precision_recall_fscore_support
-from sklearn.metrics import accuracy_score
-import torch.multiprocessing
 
-torch.multiprocessing.set_sharing_strategy('file_system')
-import torch
-import torch.nn as nn
-from torch import optim
+torch.multiprocessing.set_sharing_strategy("file_system")
 import os
 import time
 import warnings
-import numpy as np
 
-warnings.filterwarnings('ignore')
+import numpy as np
+import torch
+import torch.nn as nn
+from torch import optim
+
+warnings.filterwarnings("ignore")
 
 
 class Exp_Anomaly_Detection(Exp_Basic):
@@ -49,7 +51,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 outputs = self.model(batch_x, None, None, None)
 
-                f_dim = -1 if self.args.features == 'MS' else 0
+                f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
                 pred = outputs.detach().cpu()
                 true = batch_x.detach().cpu()
@@ -61,9 +63,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
         return total_loss
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag='train')
-        vali_data, vali_loader = self._get_data(flag='val')
-        test_data, test_loader = self._get_data(flag='test')
+        train_data, train_loader = self._get_data(flag="train")
+        vali_data, vali_loader = self._get_data(flag="val")
+        test_data, test_loader = self._get_data(flag="test")
 
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
@@ -91,51 +93,51 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 outputs = self.model(batch_x, None, None, None)
 
-                f_dim = -1 if self.args.features == 'MS' else 0
+                f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
                 loss = criterion(outputs, batch_x)
                 train_loss.append(loss.item())
 
-                if (i + 1) % 100 == 0:
-                    print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                    speed = (time.time() - time_now) / iter_count
-                    left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                    print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                    iter_count = 0
-                    time_now = time.time()
+                # if (i + 1) % 100 == 0:
+                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
+                #     speed = (time.time() - time_now) / iter_count
+                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
+                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
+                #     iter_count = 0
+                #     time_now = time.time()
 
                 loss.backward()
                 model_optim.step()
 
-            print("Epoch: {} cost time: {}".format(epoch + 1, time.time() - epoch_time))
+            print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
             train_loss = np.average(train_loss)
             vali_loss = self.vali(vali_data, vali_loader, criterion)
             test_loss = self.vali(test_data, test_loader, criterion)
 
-            print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
-                epoch + 1, train_steps, train_loss, vali_loss, test_loss))
+            print(
+                f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
+            )
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
             adjust_learning_rate(model_optim, epoch + 1, self.args)
 
-        best_model_path = path + '/' + 'checkpoint.pth'
+        best_model_path = path + "/" + "checkpoint.pth"
         self.model.load_state_dict(torch.load(best_model_path))
 
         return self.model
 
     def test(self, setting, test=0):
-        test_data, test_loader = self._get_data(flag='test')
-        train_data, train_loader = self._get_data(flag='train')
+        test_data, test_loader = self._get_data(flag="test")
+        train_data, train_loader = self._get_data(flag="train")
         if test:
-            print('loading model')
-            self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
+            print("loading model")
+            self.model.load_state_dict(
+                torch.load(os.path.join("./checkpoints/" + setting, "checkpoint.pth"))
+            )
 
         attens_energy = []
-        folder_path = './test_results/' + setting + '/'
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
 
         self.model.eval()
         self.anomaly_criterion = nn.MSELoss(reduce=False)
@@ -179,29 +181,20 @@ class Exp_Anomaly_Detection(Exp_Basic):
         test_labels = np.array(test_labels)
         gt = test_labels.astype(int)
 
-        print("pred:   ", pred.shape)
-        print("gt:     ", gt.shape)
-
         # (4) detection adjustment
         gt, pred = adjustment(gt, pred)
 
-        pred = np.array(pred)
-        gt = np.array(gt)
-        print("pred: ", pred.shape)
-        print("gt:   ", gt.shape)
-
         accuracy = accuracy_score(gt, pred)
-        precision, recall, f_score, support = precision_recall_fscore_support(gt, pred, average='binary')
-        print("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(
-            accuracy, precision,
-            recall, f_score))
+        precision, recall, f_score, support = precision_recall_fscore_support(
+            gt, pred, average="binary"
+        )
 
-        f = open("result_anomaly_detection.txt", 'a')
-        f.write(setting + "  \n")
-        f.write("Accuracy : {:0.4f}, Precision : {:0.4f}, Recall : {:0.4f}, F-score : {:0.4f} ".format(
-            accuracy, precision,
-            recall, f_score))
-        f.write('\n')
-        f.write('\n')
-        f.close()
-        return
+        metrics = {
+            "accuracy": float(accuracy),
+            "recall": float(recall),
+            "f1": float(f_score),
+            "precision": float(precision),
+        }
+
+        save_preds(setting, pred, gt)
+        save_results("anomaly_detection", setting, metrics)
