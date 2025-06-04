@@ -260,14 +260,17 @@ class Exp_Short_Term_Forecast(Exp_Basic):
 
         print(self.args.model)
         file_path = "./m4_results/" + self.args.model + "/"
-        if (
-            "Weekly_forecast.csv" in os.listdir(file_path)
-            and "Monthly_forecast.csv" in os.listdir(file_path)
-            and "Yearly_forecast.csv" in os.listdir(file_path)
-            and "Daily_forecast.csv" in os.listdir(file_path)
-            and "Hourly_forecast.csv" in os.listdir(file_path)
-            and "Quarterly_forecast.csv" in os.listdir(file_path)
-        ):
+        existing_files = set(os.listdir(file_path))
+
+        required_files = {
+            "Weekly_forecast.csv",
+            "Monthly_forecast.csv",
+            "Yearly_forecast.csv",
+            "Daily_forecast.csv",
+            "Hourly_forecast.csv",
+            "Quarterly_forecast.csv",
+        }
+        if required_files.issubset(existing_files):
             m4_summary = M4Summary(file_path, self.args.root_path)
             # m4_forecast.set_index(m4_winner_forecast.columns[0], inplace=True)
             smape, owa, mape, mase = m4_summary.evaluate()

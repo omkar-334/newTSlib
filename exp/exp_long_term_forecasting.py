@@ -290,6 +290,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             "mspe": float(mspe),
         }
 
-        save_preds(setting, preds, trues)
+        # save_preds(setting, preds, trues)
         save_results("LTF", setting, argsdict)
         return PATH
