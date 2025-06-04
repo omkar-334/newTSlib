@@ -16,7 +16,7 @@ class Model(nn.Module):
     """
 
     def __init__(self, configs):
-        super(Model, self).__init__()
+        super().__init__()
         self.task_name = configs.task_name
         self.pred_len = configs.pred_len
 
@@ -65,7 +65,7 @@ class Model(nn.Module):
 
 class ResidualBlock(nn.Module):
     def __init__(self, configs, d_inner, dt_rank):
-        super(ResidualBlock, self).__init__()
+        super().__init__()
 
         self.mixer = MambaBlock(configs, d_inner, dt_rank)
         self.norm = RMSNorm(configs.d_model)
@@ -77,7 +77,7 @@ class ResidualBlock(nn.Module):
 
 class MambaBlock(nn.Module):
     def __init__(self, configs, d_inner, dt_rank):
-        super(MambaBlock, self).__init__()
+        super().__init__()
         self.d_inner = d_inner
         self.dt_rank = dt_rank
 
@@ -174,7 +174,7 @@ class MambaBlock(nn.Module):
 
 class RMSNorm(nn.Module):
     def __init__(self, d_model, eps=1e-5):
-        super(RMSNorm, self).__init__()
+        super().__init__()
         self.eps = eps
         self.weight = nn.Parameter(torch.ones(d_model))
 

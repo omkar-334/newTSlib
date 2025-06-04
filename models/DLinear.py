@@ -13,7 +13,7 @@ class Model(nn.Module):
         """
         individual: Bool, whether shared model among different variates.
         """
-        super(Model, self).__init__()
+        super().__init__()
         self.task_name = configs.task_name
         self.seq_len = configs.seq_len
         if (

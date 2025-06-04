@@ -33,7 +33,7 @@ def divide_no_nan(a, b):
 
 class mape_loss(nn.Module):
     def __init__(self):
-        super(mape_loss, self).__init__()
+        super().__init__()
 
     def forward(
         self,
@@ -57,7 +57,7 @@ class mape_loss(nn.Module):
 
 class smape_loss(nn.Module):
     def __init__(self):
-        super(smape_loss, self).__init__()
+        super().__init__()
 
     def forward(
         self,
@@ -85,7 +85,7 @@ class smape_loss(nn.Module):
 
 class mase_loss(nn.Module):
     def __init__(self):
-        super(mase_loss, self).__init__()
+        super().__init__()
 
     def forward(
         self,

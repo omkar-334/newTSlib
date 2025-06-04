@@ -44,7 +44,7 @@ class scale_block(nn.Module):
         seg_num=10,
         factor=10,
     ):
-        super(scale_block, self).__init__()
+        super().__init__()
 
         if win_size > 1:
             self.merge_layer = SegMerging(d_model, win_size, nn.LayerNorm)
@@ -74,7 +74,7 @@ class scale_block(nn.Module):
 
 class Encoder(nn.Module):
     def __init__(self, attn_layers):
-        super(Encoder, self).__init__()
+        super().__init__()
         self.encode_blocks = nn.ModuleList(attn_layers)
 
     def forward(self, x):
@@ -92,7 +92,7 @@ class DecoderLayer(nn.Module):
     def __init__(
         self, self_attention, cross_attention, seg_len, d_model, d_ff=None, dropout=0.1
     ):
-        super(DecoderLayer, self).__init__()
+        super().__init__()
         self.self_attention = self_attention
         self.cross_attention = cross_attention
         self.norm1 = nn.LayerNorm(d_model)
@@ -139,7 +139,7 @@ class DecoderLayer(nn.Module):
 
 class Decoder(nn.Module):
     def __init__(self, layers):
-        super(Decoder, self).__init__()
+        super().__init__()
         self.decode_layers = nn.ModuleList(layers)
 
     def forward(self, x, cross):

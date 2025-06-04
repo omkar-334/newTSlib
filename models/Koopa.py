@@ -12,7 +12,7 @@ class FourierFilter(nn.Module):
     """
 
     def __init__(self, mask_spectrum):
-        super(FourierFilter, self).__init__()
+        super().__init__()
         self.mask_spectrum = mask_spectrum
 
     def forward(self, x):
@@ -39,7 +39,7 @@ class MLP(nn.Module):
         dropout=0.05,
         activation="tanh",
     ):
-        super(MLP, self).__init__()
+        super().__init__()
         self.f_in = f_in
         self.f_out = f_out
         self.hidden_dim = hidden_dim
@@ -80,7 +80,7 @@ class KPLayer(nn.Module):
     """
 
     def __init__(self):
-        super(KPLayer, self).__init__()
+        super().__init__()
 
         self.K = None  # B E E
 
@@ -124,7 +124,7 @@ class KPLayerApprox(nn.Module):
     """
 
     def __init__(self):
-        super(KPLayerApprox, self).__init__()
+        super().__init__()
 
         self.K = None  # B E E
         self.K_step = None  # B E E
@@ -198,7 +198,7 @@ class TimeVarKP(nn.Module):
         decoder=None,
         multistep=False,
     ):
-        super(TimeVarKP, self).__init__()
+        super().__init__()
         self.input_len = input_len
         self.pred_len = pred_len
         self.enc_in = enc_in
@@ -244,7 +244,7 @@ class TimeInvKP(nn.Module):
     def __init__(
         self, input_len=96, pred_len=96, dynamic_dim=128, encoder=None, decoder=None
     ):
-        super(TimeInvKP, self).__init__()
+        super().__init__()
         self.dynamic_dim = dynamic_dim
         self.input_len = input_len
         self.pred_len = pred_len
@@ -291,7 +291,7 @@ class Model(nn.Module):
         multistep: bool, whether to use approximation for multistep K
         alpha: float, spectrum filter ratio
         """
-        super(Model, self).__init__()
+        super().__init__()
         self.task_name = configs.task_name
         self.enc_in = configs.enc_in
         self.input_len = configs.seq_len

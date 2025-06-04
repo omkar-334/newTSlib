@@ -20,7 +20,7 @@ class Model(nn.Module):
     """
 
     def __init__(self, configs):
-        super(Model, self).__init__()
+        super().__init__()
         self.enc_in = configs.enc_in
         self.seq_len = configs.seq_len
         self.pred_len = configs.pred_len

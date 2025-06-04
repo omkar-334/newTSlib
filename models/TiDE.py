@@ -43,7 +43,7 @@ class Model(nn.Module):
     """
 
     def __init__(self, configs, bias=True, feature_encode_dim=2):
-        super(Model, self).__init__()
+        super().__init__()
         self.configs = configs
         self.task_name = configs.task_name
         self.seq_len = configs.seq_len  # L

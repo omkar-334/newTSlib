@@ -23,7 +23,7 @@ class TokenMixer(nn.Module):
         factor=[],
         d_model=[],
     ):
-        super(TokenMixer, self).__init__()
+        super().__init__()
         self.input_seq = input_seq
         self.batch_size = batch_size
         self.channel = channel
@@ -59,7 +59,7 @@ class Mixer(nn.Module):
         tfactor=[],
         dfactor=[],
     ):
-        super(Mixer, self).__init__()
+        super().__init__()
         self.input_seq = input_seq
         self.pred_seq = out_seq
         self.batch_size = batch_size
@@ -124,7 +124,7 @@ class ResolutionBranch(nn.Module):
         patch_len=[],
         patch_stride=[],
     ):
-        super(ResolutionBranch, self).__init__()
+        super().__init__()
         self.input_seq = input_seq
         self.pred_seq = pred_seq
         self.batch_size = batch_size
@@ -221,7 +221,7 @@ class WPMixerCore(nn.Module):
         no_decomposition=[],
         use_amp=[],
     ):
-        super(WPMixerCore, self).__init__()
+        super().__init__()
         self.input_length = input_length
         self.pred_length = pred_length
         self.wavelet_name = wavelet_name
@@ -325,7 +325,7 @@ class Model(nn.Module):
         stride=8,
         no_decomposition=False,
     ):
-        super(Model, self).__init__()
+        super().__init__()
         self.args = args
         self.task_name = args.task_name
         self.wpmixerCore = WPMixerCore(

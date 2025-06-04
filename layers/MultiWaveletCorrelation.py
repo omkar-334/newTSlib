@@ -268,7 +268,7 @@ class MultiWaveletTransform(nn.Module):
         base="legendre",
         attention_dropout=0.1,
     ):
-        super(MultiWaveletTransform, self).__init__()
+        super().__init__()
         print("base", base)
         self.k = k
         self.c = c
@@ -324,7 +324,7 @@ class MultiWaveletCross(nn.Module):
         activation="tanh",
         **kwargs,
     ):
-        super(MultiWaveletCross, self).__init__()
+        super().__init__()
         print("base", base)
 
         self.c = c
@@ -501,7 +501,7 @@ class FourierCrossAttentionW(nn.Module):
         activation="tanh",
         mode_select_method="random",
     ):
-        super(FourierCrossAttentionW, self).__init__()
+        super().__init__()
         print("corss fourier correlation used!")
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -575,7 +575,7 @@ class FourierCrossAttentionW(nn.Module):
 
 class sparseKernelFT1d(nn.Module):
     def __init__(self, k, alpha, c=1, nl=1, initializer=None, **kwargs):
-        super(sparseKernelFT1d, self).__init__()
+        super().__init__()
 
         self.modes1 = alpha
         self.scale = 1 / (c * k * c * k)
@@ -633,7 +633,7 @@ class MWT_CZ1d(nn.Module):
     def __init__(
         self, k=3, alpha=64, L=0, c=1, base="legendre", initializer=None, **kwargs
     ):
-        super(MWT_CZ1d, self).__init__()
+        super().__init__()
 
         self.k = k
         self.L = L

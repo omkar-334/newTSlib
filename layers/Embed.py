@@ -6,7 +6,7 @@ import torch.nn as nn
 
 class PositionalEmbedding(nn.Module):
     def __init__(self, d_model, max_len=5000):
-        super(PositionalEmbedding, self).__init__()
+        super().__init__()
         # Compute the positional encodings once in log space.
         pe = torch.zeros(max_len, d_model).float()
         pe.require_grad = False
@@ -28,7 +28,7 @@ class PositionalEmbedding(nn.Module):
 
 class TokenEmbedding(nn.Module):
     def __init__(self, c_in, d_model):
-        super(TokenEmbedding, self).__init__()
+        super().__init__()
         padding = 1 if torch.__version__ >= "1.5.0" else 2
         self.tokenConv = nn.Conv1d(
             in_channels=c_in,
@@ -51,7 +51,7 @@ class TokenEmbedding(nn.Module):
 
 class FixedEmbedding(nn.Module):
     def __init__(self, c_in, d_model):
-        super(FixedEmbedding, self).__init__()
+        super().__init__()
 
         w = torch.zeros(c_in, d_model).float()
         w.require_grad = False
@@ -73,7 +73,7 @@ class FixedEmbedding(nn.Module):
 
 class TemporalEmbedding(nn.Module):
     def __init__(self, d_model, embed_type="fixed", freq="h"):
-        super(TemporalEmbedding, self).__init__()
+        super().__init__()
 
         minute_size = 4
         hour_size = 24
@@ -104,7 +104,7 @@ class TemporalEmbedding(nn.Module):
 
 class TimeFeatureEmbedding(nn.Module):
     def __init__(self, d_model, embed_type="timeF", freq="h"):
-        super(TimeFeatureEmbedding, self).__init__()
+        super().__init__()
 
         freq_map = {"h": 4, "t": 5, "s": 6, "m": 1, "a": 1, "w": 2, "d": 3, "b": 3}
         d_inp = freq_map[freq]
@@ -116,7 +116,7 @@ class TimeFeatureEmbedding(nn.Module):
 
 class DataEmbedding(nn.Module):
     def __init__(self, c_in, d_model, embed_type="fixed", freq="h", dropout=0.1):
-        super(DataEmbedding, self).__init__()
+        super().__init__()
 
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
         self.position_embedding = PositionalEmbedding(d_model=d_model)
@@ -141,7 +141,7 @@ class DataEmbedding(nn.Module):
 
 class DataEmbedding_inverted(nn.Module):
     def __init__(self, c_in, d_model, embed_type="fixed", freq="h", dropout=0.1):
-        super(DataEmbedding_inverted, self).__init__()
+        super().__init__()
         self.value_embedding = nn.Linear(c_in, d_model)
         self.dropout = nn.Dropout(p=dropout)
 
@@ -158,7 +158,7 @@ class DataEmbedding_inverted(nn.Module):
 
 class DataEmbedding_wo_pos(nn.Module):
     def __init__(self, c_in, d_model, embed_type="fixed", freq="h", dropout=0.1):
-        super(DataEmbedding_wo_pos, self).__init__()
+        super().__init__()
 
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
         self.position_embedding = PositionalEmbedding(d_model=d_model)
@@ -179,7 +179,7 @@ class DataEmbedding_wo_pos(nn.Module):
 
 class PatchEmbedding(nn.Module):
     def __init__(self, d_model, patch_len, stride, padding, dropout):
-        super(PatchEmbedding, self).__init__()
+        super().__init__()
         # Patching
         self.patch_len = patch_len
         self.stride = stride

@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore")
 
 class Exp_Short_Term_Forecast(Exp_Basic):
     def __init__(self, args):
-        super(Exp_Short_Term_Forecast, self).__init__(args)
+        super().__init__(args)
 
     def _build_model(self):
         if self.args.data == "m4":

@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 class Splitting(nn.Module):
     def __init__(self):
-        super(Splitting, self).__init__()
+        super().__init__()
 
     def even(self, x):
         return x[:, ::2, :]
@@ -22,7 +22,7 @@ class Splitting(nn.Module):
 
 class CausalConvBlock(nn.Module):
     def __init__(self, d_model, kernel_size=5, dropout=0.0):
-        super(CausalConvBlock, self).__init__()
+        super().__init__()
         module_list = [
             nn.ReplicationPad1d((kernel_size - 1, kernel_size - 1)),
             nn.Conv1d(d_model, d_model, kernel_size=kernel_size),
@@ -39,7 +39,7 @@ class CausalConvBlock(nn.Module):
 
 class SCIBlock(nn.Module):
     def __init__(self, d_model, kernel_size=5, dropout=0.0):
-        super(SCIBlock, self).__init__()
+        super().__init__()
         self.splitting = Splitting()
         (
             self.modules_even,
@@ -64,7 +64,7 @@ class SCIBlock(nn.Module):
 
 class SCINet(nn.Module):
     def __init__(self, d_model, current_level=3, kernel_size=5, dropout=0.0):
-        super(SCINet, self).__init__()
+        super().__init__()
         self.current_level = current_level
         self.working_block = SCIBlock(d_model, kernel_size, dropout)
 
@@ -109,7 +109,7 @@ class SCINet(nn.Module):
 
 class Model(nn.Module):
     def __init__(self, configs):
-        super(Model, self).__init__()
+        super().__init__()
         self.task_name = configs.task_name
         self.seq_len = configs.seq_len
         self.label_len = configs.label_len

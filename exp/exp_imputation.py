@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 class Exp_Imputation(Exp_Basic):
     def __init__(self, args):
-        super(Exp_Imputation, self).__init__(args)
+        super().__init__(args)
 
     def _build_model(self):
         model = self.model_dict[self.args.model].Model(self.args).float()

@@ -18,7 +18,7 @@ class Model(nn.Module):
         bucket_size: int,
         n_hashes: int,
         """
-        super(Model, self).__init__()
+        super().__init__()
         self.task_name = configs.task_name
         self.pred_len = configs.pred_len
         self.seq_len = configs.seq_len

@@ -30,7 +30,7 @@ class Decomposition(nn.Module):
         no_decomposition=[],
         use_amp=[],
     ):
-        super(Decomposition, self).__init__()
+        super().__init__()
         self.input_length = input_length
         self.pred_length = pred_length
         self.wavelet_name = wavelet_name
