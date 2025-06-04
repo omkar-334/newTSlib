@@ -10,7 +10,7 @@ from exp.exp_classification import Exp_Classification
 from exp.exp_imputation import Exp_Imputation
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
 from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
-from utils.print_args import print_args
+# from utils.print_args import print_args
 
 if __name__ == "__main__":
     fix_seed = 2021
@@ -355,8 +355,8 @@ if __name__ == "__main__":
         args.device_ids = [int(id_) for id_ in device_ids]
         args.gpu = args.device_ids[0]
 
-    print("Args in experiment:")
-    print_args(args)
+    # print("Args in experiment:")
+    # print_args(args)
 
     if args.task_name == "long_term_forecast":
         Exp = Exp_Long_Term_Forecast
@@ -377,10 +377,11 @@ if __name__ == "__main__":
             exp = Exp(args)  # set experiments
             setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_{ii}"
 
-            print(f">>>>>>>start training : {setting}>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print(f">>>>>>>{setting}>>>>>>>")
+            print(">>>>>>>training")
             exp.train(setting)
 
-            print(f">>>>>>>testing : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            print(">>>>>>>testing")
             exp.test(setting)
             if args.gpu_type == "mps":
                 torch.backends.mps.empty_cache()

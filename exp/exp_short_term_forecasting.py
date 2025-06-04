@@ -54,6 +54,7 @@ class Exp_Short_Term_Forecast(Exp_Basic):
             return mase_loss()
         if loss_name == "SMAPE":
             return smape_loss()
+        return None
 
     def train(self, setting):
         train_data, train_loader = self._get_data(flag="train")
@@ -248,8 +249,7 @@ class Exp_Short_Term_Forecast(Exp_Basic):
 
         # result save
         folder_path = "./m4_results/" + self.args.model + "/"
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
+        os.makedirs(folder_path, exist_ok=True)
 
         forecasts_df = pandas.DataFrame(
             preds[:, :, 0], columns=[f"V{i + 1}" for i in range(self.args.pred_len)]

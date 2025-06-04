@@ -91,13 +91,18 @@ def visual(true, preds=None, setting: str = None, iter: int = None):
     """
     Results visualization
     """
-    path = os.path.join("plots", setting, f"{iter!s}.png")
+    dir_path = os.path.join("plots", setting)
+    os.makedirs(dir_path, exist_ok=True)  # Create directory if not exists
+
+    path = os.path.join(dir_path, f"{iter!s}.png")
+
     plt.figure()
     if preds is not None:
         plt.plot(preds, label="Prediction", linewidth=2)
     plt.plot(true, label="GroundTruth", linewidth=2)
     plt.legend()
     plt.savefig(path, bbox_inches="tight")
+    plt.close()
 
 
 def adjustment(gt, pred):
