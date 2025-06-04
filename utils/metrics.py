@@ -52,7 +52,7 @@ def save_results(task, setting: str, metrics: dict):
     for key in metrics:
         print(f"{key} - {metrics[key]}", end="---")
 
-    json_path = f"./{task}_results.json"
+    json_path = f"./results/{task}_results.json"
     if os.path.exists(json_path):
         with open(json_path) as f:
             results_dict = json.load(f)

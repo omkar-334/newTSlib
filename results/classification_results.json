@@ -1,0 +1,458 @@
+{
+    "classification_EthanolConcentration_Autoformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 15:59:52",
+        "accuracy": 0.28517110266159695
+    },
+    "classification_FaceDetection_Autoformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:15:37",
+        "accuracy": 0.5862656072644722
+    },
+    "classification_Handwriting_Autoformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:16:24",
+        "accuracy": 0.18588235294117647
+    },
+    "classification_Heartbeat_Autoformer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:17:07",
+        "accuracy": 0.7219512195121951
+    },
+    "classification_JapaneseVowels_Autoformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:18:26",
+        "accuracy": 0.9648648648648649
+    },
+    "classification_PEMS-SF_Autoformer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:23:47",
+        "accuracy": 0.7861271676300579
+    },
+    "classification_SelfRegulationSCP1_Autoformer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:24:51",
+        "accuracy": 0.552901023890785
+    },
+    "classification_SelfRegulationSCP2_Autoformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:25:35",
+        "accuracy": 0.5111111111111111
+    },
+    "classification_SpokenArabicDigits_Autoformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:30:45",
+        "accuracy": 0.975443383356071
+    },
+    "classification_UWaveGestureLibrary_Autoformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:31:36",
+        "accuracy": 0.51875
+    },
+    "classification_EthanolConcentration_Crossformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:32:45",
+        "accuracy": 0.39543726235741444
+    },
+    "classification_FaceDetection_Crossformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 16:49:46",
+        "accuracy": 0.6259931895573212
+    },
+    "classification_SelfRegulationSCP1_DLinear_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 17:33:29",
+        "accuracy": 0.9146757679180887
+    },
+    "classification_SelfRegulationSCP2_DLinear_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 17:33:53",
+        "accuracy": 0.5444444444444444
+    },
+    "classification_SpokenArabicDigits_DLinear_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 17:37:26",
+        "accuracy": 0.9649840836743975
+    },
+    "classification_UWaveGestureLibrary_DLinear_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 17:38:00",
+        "accuracy": 0.821875
+    },
+    "classification_EthanolConcentration_FEDformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 18:01:31",
+        "accuracy": 0.29277566539923955
+    },
+    "classification_FaceDetection_FEDformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 18:50:24",
+        "accuracy": 0.6705448354143019
+    },
+    "classification_Handwriting_FEDformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 18:58:31",
+        "accuracy": 0.23529411764705882
+    },
+    "classification_Heartbeat_FEDformer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 19:00:43",
+        "accuracy": 0.7658536585365854
+    },
+    "classification_JapaneseVowels_FEDformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 19:05:28",
+        "accuracy": 0.9783783783783784
+    },
+    "classification_PEMS-SF_FEDformer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 19:14:15",
+        "accuracy": 0.8439306358381503
+    },
+    "classification_SelfRegulationSCP1_FEDformer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 19:17:05",
+        "accuracy": 0.5972696245733788
+    },
+    "classification_SelfRegulationSCP2_FEDformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 19:18:47",
+        "accuracy": 0.5277777777777778
+    },
+    "classification_SpokenArabicDigits_FEDformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 20:03:04",
+        "accuracy": 0.9872669395179627
+    },
+    "classification_UWaveGestureLibrary_FEDformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 20:06:11",
+        "accuracy": 0.5875
+    },
+    "classification_EthanolConcentration_FiLM_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 20:11:45",
+        "accuracy": 0.2813688212927757
+    },
+    "classification_FaceDetection_FiLM_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 21:31:09",
+        "accuracy": 0.6452894438138479
+    },
+    "classification_Handwriting_FiLM_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 21:35:06",
+        "accuracy": 0.13647058823529412
+    },
+    "classification_Heartbeat_FiLM_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 21:41:41",
+        "accuracy": 0.7317073170731707
+    },
+    "classification_JapaneseVowels_FiLM_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 21:46:55",
+        "accuracy": 0.9135135135135135
+    },
+    "classification_SelfRegulationSCP1_FiLM_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 21:57:21",
+        "accuracy": 0.8907849829351536
+    },
+    "classification_SelfRegulationSCP2_FiLM_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 22:01:34",
+        "accuracy": 0.55
+    },
+    "classification_SpokenArabicDigits_FiLM_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 22:22:09",
+        "accuracy": 0.977262391996362
+    },
+    "classification_UWaveGestureLibrary_FiLM_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 22:26:00",
+        "accuracy": 0.78125
+    },
+    "classification_EthanolConcentration_Informer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 22:27:50",
+        "accuracy": 0.2585551330798479
+    },
+    "classification_FaceDetection_Informer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:07:53",
+        "accuracy": 0.6694097616345063
+    },
+    "classification_Handwriting_Informer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:17:38",
+        "accuracy": 0.3176470588235294
+    },
+    "classification_Heartbeat_Informer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:19:44",
+        "accuracy": 0.7804878048780488
+    },
+    "classification_JapaneseVowels_Informer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:21:44",
+        "accuracy": 0.9702702702702702
+    },
+    "classification_PEMS-SF_Informer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:28:36",
+        "accuracy": 0.8265895953757225
+    },
+    "classification_SelfRegulationSCP1_Informer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:29:19",
+        "accuracy": 0.9146757679180887
+    },
+    "classification_SelfRegulationSCP2_Informer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:30:34",
+        "accuracy": 0.5611111111111111
+    },
+    "classification_SpokenArabicDigits_Informer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:54:00",
+        "accuracy": 0.98681218735789
+    },
+    "classification_UWaveGestureLibrary_Informer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:56:05",
+        "accuracy": 0.8625
+    },
+    "classification_EthanolConcentration_iTransformer_UEA_ftM_sl1751_ll48_pl0_dm2048_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-03 23:56:55",
+        "accuracy": 0.26996197718631176
+    },
+    "classification_FaceDetection_iTransformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:14:35",
+        "accuracy": 0.6694097616345063
+    },
+    "classification_Handwriting_iTransformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:20:29",
+        "accuracy": 0.27176470588235296
+    },
+    "classification_Heartbeat_iTransformer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:21:22",
+        "accuracy": 0.7560975609756098
+    },
+    "classification_JapaneseVowels_iTransformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:25:19",
+        "accuracy": 0.9756756756756757
+    },
+    "classification_PEMS-SF_iTransformer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:33:25",
+        "accuracy": 0.8728323699421965
+    },
+    "classification_SelfRegulationSCP1_iTransformer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:34:30",
+        "accuracy": 0.9215017064846417
+    },
+    "classification_SelfRegulationSCP2_iTransformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:34:58",
+        "accuracy": 0.5444444444444444
+    },
+    "classification_SpokenArabicDigits_iTransformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:39:00",
+        "accuracy": 0.9804456571168713
+    },
+    "classification_UWaveGestureLibrary_iTransformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:39:56",
+        "accuracy": 0.859375
+    },
+    "classification_EthanolConcentration_LightTS_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:40:33",
+        "accuracy": 0.3041825095057034
+    },
+    "classification_FaceDetection_LightTS_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 00:57:21",
+        "accuracy": 0.6651532349602725
+    },
+    "classification_Handwriting_LightTS_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:00:26",
+        "accuracy": 0.20588235294117646
+    },
+    "classification_Heartbeat_LightTS_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:01:18",
+        "accuracy": 0.751219512195122
+    },
+    "classification_JapaneseVowels_LightTS_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:02:23",
+        "accuracy": 0.9621621621621622
+    },
+    "classification_PEMS-SF_LightTS_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:08:03",
+        "accuracy": 0.8670520231213873
+    },
+    "classification_SelfRegulationSCP1_LightTS_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:08:40",
+        "accuracy": 0.9112627986348123
+    },
+    "classification_SelfRegulationSCP2_LightTS_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:09:09",
+        "accuracy": 0.5388888888888889
+    },
+    "classification_SpokenArabicDigits_LightTS_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:16:14",
+        "accuracy": 0.977262391996362
+    },
+    "classification_UWaveGestureLibrary_LightTS_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:17:11",
+        "accuracy": 0.83125
+    },
+    "classification_EthanolConcentration_MICN_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:18:27",
+        "accuracy": 0.28517110266159695
+    },
+    "classification_SelfRegulationSCP2_MICN_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 01:36:25",
+        "accuracy": 0.5611111111111111
+    },
+    "classification_EthanolConcentration_PatchTST_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 07:25:52",
+        "accuracy": 0.2737642585551331
+    },
+    "classification_FaceDetection_PatchTST_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:09:38",
+        "accuracy": 0.6793416572077186
+    },
+    "classification_Handwriting_PatchTST_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:13:06",
+        "accuracy": 0.26588235294117646
+    },
+    "classification_Heartbeat_PatchTST_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:14:34",
+        "accuracy": 0.6780487804878049
+    },
+    "classification_JapaneseVowels_PatchTST_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:15:39",
+        "accuracy": 0.9594594594594594
+    },
+    "classification_PEMS-SF_PatchTST_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:30:42",
+        "accuracy": 0.861271676300578
+    },
+    "classification_SelfRegulationSCP1_PatchTST_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:31:28",
+        "accuracy": 0.8498293515358362
+    },
+    "classification_SelfRegulationSCP2_PatchTST_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:32:05",
+        "accuracy": 0.5166666666666667
+    },
+    "classification_SpokenArabicDigits_PatchTST_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:39:23",
+        "accuracy": 0.9663483401546157
+    },
+    "classification_UWaveGestureLibrary_PatchTST_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:39:54",
+        "accuracy": 0.85
+    },
+    "classification_EthanolConcentration_Pyraformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 02:51:40",
+        "accuracy": 0.311787072243346
+    },
+    "classification_FaceDetection_Pyraformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 03:22:01",
+        "accuracy": 0.5553348467650397
+    },
+    "classification_Handwriting_Pyraformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 03:27:19",
+        "accuracy": 0.32588235294117646
+    },
+    "classification_JapaneseVowels_Pyraformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 03:31:35",
+        "accuracy": 0.9702702702702702
+    },
+    "classification_SelfRegulationSCP2_Pyraformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 03:39:06",
+        "accuracy": 0.5388888888888889
+    },
+    "classification_SpokenArabicDigits_Pyraformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:03:08",
+        "accuracy": 0.9681673487949067
+    },
+    "classification_UWaveGestureLibrary_Pyraformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:04:30",
+        "accuracy": 0.825
+    },
+    "classification_EthanolConcentration_Reformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:13:46",
+        "accuracy": 0.2813688212927757
+    },
+    "classification_FaceDetection_Reformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:33:19",
+        "accuracy": 0.6813280363223609
+    },
+    "classification_Handwriting_Reformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:35:51",
+        "accuracy": 0.3164705882352941
+    },
+    "classification_Heartbeat_Reformer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:37:14",
+        "accuracy": 0.775609756097561
+    },
+    "classification_JapaneseVowels_Reformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:38:24",
+        "accuracy": 0.9702702702702702
+    },
+    "classification_PEMS-SF_Reformer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:44:48",
+        "accuracy": 0.815028901734104
+    },
+    "classification_SelfRegulationSCP1_Reformer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:47:58",
+        "accuracy": 0.8976109215017065
+    },
+    "classification_SelfRegulationSCP2_Reformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 04:50:55",
+        "accuracy": 0.5333333333333333
+    },
+    "classification_SpokenArabicDigits_Reformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:06:11",
+        "accuracy": 0.9859026830377444
+    },
+    "classification_UWaveGestureLibrary_Reformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:07:07",
+        "accuracy": 0.86875
+    },
+    "classification_EthanolConcentration_TimesNet_UEA_ftM_sl1751_ll48_pl0_dm16_nh8_el2_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:08:27",
+        "accuracy": 0.3041825095057034
+    },
+    "classification_FaceDetection_TimesNet_UEA_ftM_sl62_ll48_pl0_dm64_nh8_el2_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:26:46",
+        "accuracy": 0.6745175936435869
+    },
+    "classification_Handwriting_TimesNet_UEA_ftM_sl152_ll48_pl0_dm32_nh8_el2_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:28:46",
+        "accuracy": 0.3270588235294118
+    },
+    "classification_Heartbeat_TimesNet_UEA_ftM_sl405_ll48_pl0_dm16_nh8_el3_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:30:19",
+        "accuracy": 0.8097560975609757
+    },
+    "classification_JapaneseVowels_TimesNet_UEA_ftM_sl29_ll48_pl0_dm16_nh8_el2_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:32:23",
+        "accuracy": 0.9783783783783784
+    },
+    "classification_PEMS-SF_TimesNet_UEA_ftM_sl144_ll48_pl0_dm64_nh8_el6_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:39:38",
+        "accuracy": 0.884393063583815
+    },
+    "classification_SelfRegulationSCP1_TimesNet_UEA_ftM_sl896_ll48_pl0_dm16_nh8_el3_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:41:02",
+        "accuracy": 0.9146757679180887
+    },
+    "classification_SelfRegulationSCP2_TimesNet_UEA_ftM_sl1152_ll48_pl0_dm32_nh8_el3_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:41:53",
+        "accuracy": 0.5555555555555556
+    },
+    "classification_SpokenArabicDigits_TimesNet_UEA_ftM_sl93_ll48_pl0_dm32_nh8_el2_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:54:28",
+        "accuracy": 0.9881764438381082
+    },
+    "classification_UWaveGestureLibrary_TimesNet_UEA_ftM_sl315_ll48_pl0_dm32_nh8_el2_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:55:57",
+        "accuracy": 0.88125
+    },
+    "classification_EthanolConcentration_Transformer_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 05:58:45",
+        "accuracy": 0.27756653992395436
+    },
+    "classification_FaceDetection_Transformer_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:14:08",
+        "accuracy": 0.6867196367763905
+    },
+    "classification_Handwriting_Transformer_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:15:11",
+        "accuracy": 0.3776470588235294
+    },
+    "classification_Heartbeat_Transformer_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:15:59",
+        "accuracy": 0.7804878048780488
+    },
+    "classification_JapaneseVowels_Transformer_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:16:42",
+        "accuracy": 0.9783783783783784
+    },
+    "classification_PEMS-SF_Transformer_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:22:36",
+        "accuracy": 0.8323699421965318
+    },
+    "classification_SelfRegulationSCP1_Transformer_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:23:46",
+        "accuracy": 0.9078498293515358
+    },
+    "classification_SelfRegulationSCP2_Transformer_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:25:59",
+        "accuracy": 0.5333333333333333
+    },
+    "classification_SpokenArabicDigits_Transformer_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:31:29",
+        "accuracy": 0.9895407003183265
+    },
+    "classification_UWaveGestureLibrary_Transformer_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-04 06:32:00",
+        "accuracy": 0.865625
+    }
+}

@@ -1,0 +1,233 @@
+{
+    "anomaly_detection_SWAT_Transformer_SWAT_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 17:24:57",
+        "accuracy": 0.958682117291361,
+        "recall": 0.6609767305615056,
+        "f1": 0.7952946971226438,
+        "precision": 0.9981250188341333
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm8_nh8_el3_dl1_df8_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 17:49:05",
+        "accuracy": 0.9819797919167667,
+        "recall": 0.931030556013255,
+        "f1": 0.9261852983636164,
+        "precision": 0.9213902108783278
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm16_nh8_el3_dl1_df16_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 18:25:27",
+        "accuracy": 0.9815353697034369,
+        "recall": 0.9354107394591824,
+        "f1": 0.9248292408764806,
+        "precision": 0.9144844632894763
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm32_nh8_el3_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 19:16:44",
+        "accuracy": 0.9821544173224845,
+        "recall": 0.939852437707109,
+        "f1": 0.9274851204160917,
+        "precision": 0.9154390536267026
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm64_nh8_el3_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 20:46:38",
+        "accuracy": 0.9826344982437419,
+        "recall": 0.9535367349554201,
+        "f1": 0.9302418581714684,
+        "precision": 0.9080580250471567
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm8_nh8_el2_dl1_df8_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 21:19:42",
+        "accuracy": 0.9819280601129341,
+        "recall": 0.9302909137511214,
+        "f1": 0.9259345916157993,
+        "precision": 0.9216188784756532
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm16_nh8_el2_dl1_df16_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 21:50:55",
+        "accuracy": 0.9820561780267663,
+        "recall": 0.9357543801834459,
+        "f1": 0.9268191889091788,
+        "precision": 0.9180530217154562
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm32_nh8_el2_dl1_df32_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 22:28:58",
+        "accuracy": 0.9823797296696456,
+        "recall": 0.9414084326541073,
+        "f1": 0.9284450310195365,
+        "precision": 0.9158337977451404
+    },
+    "anomaly_detection_SWAT_TimesNet_SWAT_ftM_sl100_ll48_pl0_dm64_nh8_el2_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:13:52",
+        "accuracy": 0.9829572495664932,
+        "recall": 0.9539415243221472,
+        "f1": 0.9314765860436471,
+        "precision": 0.9100453841673267
+    },
+    "anomaly_detection_SWAT_Autoformer_SWAT_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:33:40",
+        "accuracy": 0.9581475923702815,
+        "recall": 0.6556262243459475,
+        "f1": 0.7918576834836646,
+        "precision": 0.9995531299465179
+    },
+    "anomaly_detection_SMD_Transformer_SMD_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:34:32",
+        "accuracy": 0.9780477131564088,
+        "recall": 0.6523909794864828,
+        "f1": 0.711853100854194,
+        "precision": 0.7832415902140673
+    },
+    "anomaly_detection_SMD_TimesNet_SMD_ftM_sl100_ll48_pl0_dm64_nh8_el2_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:38:44",
+        "accuracy": 0.987656691134952,
+        "recall": 0.8153783453335145,
+        "f1": 0.8459478505990135,
+        "precision": 0.8788988138819739
+    },
+    "anomaly_detection_SMD_Autoformer_SMD_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:39:40",
+        "accuracy": 0.9780632411067194,
+        "recall": 0.6510324684146176,
+        "f1": 0.7115705853966369,
+        "precision": 0.7845215683064583
+    },
+    "anomaly_detection_MSL_LightTS_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-03 23:42:45",
+        "accuracy": 0.9633206573407579,
+        "recall": 0.7408035024465619,
+        "f1": 0.8099016953781483,
+        "precision": 0.8932161233127254
+    },
+    "anomaly_detection_MSL_FiLM_MSL_ftM_sl100_ll48_pl100_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:24:34",
+        "accuracy": 0.9387980442754312,
+        "recall": 0.5130169971671388,
+        "f1": 0.6387584893318198,
+        "precision": 0.846152049068914
+    },
+    "anomaly_detection_MSL_FEDformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:47:04",
+        "accuracy": 0.9656876273258183,
+        "recall": 0.7522624259593098,
+        "f1": 0.8222153103044496,
+        "precision": 0.9065118487530568
+    },
+    "anomaly_detection_MSL_DLinear_MSL_ftM_sl100_ll48_pl100_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:49:10",
+        "accuracy": 0.9648166508216759,
+        "recall": 0.7530195724954932,
+        "f1": 0.8186708384518199,
+        "precision": 0.8968629465757731
+    },
+    "anomaly_detection_MSL_Transformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:53:19",
+        "accuracy": 0.9633028656797501,
+        "recall": 0.7366379088333762,
+        "f1": 0.8089570664059103,
+        "precision": 0.8970218597657065
+    },
+    "anomaly_detection_MSL_iTransformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:56:06",
+        "accuracy": 0.9499611571370365,
+        "recall": 0.6262876641771826,
+        "f1": 0.7252908992488737,
+        "precision": 0.8614719458151637
+    },
+    "anomaly_detection_MSL_TimesNet_MSL_ftM_sl100_ll48_pl0_dm8_nh8_el1_dl1_df16_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 02:56:43",
+        "accuracy": 0.9646687491511612,
+        "recall": 0.7528792171001802,
+        "f1": 0.8180195254897461,
+        "precision": 0.8954995742178167
+    },
+    "anomaly_detection_MSL_Informer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:00:46",
+        "accuracy": 0.963732446013853,
+        "recall": 0.73689672933299,
+        "f1": 0.8108241368219861,
+        "precision": 0.9012387674688891
+    },
+    "anomaly_detection_MSL_Reformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:11:10",
+        "accuracy": 0.963774955860383,
+        "recall": 0.7370667010043781,
+        "f1": 0.8110393138826684,
+        "precision": 0.9015162134195991
+    },
+    "anomaly_detection_MSL_Pyraformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:18:45",
+        "accuracy": 0.9573244601385305,
+        "recall": 0.6846986865825393,
+        "f1": 0.7719232282350071,
+        "precision": 0.8846153846153846
+    },
+    "anomaly_detection_MSL_Crossformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:30:59",
+        "accuracy": 0.9630607089501562,
+        "recall": 0.7278083955704352,
+        "f1": 0.8060603986263705,
+        "precision": 0.9031664259143263
+    },
+    "anomaly_detection_MSL_MICN_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:33:40",
+        "accuracy": 0.9606379193263616,
+        "recall": 0.7198055627092455,
+        "f1": 0.7941342141246249,
+        "precision": 0.8855812111370748
+    },
+    "anomaly_detection_MSL_Autoformer_MSL_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:39:43",
+        "accuracy": 0.9662852098329485,
+        "recall": 0.7579551892866341,
+        "f1": 0.825855946483264,
+        "precision": 0.9071194548295726
+    },
+    "anomaly_detection_PSM_DLinear_PSM_ftM_sl100_ll48_pl100_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:40:26",
+        "accuracy": 0.9816689840669235,
+        "recall": 0.946852983643848,
+        "f1": 0.9662777835085699,
+        "precision": 0.9865162805552059
+    },
+    "anomaly_detection_PSM_Transformer_PSM_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:42:44",
+        "accuracy": 0.9523696747281803,
+        "recall": 0.831468684333579,
+        "f1": 0.9064015953372578,
+        "precision": 0.9961783282709188
+    },
+    "anomaly_detection_PSM_TimesNet_PSM_ftM_sl100_ll48_pl0_dm64_nh8_el2_dl1_df64_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:52:41",
+        "accuracy": 0.9857128855052313,
+        "recall": 0.9629613650315445,
+        "f1": 0.9739514761619787,
+        "precision": 0.9851953397921117
+    },
+    "anomaly_detection_PSM_Autoformer_PSM_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 03:56:49",
+        "accuracy": 0.9415976385311481,
+        "recall": 0.7895432555012898,
+        "f1": 0.8823467555665762,
+        "precision": 0.9998725125640169
+    },
+    "anomaly_detection_SMAP_Transformer_SMAP_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 04:02:13",
+        "accuracy": 0.9426854073980511,
+        "recall": 0.6137415898786017,
+        "f1": 0.7326207445016142,
+        "precision": 0.9086157858723567
+    },
+    "anomaly_detection_SMAP_TimesNet_SMAP_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 05:11:36",
+        "accuracy": 0.9362177966775668,
+        "recall": 0.5640555068012286,
+        "f1": 0.6935183520060424,
+        "precision": 0.9001137848940342
+    },
+    "anomaly_detection_SMAP_Autoformer_SMAP_ftM_sl100_ll48_pl0_dm128_nh8_el3_dl1_df128_expand2_dc4_fc1_ebtimeF_dtTrue_test_0": {
+        "time": "2025-06-04 05:18:48",
+        "accuracy": 0.9438022258711913,
+        "recall": 0.6252638218516894,
+        "f1": 0.740051817474213,
+        "precision": 0.9064633504398011
+    }
+}
