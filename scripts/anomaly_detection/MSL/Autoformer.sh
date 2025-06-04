@@ -1,5 +1,3 @@
-export CUDA_VISIBLE_DEVICES=0
-
 python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \

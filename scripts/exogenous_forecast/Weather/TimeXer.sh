@@ -1,4 +1,3 @@
-export CUDA_VISIBLE_DEVICES=0
 
 model_name=TimeXer
 des='Timexer-MS'
