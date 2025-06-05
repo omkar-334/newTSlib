@@ -36,7 +36,7 @@ class Dataset_ETT_hour(Dataset):
         # size [seq_len, label_len, pred_len]
         self.args = args
         # info
-        if size == None:
+        if size is None:
             self.seq_len = 24 * 4 * 4
             self.label_len = 24 * 4
             self.pred_len = 24 * 4
@@ -45,7 +45,7 @@ class Dataset_ETT_hour(Dataset):
             self.label_len = size[1]
             self.pred_len = size[2]
         # init
-        assert flag in ["train", "test", "val"]
+        assert flag in {"train", "test", "val"}
         type_map = {"train": 0, "val": 1, "test": 2}
         self.set_type = type_map[flag]
 
@@ -76,7 +76,7 @@ class Dataset_ETT_hour(Dataset):
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
-        if self.features == "M" or self.features == "MS":
+        if self.features in {"M", "MS"}:
             cols_data = df_raw.columns[1:]
             df_data = df_raw[cols_data]
         elif self.features == "S":
@@ -151,7 +151,7 @@ class Dataset_ETT_minute(Dataset):
         # size [seq_len, label_len, pred_len]
         self.args = args
         # info
-        if size == None:
+        if size is None:
             self.seq_len = 24 * 4 * 4
             self.label_len = 24 * 4
             self.pred_len = 24 * 4
@@ -160,7 +160,7 @@ class Dataset_ETT_minute(Dataset):
             self.label_len = size[1]
             self.pred_len = size[2]
         # init
-        assert flag in ["train", "test", "val"]
+        assert flag in {"train", "test", "val"}
         type_map = {"train": 0, "val": 1, "test": 2}
         self.set_type = type_map[flag]
 
@@ -191,7 +191,7 @@ class Dataset_ETT_minute(Dataset):
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
-        if self.features == "M" or self.features == "MS":
+        if self.features in {"M", "MS"}:
             cols_data = df_raw.columns[1:]
             df_data = df_raw[cols_data]
         elif self.features == "S":
@@ -268,7 +268,7 @@ class Dataset_Custom(Dataset):
         # size [seq_len, label_len, pred_len]
         self.args = args
         # info
-        if size == None:
+        if size is None:
             self.seq_len = 24 * 4 * 4
             self.label_len = 24 * 4
             self.pred_len = 24 * 4
@@ -277,7 +277,7 @@ class Dataset_Custom(Dataset):
             self.label_len = size[1]
             self.pred_len = size[2]
         # init
-        assert flag in ["train", "test", "val"]
+        assert flag in {"train", "test", "val"}
         type_map = {"train": 0, "val": 1, "test": 2}
         self.set_type = type_map[flag]
 
@@ -301,7 +301,7 @@ class Dataset_Custom(Dataset):
         cols = list(df_raw.columns)
         cols.remove(self.target)
         cols.remove("date")
-        df_raw = df_raw[["date"] + cols + [self.target]]
+        df_raw = df_raw[["date", *cols, self.target]]
         num_train = int(len(df_raw) * 0.7)
         num_test = int(len(df_raw) * 0.2)
         num_vali = len(df_raw) - num_train - num_test
@@ -310,7 +310,7 @@ class Dataset_Custom(Dataset):
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
-        if self.features == "M" or self.features == "MS":
+        if self.features in {"M", "MS"}:
             cols_data = df_raw.columns[1:]
             df_data = df_raw[cols_data]
         elif self.features == "S":
@@ -413,10 +413,8 @@ class Dataset_M4(Dataset):
             v[~np.isnan(v)]
             for v in dataset.values[dataset.groups == self.seasonal_patterns]
         ])  # split different frequencies
-        self.ids = np.array([
-            i for i in dataset.ids[dataset.groups == self.seasonal_patterns]
-        ])
-        self.timeseries = [ts for ts in training_values]
+        self.ids = np.array(list(dataset.ids[dataset.groups == self.seasonal_patterns]))
+        self.timeseries = list(training_values)
 
     def __getitem__(self, index):
         insample = np.zeros((self.seq_len, 1))
@@ -840,7 +838,7 @@ class UEAloader(Dataset):
         )  # int8-32 gives an error when using nn.CrossEntropyLoss
 
         lengths = (
-            df.applymap(lambda x: len(x)).values
+            df.applymap(len).values
         )  # (num_samples, num_dimensions) array containing the length of each series
 
         horiz_diffs = np.abs(lengths - np.expand_dims(lengths[:, 0], -1))
@@ -850,7 +848,7 @@ class UEAloader(Dataset):
         ):  # if any row (sample) has varying length across dimensions
             df = df.applymap(subsample)
 
-        lengths = df.applymap(lambda x: len(x)).values
+        lengths = df.applymap(len).values
         vert_diffs = np.abs(lengths - np.expand_dims(lengths[0, :], 0))
         if (
             np.sum(vert_diffs) > 0

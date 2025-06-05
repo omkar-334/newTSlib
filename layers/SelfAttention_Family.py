@@ -4,9 +4,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 from einops import rearrange, repeat
-from reformer_pytorch import LSHSelfAttention
 
 from utils.masking import ProbMask, TriangularCausalMask
+
+from .reformer import LSHSelfAttention
 
 
 class DSAttention(nn.Module):
