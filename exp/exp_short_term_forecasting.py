@@ -116,13 +116,17 @@ class Exp_Short_Term_Forecast(Exp_Basic):
                 loss = loss_value  # + loss_sharpness * 1e-5
                 train_loss.append(loss.item())
 
-                # if (i + 1) % 100 == 0:
-                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                #     speed = (time.time() - time_now) / iter_count
-                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                #     iter_count = 0
-                #     time_now = time.time()
+                if (i + 1) % 100 == 0:
+                    print(
+                        f"\titers: {i + 1}, epoch: {epoch + 1} | loss: {loss.item():.7f}"
+                    )
+                    speed = (time.time() - time_now) / iter_count
+                    left_time = speed * (
+                        (self.args.train_epochs - epoch) * train_steps - i
+                    )
+                    print(f"\tspeed: {speed:.4f}s/iter; left time: {left_time:.4f}s")
+                    iter_count = 0
+                    time_now = time.time()
 
                 loss.backward()
                 model_optim.step()
