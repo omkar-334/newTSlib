@@ -409,10 +409,10 @@ class Dataset_M4(Dataset):
             dataset = M4Dataset.load(training=True, dataset_file=self.root_path)
         else:
             dataset = M4Dataset.load(training=False, dataset_file=self.root_path)
-        training_values = np.array([
+        training_values = [
             v[~np.isnan(v)]
             for v in dataset.values[dataset.groups == self.seasonal_patterns]
-        ])  # split different frequencies
+        ]  # split different frequencies
         self.ids = np.array(list(dataset.ids[dataset.groups == self.seasonal_patterns]))
         self.timeseries = list(training_values)
 

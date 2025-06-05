@@ -4,7 +4,6 @@ import torch
 import torch.nn.functional as F
 from einops import pack, rearrange, repeat, unpack
 from torch import einsum, nn
-from torch.cuda.amp import autocast
 from torch.nn import Module
 
 
@@ -30,7 +29,7 @@ class SinusoidalEmbeddings(Module):
         scale = (torch.arange(0, dim, 2) + 0.4 * dim) / (1.4 * dim)
         self.register_buffer("scale", scale, persistent=False)
 
-    @autocast(device_type="cuda", enabled=False)
+    # @autocast(device_type="cuda", enabled=False)
     def forward(self, x):
         seq_len, device = x.shape[-2], x.device
 
@@ -54,7 +53,7 @@ def rotate_half(x):
     return torch.cat((-x2, x1), dim=-1)
 
 
-@autocast(device_type="cuda", enabled=False)
+# @autocast(device_type="cuda", enabled=False)
 def apply_rotary_pos_emb(q, k, freqs, scale=1):
     q_len = q.shape[-2]
     q_freqs = freqs[..., -q_len:, :]
