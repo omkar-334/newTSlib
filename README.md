@@ -1,173 +1,170 @@
-# Time Series Library (TSLib)
-TSLib is an open-source library for deep learning researchers, especially for deep time series analysis.
+# TimeSeries
 
-We provide a neat code base to evaluate advanced deep time series models or develop your model, which covers five mainstream tasks: **long- and short-term forecasting, imputation, anomaly detection, and classification.**
+![dtsm](./images/dtsm.png)  
 
-:triangular_flag_on_post:**News** (2024.10) We have included [[TimeXer]](https://arxiv.org/abs/2402.19072), which defined a practical forecasting paradigm: Forecasting with Exogenous Variables. Considering both practicability and computation efficiency, we believe the new forecasting paradigm defined in TimeXer can be the "right" task for future research.
+## **Imputation**
 
-:triangular_flag_on_post:**News** (2024.10) Our lab has open-sourced [[OpenLTM]](https://github.com/thuml/OpenLTM), which provides a distinct pretrain-finetuning paradigm compared to TSLib. If you are interested in Large Time Series Models, you may find this repository helpful.
+Temporal dependence characterizes time series data because observations close in time tend to be similar compared to cross-sectional data.
 
-:triangular_flag_on_post:**News** (2024.07) We wrote a comprehensive survey of [[Deep Time Series Models]](https://arxiv.org/abs/2407.13278) with a rigorous benchmark based on TSLib. In this paper, we summarized the design principles of current time series models supported by insightful experiments, hoping to be helpful to future research.
+### Missing mechanisms [Rubin, 1976](https://academic.oup.com/biomet/article/63/3/581/270932)
 
-:triangular_flag_on_post:**News** (2024.04) Many thanks for the great work from [frecklebars](https://github.com/thuml/Time-Series-Library/pull/378). The famous sequential model [Mamba](https://arxiv.org/abs/2312.00752) has been included in our library. See [this file](https://github.com/thuml/Time-Series-Library/blob/main/models/Mamba.py), where you need to install `mamba_ssm` with pip at first.
+1. MCAR
+2. MAR
+3. MNAR
 
-:triangular_flag_on_post:**News** (2024.03) Given the inconsistent look-back length of various papers, we split the long-term forecasting in the leaderboard into two categories: Look-Back-96 and Look-Back-Searching. We recommend researchers read [TimeMixer](https://openreview.net/pdf?id=7oLshfEIC2), which includes both look-back length settings in experiments for scientific rigor.
+### Missing Patterns
 
-:triangular_flag_on_post:**News** (2023.10) We add an implementation to [iTransformer](https://arxiv.org/abs/2310.06625), which is the state-of-the-art model for long-term forecasting. The official code and complete scripts of iTransformer can be found [here](https://github.com/thuml/iTransformer).
+1. point missing
+2. subsequence missing
+3. block missing
 
-:triangular_flag_on_post:**News** (2023.09) We added a detailed [tutorial](https://github.com/thuml/Time-Series-Library/blob/main/tutorial/TimesNet_tutorial.ipynb) for [TimesNet](https://openreview.net/pdf?id=ju_Uqw384Oq) and this library, which is quite friendly to beginners of deep time series analysis.
+![missing](./images/missing.png)
 
-:triangular_flag_on_post:**News** (2023.02) We release the TSlib as a comprehensive benchmark and code base for time series models, which is extended from our previous GitHub repository [Autoformer](https://github.com/thuml/Autoformer).
+### Statistical methods of imputation
 
-## Leaderboard for Time Series Analysis
+1. deletion
+2. constant imputation
+3. locf - last obs carried forward
+4. nocb - next obs carried backward
+5. mean/median/mode
+6. rolling statistics
+7. linear interpolation
+8. spline interpolation
+9. KNN
+10. regression
+11. seasonal trend decomposition using Loess (STL)
 
-Till March 2024, the top three models for five different tasks are:
+### Papers
 
-| Model<br>Ranking | Long-term<br>Forecasting<br>Look-Back-96              | Long-term<br/>Forecasting<br/>Look-Back-Searching     | Short-term<br>Forecasting                                    | Imputation                                                   | Classification                                               | Anomaly<br>Detection                               |
-| ---------------- | ----------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------------------------------------------- |
-| 🥇 1st            | [TimeXer](https://arxiv.org/abs/2402.19072)      | [TimeMixer](https://openreview.net/pdf?id=7oLshfEIC2) | [TimesNet](https://arxiv.org/abs/2210.02186)                 | [TimesNet](https://arxiv.org/abs/2210.02186)                 | [TimesNet](https://arxiv.org/abs/2210.02186)                 | [TimesNet](https://arxiv.org/abs/2210.02186)       |
-| 🥈 2nd            | [iTransformer](https://arxiv.org/abs/2310.06625) | [PatchTST](https://github.com/yuqinie98/PatchTST)     | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [Non-stationary<br/>Transformer](https://github.com/thuml/Nonstationary_Transformers) | [FEDformer](https://github.com/MAZiqing/FEDformer) |
-| 🥉 3rd            | [TimeMixer](https://openreview.net/pdf?id=7oLshfEIC2)          | [DLinear](https://arxiv.org/pdf/2205.13504.pdf)       | [FEDformer](https://github.com/MAZiqing/FEDformer)           | [Autoformer](https://github.com/thuml/Autoformer)            | [Informer](https://github.com/zhouhaoyi/Informer2020)        | [Autoformer](https://github.com/thuml/Autoformer)  |
+1. [TimesNet](https://openreview.net/pdf?id=ju_Uqw384Oq) ---> [Github - TSLib](https://github.com/thuml/Time-Series-Library)  
 
+    TSLib/TimesNet only supports point-missing pattern. They randomly mask the time-points in the ratio of {12.5%, 25%, 37.5%, 50%}.  
 
-**Note: We will keep updating this leaderboard.** If you have proposed advanced and awesome models, you can send us your paper/code link or raise a pull request. We will add them to this repo and update the leaderboard as soon as possible.
+    Results for Autoformer (Weather dataset)
 
-**Compared models of this leaderboard.** ☑ means that their codes have already been included in this repo.
-  - [x] **TimeXer** - TimeXer: Empowering Transformers for Time Series Forecasting with Exogenous Variables [[NeurIPS 2024]](https://arxiv.org/abs/2402.19072) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TimeXer.py)
-  - [x] **TimeMixer** - TimeMixer: Decomposable Multiscale Mixing for Time Series Forecasting [[ICLR 2024]](https://openreview.net/pdf?id=7oLshfEIC2) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TimeMixer.py).
-  - [x] **TSMixer** - TSMixer: An All-MLP Architecture for Time Series Forecasting [[arXiv 2023]](https://arxiv.org/pdf/2303.06053.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TSMixer.py)
-  - [x] **iTransformer** - iTransformer: Inverted Transformers Are Effective for Time Series Forecasting [[ICLR 2024]](https://arxiv.org/abs/2310.06625) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/iTransformer.py).
-  - [x] **PatchTST** - A Time Series is Worth 64 Words: Long-term Forecasting with Transformers [[ICLR 2023]](https://openreview.net/pdf?id=Jbdc0vTOcol) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/PatchTST.py).
-  - [x] **TimesNet** - TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis [[ICLR 2023]](https://openreview.net/pdf?id=ju_Uqw384Oq) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TimesNet.py).
-  - [x] **DLinear** - Are Transformers Effective for Time Series Forecasting? [[AAAI 2023]](https://arxiv.org/pdf/2205.13504.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/DLinear.py).
-  - [x] **LightTS** - Less Is More: Fast Multivariate Time Series Forecasting with Light Sampling-oriented MLP Structures [[arXiv 2022]](https://arxiv.org/abs/2207.01186) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/LightTS.py).
-  - [x] **ETSformer** - ETSformer: Exponential Smoothing Transformers for Time-series Forecasting [[arXiv 2022]](https://arxiv.org/abs/2202.01381) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/ETSformer.py).
-  - [x] **Non-stationary Transformer** - Non-stationary Transformers: Exploring the Stationarity in Time Series Forecasting [[NeurIPS 2022]](https://openreview.net/pdf?id=ucNDIDRNjjv) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Nonstationary_Transformer.py).
-  - [x] **FEDformer** - FEDformer: Frequency Enhanced Decomposed Transformer for Long-term Series Forecasting [[ICML 2022]](https://proceedings.mlr.press/v162/zhou22g.html) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/FEDformer.py).
-  - [x] **Pyraformer** - Pyraformer: Low-complexity Pyramidal Attention for Long-range Time Series Modeling and Forecasting [[ICLR 2022]](https://openreview.net/pdf?id=0EXmFzUn5I) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Pyraformer.py).
-  - [x] **Autoformer** - Autoformer: Decomposition Transformers with Auto-Correlation for Long-Term Series Forecasting [[NeurIPS 2021]](https://openreview.net/pdf?id=I55UqU-M11y) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Autoformer.py).
-  - [x] **Informer** - Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting [[AAAI 2021]](https://ojs.aaai.org/index.php/AAAI/article/view/17325/17132) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Informer.py).
-  - [x] **Reformer** - Reformer: The Efficient Transformer [[ICLR 2020]](https://openreview.net/forum?id=rkgNKkHtvB) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Reformer.py).
-  - [x] **Transformer** - Attention is All You Need [[NeurIPS 2017]](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Transformer.py).
+    | Mask Rate | MSE                | MAE                |
+    |-----------|--------------------|--------------------|
+    | 12.5%     | 0.3128             | 0.4111             |
+    | 25%       | 0.3024             | 0.3879             |
+    | 37.5%     | 0.1488             | 0.2562             |
+    | 50%       | 0.1428             | 0.2470             |
 
-See our latest paper [[TimesNet]](https://arxiv.org/abs/2210.02186) for the comprehensive benchmark. We will release a real-time updated online version soon.
+    More masking → model sees less observed data but is forced to learn deeper temporal dependencies and structural patterns.  
+    This leads to more robust representations, like how dropout improves generalization by preventing over-reliance on specific inputs.     
 
-**Newly added baselines.** We will add them to the leaderboard after a comprehensive evaluation.
-  - [x] **MultiPatchFormer** - A multiscale model for multivariate time series forecasting [[Scientific Reports 2025]](https://www.nature.com/articles/s41598-024-82417-4) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/MultiPatchFormer.py)
-  - [x] **WPMixer** - WPMixer: Efficient Multi-Resolution Mixing for Long-Term Time Series Forecasting [[AAAI 2025]](https://arxiv.org/abs/2412.17176) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/WPMixer.py)
-  - [x] **PAttn** - Are Language Models Actually Useful for Time Series Forecasting? [[NeurIPS 2024]](https://arxiv.org/pdf/2406.16964) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/PAttn.py)
-  - [x] **Mamba** - Mamba: Linear-Time Sequence Modeling with Selective State Spaces [[arXiv 2023]](https://arxiv.org/abs/2312.00752) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Mamba.py)
-  - [x] **SegRNN** - SegRNN: Segment Recurrent Neural Network for Long-Term Time Series Forecasting [[arXiv 2023]](https://arxiv.org/abs/2308.11200.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/SegRNN.py).
-  - [x] **Koopa** - Koopa: Learning Non-stationary Time Series Dynamics with Koopman Predictors [[NeurIPS 2023]](https://arxiv.org/pdf/2305.18803.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Koopa.py).
-  - [x] **FreTS** - Frequency-domain MLPs are More Effective Learners in Time Series Forecasting [[NeurIPS 2023]](https://arxiv.org/pdf/2311.06184.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/FreTS.py).
-  - [x] **MICN** - MICN: Multi-scale Local and Global Context Modeling for Long-term Series Forecasting [[ICLR 2023]](https://openreview.net/pdf?id=zt53IDUR1U)[[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/MICN.py).
-  - [x] **Crossformer** - Crossformer: Transformer Utilizing Cross-Dimension Dependency for Multivariate Time Series Forecasting [[ICLR 2023]](https://openreview.net/pdf?id=vSVLM2j9eie)[[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/Crossformer.py).
-  - [x] **TiDE** - Long-term Forecasting with TiDE: Time-series Dense Encoder [[arXiv 2023]](https://arxiv.org/pdf/2304.08424.pdf) [[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TiDE.py).
-  - [x] **SCINet** - SCINet: Time Series Modeling and Forecasting with Sample Convolution and Interaction [[NeurIPS 2022]](https://openreview.net/pdf?id=AyajSjTAzmg)[[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/SCINet.py).
-  - [x] **FiLM** - FiLM: Frequency improved Legendre Memory Model for Long-term Time Series Forecasting [[NeurIPS 2022]](https://openreview.net/forum?id=zTQdHSQUQWc)[[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/FiLM.py).
-  - [x] **TFT** - Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting [[arXiv 2019]](https://arxiv.org/abs/1912.09363)[[Code]](https://github.com/thuml/Time-Series-Library/blob/main/models/TemporalFusionTransformer.py). 
- 
-## Usage
+    Results for Timesnet (Weather dataset)
 
-1. Install Python 3.8. For convenience, execute the following command.
+    | Masking Ratio |     MAE     |     MSE     |
+    |:-------------:|:-----------:|:-----------:|
+    |     0.125     | 0.04593     | 0.02517     |
+    |     0.25      | 0.05506     | 0.02932     |
+    |     0.375     | 0.05704     | 0.03088     |
+    |     0.5       | 0.06148     | 0.03413     |
 
-```
-pip install -r requirements.txt
-```
+    Timesnet performance decreases with the increase in masking ratio, but Autoformer performance increases.  
+    Although, Timesnet performs much better at TS-imputation task. it also tops the TSlib leaderboard for this task.
 
-2. Prepare Data. You can obtain the well pre-processed datasets from [[Google Drive]](https://drive.google.com/drive/folders/13Cg1KYOlzM5C7K8gK8NfC-F3EYxkM3D2?usp=sharing) or [[Baidu Drive]](https://pan.baidu.com/s/1r3KhGd0Q9PJIUZdfEYoymg?pwd=i9iy), Then place the downloaded data in the folder`./dataset`. Here is a summary of supported datasets.
+    Extension of this paper - [Deep TS Models](https://arxiv.org/pdf/2407.13278)  
 
-<p align="center">
-<img src=".\images\dataset.png" height = "200" alt="" align=center />
-</p>
+2. [MTSI with Transformers](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9964035)  
 
-3. Train and evaluate model. We provide the experiment scripts for all benchmarks under the folder `./scripts/`. You can reproduce the experiment results as the following examples:
+    This paper uses 2 datasets -
+    1. physionet 2012 (clinical dataset) - As the dataset has no ground truth, 10/50/90% of the observed values in the test data are taken as ground truths for which the input data is masked with the Bernoulli distribution.  
+    2. beijing air quality - uses block-missing pattern. There is already 13% missing data. For each missing data-point, the succeeding month's data-point is taken as the ground truth. For example, if 24th Feb is missing, the ground truth to this is 24th March.
 
-```
-# long-term forecast
-bash ./scripts/long_term_forecast/ETT_script/TimesNet_ETTh1.sh
-# short-term forecast
-bash ./scripts/short_term_forecast/TimesNet_M4.sh
-# imputation
-bash ./scripts/imputation/ETT_script/TimesNet_ETTh1.sh
-# anomaly detection
-bash ./scripts/anomaly_detection/PSM/TimesNet.sh
-# classification
-bash ./scripts/classification/TimesNet.sh
-```
+3. [TSI-Bench](https://arxiv.org/pdf/2406.12747) ---> [Github - Awesome Imputation](https://github.com/WenjieDu/Awesome_Imputation)  
+    TSIBench supports all three missing patterns - point, subseq and block.  
+    ![tsibench](./images/tsibench.png)
 
-4. Develop your own model.
+4. [DL for MTSI](https://arxiv.org/pdf/2402.04059) ----> [Pypots imputations](https://docs.pypots.com/en/latest/pypots.imputation.html)  
+   ![dmtsi](./images/dlmtsi.png)
 
-- Add the model file to the folder `./models`. You can follow the `./models/Transformer.py`.
-- Include the newly added model in the `Exp_Basic.model_dict` of  `./exp/exp_basic.py`.
-- Create the corresponding scripts under the folder `./scripts`.
+## **Classification**
 
-Note: 
+![class](./images/class.png)  
 
-(1) About classification: Since we include all five tasks in a unified code base, the accuracy of each subtask may fluctuate but the average performance can be reproduced (even a bit better). We have provided the reproduced checkpoints [here](https://github.com/thuml/Time-Series-Library/issues/494).
+### Papers
 
-(2) About anomaly detection: Some discussion about the adjustment strategy in anomaly detection can be found [here](https://github.com/thuml/Anomaly-Transformer/issues/14). The key point is that the adjustment strategy corresponds to an event-level metric.
+1. [Transformers in TS - IJCAI](https://www.ijcai.org/proceedings/2023/0759.pdf)
+2. [DL for TSC](https://arxiv.org/pdf/1809.04356) - mlp, cnn, rnn/esn, fcn, resnet, encoder, mcnn, t-LeNet, mcdcnn, time-cnn
+3. [Voice2Series - ICML](https://arxiv.org/pdf/2106.09296) - Achieves SOTA in 19 datasets ($xt​=Pad(xt​)+δ$) - [Github](https://github.com/huckiyang/Voice2Series-Reprogramming)  
+    Padding reprogramming — where the padded portion is replaced by a trainable additive vector $δ=M⊙θ$
+4. [Aeon library](https://www.aeon-toolkit.org/en/latest/api_reference/classification.html)
 
-## Citation
+### Discriminative region
 
-If you find this repo useful, please cite our paper.
+A discriminative region is the subsequence of a time series that contains the most informative features for classifying the time series into the correct class.
 
-```
-@inproceedings{wu2023timesnet,
-  title={TimesNet: Temporal 2D-Variation Modeling for General Time Series Analysis},
-  author={Haixu Wu and Tengge Hu and Yong Liu and Hang Zhou and Jianmin Wang and Mingsheng Long},
-  booktitle={International Conference on Learning Representations},
-  year={2023},
-}
+| Method                    | How it finds the discriminative region                                |
+| ------------------------- | --------------------------------------------------------------------- |
+| **Shapelets**             | Learns short subsequences that best separate classes (e.g., slant)    |
+| **Saliency/Grad-CAM**     | Highlights time points where gradients w\.r.t. output are strongest   |
+| **Attention models**      | Learn to focus on regions (middle slant) with highest class-relevance |
+| **Class activation maps** | Show which part of input most influences the predicted class          |
+| **Manual inspection**     | Plotting and observing differences (used in early literature)         |
 
-@article{wang2024tssurvey,
-  title={Deep Time Series Models: A Comprehensive Survey and Benchmark},
-  author={Yuxuan Wang and Haixu Wu and Jiaxiang Dong and Yong Liu and Mingsheng Long and Jianmin Wang},
-  booktitle={arXiv preprint arXiv:2407.13278},
-  year={2024},
-}
-```
+![gun dataset](./images/tsc-gun.png)  
 
-## Contact
-If you have any questions or suggestions, feel free to contact our maintenance team:
+## **Anomaly Detection**
 
-Current:
-- Haixu Wu (Ph.D. student, wuhx23@mails.tsinghua.edu.cn)
-- Yong Liu (Ph.D. student, liuyong21@mails.tsinghua.edu.cn)
-- Yuxuan Wang (Ph.D. student, wangyuxu22@mails.tsinghua.edu.cn)
-- Huikun Weng (Undergraduate, wenghk22@mails.tsinghua.edu.cn)
+![anomaly](./images/anomaly.png)  
 
-Previous:
-- Tengge Hu (Master student, htg21@mails.tsinghua.edu.cn)
-- Haoran Zhang (Master student, z-hr20@mails.tsinghua.edu.cn)
-- Jiawei Guo (Undergraduate, guo-jw21@mails.tsinghua.edu.cn)
+Training loop often doesn't have labels.  
+The model is trained to re-construct normal (non-anomalous) data.  
+For normal samples, reconstruction error should be low.  
+For anomalous samples, reconstruction error should be high (since it is unseen data. Model predicted normal data, but original data has an anomaly)  
 
-Or describe it in Issues.
+### Evaluation
 
-## Acknowledgement
+1. Calculate reconstruction error(MSELoss) between pred and output - `score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)`
+2. Concat all errors into a single array
+3. Find the threshold percentile (Any test sample with a reconstruction error above this threshold (the top 1% highest errors) is flagged as an anomaly.) - `threshold = np.percentile(combined_energy, 100 - self.args.anomaly_ratio)`
+4. Filter all predictions by checking which are more than threshold - `pred = (test_energy > threshold).astype(int)`
 
-This project is supported by the National Key R&D Program of China (2021YFB1715200).
+### Anomaly Patterns
 
-This library is constructed based on the following repos:
+1. **Point anomalies** (point-based) refer to data points that deviate remarkably from the rest of the data.
+2. **Contextual anomalies** (point-based) refer to data points within the expected range of the distribution (in contrast to point anomalies) but deviate from the expected data distribution, given a specific context (e.g., a window).
+3. **Collective anomalies** (sequence-based) refer to sequences of points that do not repeat a typical (previously observed) pattern.
 
-- Forecasting: https://github.com/thuml/Autoformer.
+### Papers
 
-- Anomaly Detection: https://github.com/thuml/Anomaly-Transformer.
+1. [Dive into TS AD](https://arxiv.org/pdf/2412.20512) - describes many methods
+2. [AnomalyBert - ICLR](https://arxiv.org/pdf/2305.04468) - [Github](https://github.com/Jhryu30/AnomalyBERT) -   processes time series in patches (small groups of points). Unlike the original Transformer or ViT, we do not use sinusoidal positional encodings or absolute position embeddings to inject positional information. We instead add 1D relative position bias to each attention matrix to consider the relative positions between features in a window.
 
-- Classification: https://github.com/thuml/Flowformer.
+## Forecasting
 
-All the experiment datasets are public, and we obtain them from the following links:
+1. training
 
-- Long-term Forecasting and Imputation: https://github.com/thuml/Autoformer.
+    | Aspect | Short-Term | Long-Term | Difference |
+    | ------ | -----------| ---------- | ---------- |
+    | Time features            | ❌ Not used                                                                               | ✅ Uses `batch_x_mark` and `batch_y_mark`                   | Short-term often uses raw ts only                              |
+    | Model Call                | `self.model(batch_x, None, dec_inp, None)`                                               | `self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)` | Long-term uses full context                                    |
+    | Loss Calculation          | `criterion(batch_x, freq_map, outputs, batch_y, batch_y_mark)` + optional sharpness loss | `criterion(outputs, batch_y)`                              | Short-term loss may include frequency/temporal sharpness terms |
+    | Sharpness Regularization  | ✅ `MSE(output diffs, target diffs)` — optional                                           | ❌ Not applied                                              | Unique to short-term variant                                   |
+    | Use of Frequency Map      | ✅ Passed to loss (for frequency-aware loss function)                                     | ❌ Not used in long-term training                           | Short-term focuses on frequency                                |
 
-- Short-term Forecasting: https://github.com/ServiceNow/N-BEATS.
+2. validation
 
-- Anomaly Detection: https://github.com/thuml/Anomaly-Transformer.
+    | Feature            | Short-Term              | Long-Term                        |
+    | ------------------ | ----------------------- | -------------------------------- |
+    | # of test samples  | 1 (last training slice) | Many (rolling across test set)   |
+    | Loop over batches  | ❌                       | ✅                                |
+    | Decoder input      | Single sample           | Reconstructed per batch          |
+    | Time marks used    | ❌                       | ✅                                |
+    | Inverse scaling    | Optional, less common   | Common in scaled datasets        |
+    | Evaluation metrics | Often skipped           | Full set + DTW                   |
 
-- Classification: https://www.timeseriesclassification.com/.
+### Statistical methods for forecasting [Paper](https://www.researchgate.net/publication/352986678_Comparison_of_Forecasting_Techniques_for_Short-term_and_Long-term_Real_Life_Problems)
 
-## All Thanks To Our Contributors
+1. Simple Exponential Smoothing
+2. Holt's method (Double Exponential Smoothing)
+3. Holt-Winter's method (Triple Exponential Smoothing)
+4. Holt-Winter's Method with Multiplicative Seasonality
+5. Holt-Winter's Method with Additive Seasonality
 
-<a href="https://github.com/thuml/Time-Series-Library/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=thuml/Time-Series-Library" />
-</a>
+### Papers
+
+1. [MDMixer](https://arxiv.org/pdf/2505.08199)
+2. [CrossLinear](https://arxiv.org/pdf/2505.23116)
+3. [LogoLLM](https://arxiv.org/pdf/2505.11017)
