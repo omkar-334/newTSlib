@@ -183,6 +183,6 @@ class Exp_Classification(Exp_Basic):
         trues = trues.flatten().cpu().numpy()
         accuracy = cal_accuracy(predictions, trues)
 
-        save_preds(setting, preds, trues)
+        # save_preds(setting, preds, trues)
         save_results("classification", setting, {"accuracy": accuracy})
         return PATH

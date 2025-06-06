@@ -228,6 +228,6 @@ class Exp_Imputation(Exp_Basic):
             "mspe": float(mspe),
         }
 
-        save_preds(setting, preds, trues)
+        # save_preds(setting, preds, trues)
         save_results("imputation", setting, argsdict)
         return PATH

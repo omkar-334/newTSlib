@@ -196,6 +196,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
             "precision": float(precision),
         }
 
-        save_preds(setting, pred, gt)
+        # save_preds(setting, pred, gt)
         save_results("anomaly_detection", setting, metrics)
         return PATH
