@@ -209,6 +209,9 @@ class Exp_Short_Term_Forecast(Exp_Basic):
         x = x.unsqueeze(-1)
 
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
+        folder_path = "./m4_results/" + self.args.model + "/"
+        os.makedirs(folder_path, exist_ok=True)
+
         if test:
             print("loading model")
             self.model.load_state_dict(torch.load(PATH))
@@ -247,12 +250,6 @@ class Exp_Short_Term_Forecast(Exp_Basic):
                 gt = np.concatenate((x[i, :, 0], trues[i]), axis=0)
                 pd = np.concatenate((x[i, :, 0], preds[i, :, 0]), axis=0)
                 visual(gt, pd, setting, i)
-
-        # print('test shape:', preds.shape)
-
-        # result save
-        folder_path = "./m4_results/" + self.args.model + "/"
-        os.makedirs(folder_path, exist_ok=True)
 
         forecasts_df = pandas.DataFrame(
             preds[:, :, 0], columns=[f"V{i + 1}" for i in range(self.args.pred_len)]

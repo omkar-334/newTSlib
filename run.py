@@ -392,7 +392,9 @@ if __name__ == "__main__":
                 torch.cuda.empty_cache()
 
             gc.collect()
-            os.remove(ckpt)
+            if os.path.exists(ckpt):
+                os.remove(ckpt)
+
             print("-------------------------------------------------")
     else:
         exp = Exp(args)  # set experiments
