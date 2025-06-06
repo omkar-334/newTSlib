@@ -3,8 +3,7 @@
 # implementation of the N-BEATS model (Oreshkin et al., N-BEATS: Neural basis
 # expansion analysis for interpretable time series forecasting,
 # https://arxiv.org/abs/1905.10437). The copyright to the source code is
-# licensed under the Creative Commons - Attribution-NonCommercial 4.0
-# International license (CC BY-NC 4.0):
+# licensed under the Creative Commons - Attribution-NonCommercial 4.0 International license (CC BY-NC 4.0):
 # https://creativecommons.org/licenses/by-nc/4.0/.  Any commercial use (whether
 # for the benefit of third parties or internally in production) requires an
 # explicit license. The subject-matter of the N-BEATS model and associated
@@ -26,25 +25,28 @@ from data_provider.m4 import M4Dataset, M4Meta
 
 
 def group_values(values, groups, group_name):
-    return np.array([v[~np.isnan(v)] for v in values[groups == group_name]])
+    return [v[~np.isnan(v)] for v, g in zip(values, groups) if g == group_name]
 
 
 def mase(forecast, insample, outsample, frequency):
-    return np.mean(np.abs(forecast - outsample)) / np.mean(
-        np.abs(insample[:-frequency] - insample[frequency:])
-    )
+    forecast = np.asarray(forecast)
+    insample = np.asarray(insample)
+    outsample = np.asarray(outsample)
+
+    denom = np.mean(np.abs(insample[:-frequency] - insample[frequency:]))
+    if denom == 0:
+        return np.nan
+    return np.mean(np.abs(forecast - outsample)) / denom
 
 
 def smape_2(forecast, target):
     denom = np.abs(target) + np.abs(forecast)
-    # divide by 1.0 instead of 0.0, in case when denom is zero the enumerator will be 0.0 anyway.
     denom[denom == 0.0] = 1.0
     return 200 * np.abs(forecast - target) / denom
 
 
 def mape(forecast, target):
     denom = np.abs(target)
-    # divide by 1.0 instead of 0.0, in case when denom is zero the enumerator will be 0.0 anyway.
     denom[denom == 0.0] = 1.0
     return 100 * np.abs(forecast - target) / denom
 
@@ -59,14 +61,13 @@ class M4Summary:
     def evaluate(self):
         """
         Evaluate forecasts using M4 test dataset.
-
-        :param forecast: Forecasts. Shape: timeseries, time.
         :return: sMAPE and OWA grouped by seasonal patterns.
         """
         grouped_owa = OrderedDict()
 
         naive2_forecasts = pd.read_csv(self.naive_path).values[:, 1:].astype(np.float32)
-        naive2_forecasts = np.array([v[~np.isnan(v)] for v in naive2_forecasts])
+
+        naive2_forecasts = [v[~np.isnan(v)] for v in naive2_forecasts]
 
         model_mases = {}
         naive2_smapes = {}
@@ -84,13 +85,13 @@ class M4Summary:
             target = group_values(
                 self.test_set.values, self.test_set.groups, group_name
             )
-            # all timeseries within group have same frequency
-            frequency = self.training_set.frequencies[
-                self.test_set.groups == group_name
-            ][0]
             insample = group_values(
                 self.training_set.values, self.test_set.groups, group_name
             )
+
+            frequency = self.training_set.frequencies[
+                self.test_set.groups == group_name
+            ][0]
 
             model_mases[group_name] = np.mean([
                 mase(
@@ -108,15 +109,20 @@ class M4Summary:
                     outsample=target[i],
                     frequency=frequency,
                 )
-                for i in range(len(model_forecast))
+                for i in range(len(naive2_forecast))
             ])
+            naive2_concat = (
+                np.concatenate(naive2_forecast) if naive2_forecast else np.array([])
+            )
+            target_concat = np.concatenate(target) if target else np.array([])
+            model_forecast_concat = model_forecast.flatten()
 
-            naive2_smapes[group_name] = np.mean(smape_2(naive2_forecast, target))
+            naive2_smapes[group_name] = np.mean(smape_2(naive2_concat, target_concat))
             grouped_smapes[group_name] = np.mean(
-                smape_2(forecast=model_forecast, target=target)
+                smape_2(model_forecast_concat, target_concat)
             )
             grouped_mapes[group_name] = np.mean(
-                mape(forecast=model_forecast, target=target)
+                mape(model_forecast_concat, target_concat)
             )
 
         grouped_smapes = self.summarize_groups(grouped_smapes)
