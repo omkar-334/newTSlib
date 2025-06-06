@@ -1,0 +1,2978 @@
+{
+    "short_term_forecast_m4_Monthly_ETSformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:51:39",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Yearly_ETSformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:51:47",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Quarterly_ETSformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:51:56",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Weekly_ETSformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:04",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Daily_ETSformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:12",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Hourly_ETSformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl2_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:20",
+        "smape": {
+            "Yearly": 16.715,
+            "Quarterly": 13.346,
+            "Monthly": 15.12,
+            "Others": 5.511,
+            "Average": 14.58
+        },
+        "owa": {
+            "Yearly": 1.044,
+            "Quarterly": 1.293,
+            "Monthly": 1.087,
+            "Others": 1.207,
+            "Average": 1.113
+        },
+        "mape": {
+            "Yearly": 20.228,
+            "Quarterly": 15.869,
+            "Monthly": 17.668,
+            "Others": 7.251,
+            "Average": 17.304
+        },
+        "mase": {
+            "Yearly": 4.233,
+            "Quarterly": 1.884,
+            "Monthly": 1.198,
+            "Others": 3.976,
+            "Average": 2.199
+        }
+    },
+    "short_term_forecast_m4_Monthly_FEDformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:29",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Yearly_FEDformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:37",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Quarterly_FEDformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:45",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Weekly_FEDformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:52:54",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Daily_FEDformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:02",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Hourly_FEDformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:10",
+        "smape": {
+            "Yearly": 13.665,
+            "Quarterly": 10.618,
+            "Monthly": 13.948,
+            "Others": 4.915,
+            "Average": 12.632
+        },
+        "owa": {
+            "Yearly": 0.804,
+            "Quarterly": 0.937,
+            "Monthly": 0.984,
+            "Others": 1.03,
+            "Average": 0.904
+        },
+        "mape": {
+            "Yearly": 16.374,
+            "Quarterly": 12.286,
+            "Monthly": 16.206,
+            "Others": 6.807,
+            "Average": 14.834
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 1.247,
+            "Monthly": 1.064,
+            "Others": 3.251,
+            "Average": 1.678
+        }
+    },
+    "short_term_forecast_m4_Monthly_iTransformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:34",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Yearly_iTransformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:42",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Quarterly_iTransformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:51",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Weekly_iTransformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:53:59",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Daily_iTransformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:07",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Hourly_iTransformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:15",
+        "smape": {
+            "Yearly": 14.369,
+            "Quarterly": 10.701,
+            "Monthly": 13.702,
+            "Others": 5.468,
+            "Average": 12.723
+        },
+        "owa": {
+            "Yearly": 0.844,
+            "Quarterly": 0.952,
+            "Monthly": 0.978,
+            "Others": 1.169,
+            "Average": 0.926
+        },
+        "mape": {
+            "Yearly": 18.985,
+            "Quarterly": 12.3,
+            "Monthly": 16.125,
+            "Others": 7.959,
+            "Average": 15.457
+        },
+        "mase": {
+            "Yearly": 3.211,
+            "Quarterly": 1.277,
+            "Monthly": 1.071,
+            "Others": 3.763,
+            "Average": 1.747
+        }
+    },
+    "short_term_forecast_m4_Monthly_Crossformer_m4_ftM_sl36_ll18_pl18_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:24",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Yearly_Crossformer_m4_ftM_sl12_ll6_pl6_dm16_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:32",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Crossformer_m4_ftM_sl16_ll8_pl8_dm64_nh8_el2_dl1_df64_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:40",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Daily_Crossformer_m4_ftM_sl28_ll14_pl14_dm16_nh8_el2_dl1_df16_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:48",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Weekly_Crossformer_m4_ftM_sl26_ll13_pl13_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:54:57",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Hourly_Crossformer_m4_ftM_sl96_ll48_pl48_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:05",
+        "smape": {
+            "Yearly": 79.278,
+            "Quarterly": 74.354,
+            "Monthly": 68.976,
+            "Others": 176.041,
+            "Average": 77.99
+        },
+        "owa": {
+            "Yearly": 4.777,
+            "Quarterly": 8.163,
+            "Monthly": 7.689,
+            "Others": 36.916,
+            "Average": 7.762
+        },
+        "mape": {
+            "Yearly": 61.06,
+            "Quarterly": 63.9,
+            "Monthly": 66.366,
+            "Others": 92.757,
+            "Average": 65.874
+        },
+        "mase": {
+            "Yearly": 18.689,
+            "Quarterly": 13.13,
+            "Monthly": 11.269,
+            "Others": 116.647,
+            "Average": 18.691
+        }
+    },
+    "short_term_forecast_m4_Monthly_TimesNet_m4_ftM_sl36_ll18_pl18_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:13",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Yearly_TimesNet_m4_ftM_sl12_ll6_pl6_dm16_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:22",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Quarterly_TimesNet_m4_ftM_sl16_ll8_pl8_dm64_nh8_el2_dl1_df64_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:30",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Daily_TimesNet_m4_ftM_sl28_ll14_pl14_dm16_nh8_el2_dl1_df16_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:38",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Weekly_TimesNet_m4_ftM_sl26_ll13_pl13_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:47",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Hourly_TimesNet_m4_ftM_sl96_ll48_pl48_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:55:55",
+        "smape": {
+            "Yearly": 13.394,
+            "Quarterly": 10.072,
+            "Monthly": 12.812,
+            "Others": 5.026,
+            "Average": 11.899
+        },
+        "owa": {
+            "Yearly": 0.786,
+            "Quarterly": 0.887,
+            "Monthly": 0.891,
+            "Others": 1.057,
+            "Average": 0.856
+        },
+        "mape": {
+            "Yearly": 16.348,
+            "Quarterly": 11.385,
+            "Monthly": 14.999,
+            "Others": 6.617,
+            "Average": 14.023
+        },
+        "mase": {
+            "Yearly": 2.993,
+            "Quarterly": 1.18,
+            "Monthly": 0.95,
+            "Others": 3.352,
+            "Average": 1.595
+        }
+    },
+    "short_term_forecast_m4_Monthly_TimeMixer_m4_ftM_sl36_ll18_pl18_dm32_nh8_el4_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:03",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Yearly_TimeMixer_m4_ftM_sl12_ll6_pl6_dm32_nh8_el4_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:11",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Quarterly_TimeMixer_m4_ftM_sl16_ll8_pl8_dm32_nh8_el4_dl1_df64_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:20",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Daily_TimeMixer_m4_ftM_sl28_ll14_pl14_dm32_nh8_el4_dl1_df16_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:28",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Weekly_TimeMixer_m4_ftM_sl26_ll13_pl13_dm32_nh8_el4_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:37",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Hourly_TimeMixer_m4_ftM_sl96_ll48_pl48_dm32_nh8_el4_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:45",
+        "smape": {
+            "Yearly": 13.404,
+            "Quarterly": 10.188,
+            "Monthly": 12.772,
+            "Others": 5.045,
+            "Average": 11.911
+        },
+        "owa": {
+            "Yearly": 0.794,
+            "Quarterly": 0.901,
+            "Monthly": 0.885,
+            "Others": 1.071,
+            "Average": 0.861
+        },
+        "mape": {
+            "Yearly": 16.359,
+            "Quarterly": 11.613,
+            "Monthly": 14.962,
+            "Others": 6.596,
+            "Average": 14.061
+        },
+        "mase": {
+            "Yearly": 3.049,
+            "Quarterly": 1.202,
+            "Monthly": 0.94,
+            "Others": 3.423,
+            "Average": 1.612
+        }
+    },
+    "short_term_forecast_m4_Monthly_Reformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:56:54",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Yearly_Reformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:02",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Reformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:10",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Weekly_Reformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:19",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Daily_Reformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:27",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Hourly_Reformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:35",
+        "smape": {
+            "Yearly": 13.689,
+            "Quarterly": 16.35,
+            "Monthly": 14.251,
+            "Others": 7.438,
+            "Average": 14.285
+        },
+        "owa": {
+            "Yearly": 0.805,
+            "Quarterly": 1.548,
+            "Monthly": 1.026,
+            "Others": 1.632,
+            "Average": 1.062
+        },
+        "mape": {
+            "Yearly": 16.849,
+            "Quarterly": 20.83,
+            "Monthly": 16.846,
+            "Others": 16.076,
+            "Average": 17.764
+        },
+        "mase": {
+            "Yearly": 3.068,
+            "Quarterly": 2.208,
+            "Monthly": 1.133,
+            "Others": 5.384,
+            "Average": 2.049
+        }
+    },
+    "short_term_forecast_m4_Monthly_MICN_m4_ftM_sl36_ll18_pl18_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:43",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Yearly_MICN_m4_ftM_sl12_ll6_pl6_dm16_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:57:52",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Quarterly_MICN_m4_ftM_sl16_ll8_pl8_dm64_nh8_el2_dl1_df64_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:00",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Daily_MICN_m4_ftM_sl28_ll14_pl14_dm16_nh8_el2_dl1_df16_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:08",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Weekly_MICN_m4_ftM_sl26_ll13_pl13_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:17",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Hourly_MICN_m4_ftM_sl96_ll48_pl48_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:25",
+        "smape": {
+            "Yearly": 14.53,
+            "Quarterly": 11.408,
+            "Monthly": 13.802,
+            "Others": 6.164,
+            "Average": 13.013
+        },
+        "owa": {
+            "Yearly": 0.867,
+            "Quarterly": 1.022,
+            "Monthly": 0.989,
+            "Others": 1.321,
+            "Average": 0.961
+        },
+        "mape": {
+            "Yearly": 17.247,
+            "Quarterly": 13.409,
+            "Monthly": 16.788,
+            "Others": 10.629,
+            "Average": 15.775
+        },
+        "mase": {
+            "Yearly": 3.36,
+            "Quarterly": 1.382,
+            "Monthly": 1.086,
+            "Others": 4.266,
+            "Average": 1.839
+        }
+    },
+    "short_term_forecast_m4_Monthly_Autoformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:33",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Yearly_Autoformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:42",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Autoformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:50",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Weekly_Autoformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:58:58",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Daily_Autoformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:07",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Hourly_Autoformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:15",
+        "smape": {
+            "Yearly": 17.735,
+            "Quarterly": 13.718,
+            "Monthly": 17.834,
+            "Others": 6.692,
+            "Average": 16.266
+        },
+        "owa": {
+            "Yearly": 1.034,
+            "Quarterly": 1.251,
+            "Monthly": 1.344,
+            "Others": 1.45,
+            "Average": 1.198
+        },
+        "mape": {
+            "Yearly": 24.77,
+            "Quarterly": 16.027,
+            "Monthly": 21.665,
+            "Others": 10.958,
+            "Average": 20.491
+        },
+        "mase": {
+            "Yearly": 3.905,
+            "Quarterly": 1.723,
+            "Monthly": 1.544,
+            "Others": 4.73,
+            "Average": 2.289
+        }
+    },
+    "short_term_forecast_m4_Monthly_FiLM_m4_ftM_sl36_ll18_pl18_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:23",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Yearly_FiLM_m4_ftM_sl12_ll6_pl6_dm16_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:32",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Quarterly_FiLM_m4_ftM_sl16_ll8_pl8_dm64_nh8_el2_dl1_df64_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:40",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Daily_FiLM_m4_ftM_sl28_ll14_pl14_dm16_nh8_el2_dl1_df16_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:49",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Weekly_FiLM_m4_ftM_sl26_ll13_pl13_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 12:59:57",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Hourly_FiLM_m4_ftM_sl96_ll48_pl48_dm32_nh8_el2_dl1_df32_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:06",
+        "smape": {
+            "Yearly": 14.089,
+            "Quarterly": 10.756,
+            "Monthly": 13.378,
+            "Others": 5.264,
+            "Average": 12.506
+        },
+        "owa": {
+            "Yearly": 0.809,
+            "Quarterly": 0.965,
+            "Monthly": 0.944,
+            "Others": 1.123,
+            "Average": 0.899
+        },
+        "mape": {
+            "Yearly": 16.843,
+            "Quarterly": 12.423,
+            "Monthly": 16.133,
+            "Others": 8.832,
+            "Average": 15.041
+        },
+        "mase": {
+            "Yearly": 3.007,
+            "Quarterly": 1.306,
+            "Monthly": 1.021,
+            "Others": 3.611,
+            "Average": 1.676
+        }
+    },
+    "short_term_forecast_m4_Monthly_DLinear_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:14",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Yearly_DLinear_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:22",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Quarterly_DLinear_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:31",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Weekly_DLinear_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:39",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Daily_DLinear_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:47",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Hourly_DLinear_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:00:56",
+        "smape": {
+            "Yearly": 14.358,
+            "Quarterly": 10.5,
+            "Monthly": 13.395,
+            "Others": 5.111,
+            "Average": 12.507
+        },
+        "owa": {
+            "Yearly": 0.833,
+            "Quarterly": 0.929,
+            "Monthly": 0.938,
+            "Others": 1.116,
+            "Average": 0.901
+        },
+        "mape": {
+            "Yearly": 16.775,
+            "Quarterly": 12.204,
+            "Monthly": 16.284,
+            "Others": 7.042,
+            "Average": 14.956
+        },
+        "mase": {
+            "Yearly": 3.128,
+            "Quarterly": 1.239,
+            "Monthly": 1.007,
+            "Others": 3.665,
+            "Average": 1.684
+        }
+    },
+    "short_term_forecast_m4_Monthly_Transformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:04",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Yearly_Transformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:12",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Transformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:20",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Weekly_Transformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:29",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Daily_Transformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:37",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Hourly_Transformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:45",
+        "smape": {
+            "Yearly": 69.683,
+            "Quarterly": 73.676,
+            "Monthly": 69.902,
+            "Others": 106.24,
+            "Average": 72.574
+        },
+        "owa": {
+            "Yearly": 4.414,
+            "Quarterly": 8.193,
+            "Monthly": 7.669,
+            "Others": 24.105,
+            "Average": 7.073
+        },
+        "mape": {
+            "Yearly": 62.587,
+            "Quarterly": 66.847,
+            "Monthly": 68.34,
+            "Others": 64.699,
+            "Average": 66.477
+        },
+        "mase": {
+            "Yearly": 18.139,
+            "Quarterly": 13.295,
+            "Monthly": 11.158,
+            "Others": 81.973,
+            "Average": 16.817
+        }
+    },
+    "short_term_forecast_m4_Monthly_Informer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:01:54",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Yearly_Informer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:02",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Informer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:10",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Weekly_Informer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:18",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Daily_Informer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:27",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Hourly_Informer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:35",
+        "smape": {
+            "Yearly": 14.604,
+            "Quarterly": 12.93,
+            "Monthly": 15.95,
+            "Others": 7.527,
+            "Average": 14.494
+        },
+        "owa": {
+            "Yearly": 0.863,
+            "Quarterly": 1.166,
+            "Monthly": 1.16,
+            "Others": 1.649,
+            "Average": 1.066
+        },
+        "mape": {
+            "Yearly": 18.422,
+            "Quarterly": 15.467,
+            "Monthly": 18.59,
+            "Others": 17.618,
+            "Average": 17.753
+        },
+        "mase": {
+            "Yearly": 3.312,
+            "Quarterly": 1.588,
+            "Monthly": 1.291,
+            "Others": 5.434,
+            "Average": 2.034
+        }
+    },
+    "short_term_forecast_m4_Monthly_Pyraformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:02:58",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Yearly_Pyraformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:07",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Pyraformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:15",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Weekly_Pyraformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:23",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Daily_Pyraformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:32",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Hourly_Pyraformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:40",
+        "smape": {
+            "Yearly": 14.875,
+            "Quarterly": 11.691,
+            "Monthly": 15.116,
+            "Others": 5.715,
+            "Average": 13.769
+        },
+        "owa": {
+            "Yearly": 0.87,
+            "Quarterly": 1.039,
+            "Monthly": 1.077,
+            "Others": 1.233,
+            "Average": 0.993
+        },
+        "mape": {
+            "Yearly": 19.882,
+            "Quarterly": 13.67,
+            "Monthly": 17.845,
+            "Others": 8.111,
+            "Average": 16.825
+        },
+        "mase": {
+            "Yearly": 3.297,
+            "Quarterly": 1.394,
+            "Monthly": 1.175,
+            "Others": 4.005,
+            "Average": 1.857
+        }
+    },
+    "short_term_forecast_m4_Monthly_Nonstationary_Transformer_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:48",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Yearly_Nonstationary_Transformer_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:03:57",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Quarterly_Nonstationary_Transformer_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:05",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Weekly_Nonstationary_Transformer_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:13",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Daily_Nonstationary_Transformer_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:22",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Hourly_Nonstationary_Transformer_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:30",
+        "smape": {
+            "Yearly": 14.166,
+            "Quarterly": 12.395,
+            "Monthly": 15.503,
+            "Others": 6.407,
+            "Average": 13.995
+        },
+        "owa": {
+            "Yearly": 0.834,
+            "Quarterly": 1.127,
+            "Monthly": 1.122,
+            "Others": 1.336,
+            "Average": 1.016
+        },
+        "mape": {
+            "Yearly": 18.286,
+            "Quarterly": 14.817,
+            "Monthly": 18.525,
+            "Others": 13.126,
+            "Average": 17.31
+        },
+        "mase": {
+            "Yearly": 3.183,
+            "Quarterly": 1.548,
+            "Monthly": 1.245,
+            "Others": 4.197,
+            "Average": 1.911
+        }
+    },
+    "short_term_forecast_m4_Monthly_LightTS_m4_ftM_sl36_ll18_pl18_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:38",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    },
+    "short_term_forecast_m4_Yearly_LightTS_m4_ftM_sl12_ll6_pl6_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:46",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    },
+    "short_term_forecast_m4_Quarterly_LightTS_m4_ftM_sl16_ll8_pl8_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:04:55",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    },
+    "short_term_forecast_m4_Weekly_LightTS_m4_ftM_sl26_ll13_pl13_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:05:03",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    },
+    "short_term_forecast_m4_Daily_LightTS_m4_ftM_sl28_ll14_pl14_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:05:11",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    },
+    "short_term_forecast_m4_Hourly_LightTS_m4_ftM_sl96_ll48_pl48_dm512_nh8_el2_dl1_df2048_expand2_dc4_fc3_ebtimeF_dtTrue_Exp_0": {
+        "time": "2025-06-06 13:05:19",
+        "smape": {
+            "Yearly": 13.44,
+            "Quarterly": 10.304,
+            "Monthly": 12.751,
+            "Others": 5.383,
+            "Average": 11.954
+        },
+        "owa": {
+            "Yearly": 0.793,
+            "Quarterly": 0.903,
+            "Monthly": 0.886,
+            "Others": 1.107,
+            "Average": 0.862
+        },
+        "mape": {
+            "Yearly": 16.26,
+            "Quarterly": 11.531,
+            "Monthly": 14.689,
+            "Others": 7.741,
+            "Average": 13.945
+        },
+        "mase": {
+            "Yearly": 3.037,
+            "Quarterly": 1.193,
+            "Monthly": 0.945,
+            "Others": 3.43,
+            "Average": 1.61
+        }
+    }
+}
