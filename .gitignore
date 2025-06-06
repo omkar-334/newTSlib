@@ -135,11 +135,6 @@ dmypy.json
 /temp.sh
 
 .idea
-/tv_result.xlsx
-/test.py
-/m4_results/
-/test_results/
-/PatchTST_results.xlsx
 /seq_len_long_term_forecast/
 /progress.xlsx
 /scripts/short_term_forecast/PatchTST_M4.sh
@@ -147,7 +142,6 @@ dmypy.json
 
 /scripts/long_term_forecast/ETT_tv_script/
 /dataset/
-/data/
 data_factory_all.py
 data_loader_all.py
 /scripts/short_term_forecast/tv_script/
