@@ -1,0 +1,44 @@
+{
+    "tphi-off--cond-off":{
+        "classification_EthanolConcentration_CnDiff_UEA_ftM_sl1751_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 14:27:54",
+            "accuracy": 0.28517110266159695
+        },
+        "classification_Handwriting_CnDiff_UEA_ftM_sl152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 14:39:40",
+            "accuracy": 0.15529411764705883
+        },
+        "classification_Heartbeat_CnDiff_UEA_ftM_sl405_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:01:31",
+            "accuracy": 0.7609756097560976
+        },
+        "classification_JapaneseVowels_CnDiff_UEA_ftM_sl29_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:13:54",
+            "accuracy": 0.9702702702702702
+        },
+        "classification_PEMS-SF_CnDiff_UEA_ftM_sl144_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:27:59",
+            "accuracy": 0.7630057803468208
+        },
+        "classification_SelfRegulationSCP1_CnDiff_UEA_ftM_sl896_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:29:01",
+            "accuracy": 0.8839590443686007
+        },
+        "classification_SelfRegulationSCP2_CnDiff_UEA_ftM_sl1152_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:30:42",
+            "accuracy": 0.5777777777777777
+        },
+        "classification_SpokenArabicDigits_CnDiff_UEA_ftM_sl93_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:38:21",
+            "accuracy": 0.9636198271941792
+        },
+        "classification_UWaveGestureLibrary_CnDiff_UEA_ftM_sl315_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 15:40:45",
+            "accuracy": 0.553125
+        },
+        "classification_FaceDetection_CnDiff_UEA_ftM_sl62_ll48_pl0_dm128_nh8_el3_dl1_df256_expand2_dc4_fc1_ebtimeF_dtTrue_Exp_0": {
+            "time": "2025-06-13 16:14:45",
+            "accuracy": 0.5513620885357549
+        }
+    }
+}

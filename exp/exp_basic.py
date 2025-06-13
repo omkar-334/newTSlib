@@ -5,6 +5,7 @@ import torch
 from models import (
     MICN,
     Autoformer,
+    CnDiff,
     Crossformer,
     DLinear,
     ETSformer,
@@ -39,6 +40,7 @@ class Exp_Basic:
     def __init__(self, args):
         self.args = args
         self.model_dict = {
+            "CnDiff": CnDiff,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,
