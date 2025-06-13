@@ -16,7 +16,7 @@ defaults = {
     # === Data Configuration ===
     "dataset": "exchange",
     "split_ratio": [0.7, 0.1, 0.2],  # train, val, test
-    "feature_dim": 8,
+    "feature_dim": 3,
     "seq_len": 96,
     # "pred_len": 14,
     "pred_len": 96,
@@ -49,7 +49,7 @@ defaults = {
     # === Conditional Usage Flag ===
     "use_cond": False,
     # === Diffusion Configuration ===
-    "noise_type": "",
+    "noise_type": "t_phi",
     "beta_schedule": "quad",
     "beta_start": 0.0001,
     "beta_end": 0.1,
@@ -150,13 +150,15 @@ class Tphi(nn.Module):
 
     def __init__(self, config):
         super().__init__()
+
         self.w1 = nn.Parameter(torch.empty(config.feature_dim, config.feature_dim))
         self.b1 = nn.Parameter(torch.empty(config.feature_dim))
-        self.w2 = nn.Parameter(torch.empty(config.pred_len, config.pred_len))
-        self.b2 = nn.Parameter(torch.empty(config.pred_len))
-        # self.w2 = nn.Parameter(torch.empty(config.seq_len, config.seq_len))
-        # self.b2 = nn.Parameter(torch.empty(config.seq_len))
 
+        # param = config.pred_len # working for tphi_off and cond_off
+        # param = config.seq_len
+        param = 1751
+        self.w2 = nn.Parameter(torch.empty(param, param))
+        self.b2 = nn.Parameter(torch.empty(param))
         self.act = nn.Tanh()
         self.time_emb = StepEmbedding(config.feature_dim, freq_dim=256)
 
