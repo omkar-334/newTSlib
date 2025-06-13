@@ -16,8 +16,6 @@ defaults = {
     # === Data Configuration ===
     "dataset": "exchange",
     "split_ratio": [0.7, 0.1, 0.2],  # train, val, test
-    "feature_dim": 3,
-    "seq_len": 96,
     # "pred_len": 14,
     "pred_len": 96,
     "d_model": 128,
@@ -65,7 +63,6 @@ class Model(nn.Module):
 
         merged = {**vars(config), **defaults}
         self.config = config = SimpleNamespace(**merged)
-        print(f"Using config: {self.config}")
 
         self.device = self.config.device
 
@@ -154,9 +151,7 @@ class Tphi(nn.Module):
         self.w1 = nn.Parameter(torch.empty(config.feature_dim, config.feature_dim))
         self.b1 = nn.Parameter(torch.empty(config.feature_dim))
 
-        # param = config.pred_len # working for tphi_off and cond_off
-        # param = config.seq_len
-        param = 1751
+        param = config.seq_len
         self.w2 = nn.Parameter(torch.empty(param, param))
         self.b2 = nn.Parameter(torch.empty(param))
         self.act = nn.Tanh()

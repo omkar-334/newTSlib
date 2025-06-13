@@ -95,17 +95,9 @@ class Decoder(nn.Module):
 class Denoiser(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
-        # embedding layer dynamic shapes based on dataset?? should code this instead of hardcoding
-        # ethanol, handwriting - 3
-        # heartbeat - 61
-        # japanese - 12
-        # pems - 963
-        # SelfRegulationSCP1 - 6
-        # SelfRegulationSCP2 - 7
-        # SpokenArabicDigits - 13
-        # UWaveGestureLibrary - 3
-        # FaceDetection - 144
-        self.input_embedder = DataEmbedding(144, config.hidden_dim, config.n_emb)
+        self.input_embedder = DataEmbedding(
+            config.feature_dim, config.hidden_dim, config.n_emb
+        )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
 
         d_model = config.hidden_dim * 2

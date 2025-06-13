@@ -9,8 +9,8 @@ from torch import optim
 
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from utils.metrics import save_preds, save_results
-from utils.tools import EarlyStopping, cal_accuracy
+from utils.metrics import save_results
+from utils.tools import EarlyStopping, cal_accuracy, get_loader_dims
 
 warnings.filterwarnings("ignore")
 
@@ -21,14 +21,19 @@ class Exp_Classification(Exp_Basic):
 
     def _build_model(self):
         # model input depends on data
-        train_data, train_loader = self._get_data(flag="TRAIN")
-        test_data, test_loader = self._get_data(flag="TEST")
-        self.args.seq_len = max(train_data.max_seq_len, test_data.max_seq_len)
-        self.args.pred_len = 0
-        self.args.enc_in = train_data.feature_df.shape[1]
-        self.args.num_class = len(train_data.class_names)
+        self.train_data, self.train_loader = self._get_data(flag="TRAIN")
+        self.test_data, self.test_loader = self._get_data(flag="TEST")
+        self.vali_data, self.vali_loader = self._get_data(flag="TEST")
+
+        self.args.seq_len, self.args.feature_dim = x = get_loader_dims(
+            self.train_loader
+        )
+        print(x)
+        self.args.enc_in = self.train_data.feature_df.shape[1]
+        self.args.num_class = len(self.train_data.class_names)
         # model init
         model = self.model_dict[self.args.model].Model(self.args).float()
+        print(model.config)
         if self.args.use_multi_gpu and self.args.use_gpu:
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
@@ -46,13 +51,13 @@ class Exp_Classification(Exp_Basic):
         criterion = nn.CrossEntropyLoss()
         return criterion
 
-    def vali(self, vali_data, vali_loader, criterion):
+    def vali(self, criterion):
         total_loss = []
         preds = []
         trues = []
         self.model.eval()
         with torch.no_grad():
-            for i, (batch_x, label, padding_mask) in enumerate(vali_loader):
+            for i, (batch_x, label, padding_mask) in enumerate(self.vali_loader):
                 batch_x = batch_x.float().to(self.device)
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
@@ -83,31 +88,25 @@ class Exp_Classification(Exp_Basic):
         return total_loss, accuracy
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag="TRAIN")
-        vali_data, vali_loader = self._get_data(flag="TEST")
-        test_data, test_loader = self._get_data(flag="TEST")
-
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
 
         time_now = time.time()
 
-        train_steps = len(train_loader)
+        train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
         model_optim = self._select_optimizer()
         criterion = self._select_criterion()
 
         for epoch in range(self.args.train_epochs):
-            iter_count = 0
             train_loss = []
 
             self.model.train()
             epoch_time = time.time()
 
-            for i, (batch_x, label, padding_mask) in enumerate(train_loader):
-                iter_count += 1
+            for i, (batch_x, label, padding_mask) in enumerate(self.train_loader):
                 model_optim.zero_grad()
 
                 batch_x = batch_x.float().to(self.device)
@@ -132,8 +131,8 @@ class Exp_Classification(Exp_Basic):
 
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
             train_loss = np.average(train_loss)
-            vali_loss, val_accuracy = self.vali(vali_data, vali_loader, criterion)
-            test_loss, test_accuracy = self.vali(test_data, test_loader, criterion)
+            vali_loss, val_accuracy = self.vali(criterion)
+            test_loss, test_accuracy = self.vali(criterion)
 
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.3f} Vali Loss: {vali_loss:.3f} Vali Acc: {val_accuracy:.3f} Test Loss: {test_loss:.3f} Test Acc: {test_accuracy:.3f}"

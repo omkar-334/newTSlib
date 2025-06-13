@@ -1,5 +1,6 @@
 import math
 import os
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -129,3 +130,15 @@ def adjustment(gt, pred):
 
 def cal_accuracy(y_pred, y_true):
     return np.mean(y_pred == y_true)
+
+
+def get_loader_dims(loader):
+    for batch in loader:
+        if isinstance(batch, (list, tuple)):
+            batch_x = batch[0]  # assuming first element is batch_x
+        else:
+            raise ValueError("Expected DataLoader to return a tuple (batch_x, ...)")
+
+        _, seq_len, feature_dim = batch_x.shape
+        return seq_len, feature_dim
+    sys.exit(1)

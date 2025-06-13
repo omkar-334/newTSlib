@@ -1,0 +1,23 @@
+
+-x-x-x-x-x EthanolConcentration torch.Size([16, 1751, 3]) -x-x-x-x-
+-x-x-x-x-x FaceDetection torch.Size([16, 62, 144]) -x-x-x-x-
+-x-x-x-x-x Handwriting torch.Size([16, 152, 3]) -x-x-x-x-
+-x-x-x-x-x Heartbeat torch.Size([16, 405, 61]) -x-x-x-x-
+-x-x-x-x-x JapaneseVowels torch.Size([16, 29, 12]) -x-x-x-x-
+-x-x-x-x-x PEMS-SF torch.Size([16, 144, 963]) -x-x-x-x-
+-x-x-x-x-x SelfRegulationSCP1 torch.Size([16, 896, 6]) -x-x-x-x-
+-x-x-x-x-x SelfRegulationSCP2 torch.Size([16, 1152, 7]) -x-x-x-x-
+-x-x-x-x-x SpokenArabicDigits torch.Size([16, 93, 13]) -x-x-x-x-
+-x-x-x-x-x UWaveGestureLibrary torch.Size([16, 315, 3]) -x-x-x-x-
+
+
+# embedding layer dynamic shapes based on dataset?? should code this instead of hardcoding
+# ethanol, handwriting - 3
+# heartbeat - 61
+# japanese - 12
+# pems - 963
+# SelfRegulationSCP1 - 6
+# SelfRegulationSCP2 - 7
+# SpokenArabicDigits - 13
+# UWaveGestureLibrary - 3
+# FaceDetection - 144
