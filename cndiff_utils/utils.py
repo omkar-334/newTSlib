@@ -93,7 +93,6 @@ class EarlyStopping:
         self.early_stop = False
         self.val_loss_min = np.inf
         self.delta = delta
-        self.device = config.device
         self.run_name = config.run_name
 
     def __call__(self, val_loss, model):

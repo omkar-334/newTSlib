@@ -10,33 +10,14 @@ from cndiff_utils.utils import extract
 
 defaults = {
     # === Default Settings ===
-    "seed": 2024,
     "run_name": "exchange",
-    "test": False,
     # === Data Configuration ===
-    "dataset": "exchange",
-    "split_ratio": [0.7, 0.1, 0.2],  # train, val, test
-    # "pred_len": 14,
     "pred_len": 96,
     "d_model": 128,
-    "data_path": "data/exchange_rate.csv",
-    "scale": True,  # normalize data
-    "target": "OT",  # target column
-    "features": "M",
-    "timeenc": 1,
     "freq": "d",
-    "batch_size": 64,
-    "test_batch_size": 32,
-    "shuffle": True,
-    "drop_last": True,
     # === Training Configuration ===
     "device": "cuda:0",
-    "gpu_type": "cuda",
-    "optimizer": "Adam",
-    "epochs": 100,
-    "lr": 0.001,
     "patience": 10,
-    "mask_rate": 0.375,
     # === Model Configuration ===
     "hidden_dim": 64,
     "n_emb": 2,
@@ -45,15 +26,13 @@ defaults = {
     "mlp_ratio": 1,
     "n_depth": 1,
     # === Conditional Usage Flag ===
-    "use_cond": False,
+    "use_cond": True,
     # === Diffusion Configuration ===
     "noise_type": "t_phi",
     "beta_schedule": "quad",
     "beta_start": 0.0001,
     "beta_end": 0.1,
     "timesteps": 100,
-    "model_type": "CN_Diff",
-    "n_copies_to_test": 10,
 }
 
 
