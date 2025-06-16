@@ -1,8 +1,4 @@
-import os
-
-import numpy as np
 import torch
-import torch.nn.functional as F
 
 
 def extract(tensor, t, x):
@@ -73,58 +69,3 @@ def instance_denormalization(y0, mean, std, pred_len):
     mean = torch.repeat_interleave(mean, n_samples, dim=0).repeat(1, pred_len, 1)
     y0 = y0 * std + mean
     return y0
-
-
-def calculate_mse_mae(preds_save, trues_save):
-    preds_save = np.mean(preds_save, axis=2)
-
-    mse = F.mse_loss(torch.tensor(preds_save), torch.tensor(trues_save))
-    mae = F.l1_loss(torch.tensor(preds_save), torch.tensor(trues_save))
-    print(f"mse: {mse}, mae: {mae}")
-    return mse, mae
-
-
-class EarlyStopping:
-    def __init__(self, config, patience=7, verbose=False, delta=0) -> None:
-        self.patience = patience
-        self.verbose = verbose
-        self.counter = 0
-        self.best_score = None
-        self.early_stop = False
-        self.val_loss_min = np.inf
-        self.delta = delta
-        self.run_name = config.run_name
-
-    def __call__(self, val_loss, model):
-        is_best = False
-        score = -val_loss
-        if val_loss is None:
-            self.save_checkpoint(val_loss, model)
-            print("Early Stopping due to NAN values")
-            self.early_stop = True
-        else:
-            if self.best_score is None:
-                self.best_score = score
-                self.save_checkpoint(val_loss, model)
-            elif score < self.best_score + self.delta:
-                self.counter += 1
-                print(f"EarlyStopping counter: {self.counter} out of {self.patience}")
-                if self.counter >= self.patience:
-                    self.early_stop = True
-            else:
-                self.best_score = score
-                self.save_checkpoint(val_loss, model)
-                self.counter = 0
-                is_best = True
-            return is_best
-        return None
-
-    def save_checkpoint(self, val_loss, model, path: str = "checkpoints") -> None:
-        os.makedirs(path, exist_ok=True)
-        self.ckpt_model = model
-        if self.verbose:
-            print(
-                f"Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ..."
-            )
-        torch.save(model.state_dict(), path + "/" + f"{self.run_name}.pth")
-        self.val_loss_min = val_loss
