@@ -1,6 +1,6 @@
 
 model_name=CnDiff
-
+description="run"
 
 python -u run.py \
   --task_name classification \
@@ -9,16 +9,10 @@ python -u run.py \
   --model_id EthanolConcentration \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -27,16 +21,10 @@ python -u run.py \
   --model_id FaceDetection \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -45,16 +33,10 @@ python -u run.py \
   --model_id Handwriting \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -63,16 +45,10 @@ python -u run.py \
   --model_id Heartbeat \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -81,16 +57,10 @@ python -u run.py \
   --model_id JapaneseVowels \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -99,16 +69,10 @@ python -u run.py \
   --model_id PEMS-SF \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -117,16 +81,10 @@ python -u run.py \
   --model_id SelfRegulationSCP1 \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -135,16 +93,10 @@ python -u run.py \
   --model_id SelfRegulationSCP2 \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -153,16 +105,10 @@ python -u run.py \
   --model_id SpokenArabicDigits \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 
 
 python -u run.py \
   --task_name classification \
@@ -171,13 +117,7 @@ python -u run.py \
   --model_id UWaveGestureLibrary \
   --model $model_name \
   --data UEA \
-  --e_layers 3 \
   --batch_size 16 \
-  --d_model 128 \
-  --d_ff 256 \
-  --top_k 3 \
-  --des 'Exp' \
-  --itr 1 \
+  --des $description \
   --learning_rate 0.001 \
-  --train_epochs 100 \
-  --patience 10
+  --train_epochs 100 

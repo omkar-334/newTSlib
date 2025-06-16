@@ -34,7 +34,6 @@ class DiTBlock(nn.Module):
     def __init__(
         self, hidden_dim, d_model, n_heads, attn_dropout, mlp_ratio=4.0
     ) -> None:
-        d_model = 64
         super().__init__()
         self.norm1 = nn.LayerNorm(d_model, elementwise_affine=False, eps=1e-6)
         self.attn = FullAttention(
@@ -70,7 +69,6 @@ class Decoder(nn.Module):
 
     def __init__(self, hidden_dim, d_model, pred_len, n_emb, config) -> None:
         super().__init__()
-        d_model = 64
         self.norm = nn.LayerNorm(d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
             DataEmbedding(d_model, d_model, n_emb - 1), nn.Linear(d_model, pred_len)
@@ -100,7 +98,7 @@ class Denoiser(nn.Module):
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
 
-        d_model = config.hidden_dim * 2
+        d_model = config.d_model
         self.blocks = nn.ModuleList([
             DiTBlock(
                 config.hidden_dim,

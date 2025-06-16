@@ -13,8 +13,7 @@ defaults = {
     "run_name": "exchange",
     # === Data Configuration ===
     "pred_len": 96,
-    "d_model": 128,
-    "freq": "d",
+    "d_model": 64,
     # === Training Configuration ===
     "device": "cuda:0",
     "patience": 10,
