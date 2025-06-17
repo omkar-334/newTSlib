@@ -184,7 +184,7 @@ if __name__ == "__main__":
         "--batch_size", type=int, default=32, help="batch size of train input data"
     )
     parser.add_argument(
-        "--patience", type=int, default=3, help="early stopping patience"
+        "--patience", type=int, default=20, help="early stopping patience"
     )
     parser.add_argument(
         "--learning_rate", type=float, default=0.0001, help="optimizer learning rate"
@@ -336,6 +336,23 @@ if __name__ == "__main__":
 
     # TimeXer
     parser.add_argument("--patch_len", type=int, default=16, help="patch length")
+
+    # CnDiff
+    parser.add_argument("--hidden_dim", type=int, default=64)
+    parser.add_argument("--n_emb", type=int, default=2)
+    parser.add_argument("--attn_dropout", type=float, default=0.1)
+    parser.add_argument("--mlp_ratio", type=int, default=1)
+    parser.add_argument("--n_depth", type=int, default=1)
+    parser.add_argument(
+        "--use_cond", type=lambda x: str(x).lower() == "true", default=True
+    )
+    parser.add_argument(
+        "--use_tphi", type=lambda x: str(x).lower() == "true", default=True
+    )
+    parser.add_argument("--beta_schedule", type=str, default="quad")
+    parser.add_argument("--beta_start", type=float, default=0.0001)
+    parser.add_argument("--beta_end", type=float, default=0.1)
+    parser.add_argument("--timesteps", type=int, default=100)
 
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:

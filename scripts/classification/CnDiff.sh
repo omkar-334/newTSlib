@@ -2,7 +2,7 @@
 
 model_name="CnDiff"
 description="run"
-device=0
+device=1
 
 datasets=(
   "EthanolConcentration"
@@ -26,10 +26,24 @@ for dataset in "${datasets[@]}"; do
     --model_id "$dataset" \
     --model "$model_name" \
     --data UEA \
-    --batch_size 16 \
-    --des "$description" \
-    --learning_rate 0.001 \
     --device "cuda:$device" \
     --gpu "$device" \
-    --train_epochs 100
+    --pred_len 96 \
+    --d_model 64 \
+    --hidden_dim 64 \
+    --batch_size 16 \
+    --train_epochs 100 \
+    --des "$description" \
+    --learning_rate 0.001 \
+    --n_emb 2 \
+    --n_heads 8 \
+    --attn_dropout 0.1 \
+    --mlp_ratio 3 \
+    --n_depth 2 \
+    --use_cond False \
+    --noise_type t_phi \
+    --beta_schedule quad \
+    --beta_start 0.0001 \
+    --beta_end 0.1 \
+    --timesteps 200
 done

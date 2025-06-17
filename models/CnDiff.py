@@ -8,39 +8,10 @@ from cndiff_utils.layers import StepEmbedding, make_beta_schedule
 from cndiff_utils.modules import Condition, Denoiser
 from cndiff_utils.utils import extract
 
-defaults = {
-    # === Default Settings ===
-    "run_name": "exchange",
-    # === Data Configuration ===
-    "pred_len": 96,
-    "d_model": 64,
-    # === Training Configuration ===
-    "device": "cuda:0",
-    "patience": 10,
-    # === Model Configuration ===
-    "hidden_dim": 64,
-    "n_emb": 2,
-    "n_heads": 8,
-    "attn_dropout": 0.1,
-    "mlp_ratio": 1,
-    "n_depth": 1,
-    # === Conditional Usage Flag ===
-    "use_cond": True,
-    # === Diffusion Configuration ===
-    "noise_type": "t_phi",
-    "beta_schedule": "quad",
-    "beta_start": 0.0001,
-    "beta_end": 0.1,
-    "timesteps": 100,
-}
-
 
 class Model(nn.Module):
-    def __init__(self, config) -> None:
+    def __init__(self, config: SimpleNamespace) -> None:
         super().__init__()
-
-        merged = {**vars(config), **defaults}
-        self.config = config = SimpleNamespace(**merged)
 
         self.device = self.config.device
 
@@ -52,7 +23,7 @@ class Model(nn.Module):
             end=self.config.beta_end,
         )
 
-        betas = self.betas = betas.float().to(self.device)
+        betas = betas.float().to(self.device)
         alphas = 1.0 - betas
         self.alphas = alphas
         alphas_cumprod = alphas.to("cpu").cumprod(dim=0).to(self.device)
@@ -63,15 +34,12 @@ class Model(nn.Module):
                 0.9999  # avoid division by 0 for 1/sqrt(alpha_bar_t) during inference
             )
 
-        # self.pred_len = config.pred_len
-        self.noise_type = self.config.noise_type
+        self.t_phi = Tphi(config) if config.use_tphi else None
 
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
         if self.config.use_cond:
             self.condition_model = Condition(config)
-
-        self.t_phi = Tphi(config)
 
         self.classifier = nn.Sequential(
             nn.AdaptiveAvgPool1d(1),  # Aggregate over features
@@ -86,7 +54,7 @@ class Model(nn.Module):
         sqrt_alpha_bar_t = extract(self.alphas_bar_sqrt, t, batch_y)
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
-        if self.noise_type == "t_phi":
+        if self.tphi:
             batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
