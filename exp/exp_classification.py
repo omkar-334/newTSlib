@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
+import wandb
 from torch import optim
 
 from data_provider.data_factory import data_provider
@@ -135,6 +136,15 @@ class Exp_Classification(Exp_Basic):
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.3f} Vali Loss: {vali_loss:.3f} Vali Acc: {val_accuracy:.3f} Test Loss: {test_loss:.3f} Test Acc: {test_accuracy:.3f}"
             )
+
+            if self.args.wandb:
+                wandb.log({
+                    "train_loss": train_loss,
+                    "vali_loss": vali_loss,
+                    "vali_accuracy": val_accuracy,
+                    "test_loss": test_loss,
+                    "test_accuracy": test_accuracy,
+                })
             early_stopping(-val_accuracy, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
@@ -181,5 +191,5 @@ class Exp_Classification(Exp_Basic):
         accuracy = cal_accuracy(predictions, trues)
 
         # save_preds(setting, preds, trues)
-        save_results("classification", setting, {"accuracy": accuracy})
+        save_results("classification", setting, {"accuracy": accuracy}, self.args.sweep)
         return PATH

@@ -8,6 +8,7 @@ import sys
 import numpy as np
 import torch
 import torch.backends
+import wandb
 
 from exp.exp_anomaly_detection import Exp_Anomaly_Detection
 from exp.exp_classification import Exp_Classification
@@ -359,21 +360,26 @@ def get_args():
     parser.add_argument(
         "--shuffle_test", type=bool, default=False, help="shuffle test data"
     )
+    parser.add_argument(
+        "--use_cls_token",
+        type=lambda x: str(x).lower() == "true",
+        default=True,
+        help="use classifier token for classification task",
+    )
+    parser.add_argument("--sweep", type=bool, default=False, help="sweep mode")
+    parser.add_argument("--wandb", type=bool, default=False, help="use wandb")
 
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:
         args.device = torch.device(f"cuda:{args.gpu}")
-        print("Using GPU")
+    elif hasattr(torch.backends, "mps"):
+        args.device = (
+            torch.device("mps")
+            if torch.backends.mps.is_available()
+            else torch.device("cpu")
+        )
     else:
-        if hasattr(torch.backends, "mps"):
-            args.device = (
-                torch.device("mps")
-                if torch.backends.mps.is_available()
-                else torch.device("cpu")
-            )
-        else:
-            args.device = torch.device("cpu")
-        print("Using cpu or mps")
+        args.device = torch.device("cpu")
 
     if args.use_gpu and args.use_multi_gpu:
         args.devices = args.devices.replace(" ", "")
@@ -410,14 +416,29 @@ def clean(ckpt=None):
         os.remove(ckpt)
 
 
+def get_setting(args):
+    # setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
+
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}_clstoken={args.use_cls_token}"
+
+    return setting
+
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
 
     args = get_args()
+    setting = get_setting(args)
+
+    if args.wandb:
+        wandb.init(
+            project="CnDiff",
+            name=setting,
+            config=vars(args),
+            reinit=True,
+        )
     exp = get_exp(args)
     # print(exp.args)
-
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
 
     try:
         if args.is_training:

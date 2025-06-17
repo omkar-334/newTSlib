@@ -7,7 +7,7 @@ device=1
 datasets=(
   "EthanolConcentration"
   "FaceDetection"
-  "Handwriting"
+  "Handwriting"s
   "Heartbeat"
   "JapaneseVowels"
   "PEMS-SF"
@@ -26,7 +26,6 @@ for dataset in "${datasets[@]}"; do
     --model_id "$dataset" \
     --model "$model_name" \
     --data UEA \
-    --device "cuda:$device" \
     --gpu "$device" \
     --batch_size 16 \
     --train_epochs 100 \
@@ -35,8 +34,9 @@ for dataset in "${datasets[@]}"; do
     --n_emb 2 \
     --n_heads 8 \
     --attn_dropout 0.1 \
-    --mlp_ratio 3 \
+    --mlp_ratio 1 \
     --n_depth 2 \
     --use_cond True \
-    --use_tphi True 
+    --use_tphi True \
+    --wandb True
 done

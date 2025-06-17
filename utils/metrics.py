@@ -47,11 +47,12 @@ def metric(pred, true):
     return mae, mse, rmse, mape, mspe
 
 
-def save_results(task, setting: str, metrics: dict):
+def save_results(task, setting: str, metrics: dict, sweep=False):
     print(setting, end="---")
     for key in metrics:
         print(f"{key} - {metrics[key]}", end="---")
 
+    task = f"{task}_sweep" if sweep else task
     json_path = f"./results/{task}_results.json"
     if os.path.exists(json_path):
         with open(json_path) as f:
