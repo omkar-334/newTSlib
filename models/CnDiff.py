@@ -45,7 +45,7 @@ class Model(nn.Module):
         self.classifier = nn.Sequential(
             nn.AdaptiveAvgPool1d(1),  # Aggregate over features
             nn.Flatten(),
-            nn.Linear(64, self.config.num_class),
+            nn.Linear(config.d_model, self.config.num_class),
         )
 
     def q_sample(self, batch_y, t):

@@ -138,11 +138,10 @@ class DataEmbedding(nn.Module):
 
     def __init__(self, in_dim, out_dim, n_emb):
         super().__init__()
-        self.feat_embedding = [MLPResidual(in_dim, out_dim)]
+        layers = [MLPResidual(in_dim, out_dim)]
         if n_emb > 1:
-            for _ in range(n_emb - 1):
-                self.feat_embedding.append(MLPResidual(out_dim, out_dim))
-        self.feat_embedding = nn.Sequential(*self.feat_embedding)
+            layers.extend(MLPResidual(out_dim, out_dim) for _ in range(n_emb - 1))
+        self.feat_embedding = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.feat_embedding(x)

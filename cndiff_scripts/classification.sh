@@ -37,6 +37,6 @@ for dataset in "${datasets[@]}"; do
     --attn_dropout 0.1 \
     --mlp_ratio 3 \
     --n_depth 2 \
-    --use_cond False \
+    --use_cond True \
     --use_tphi True 
 done

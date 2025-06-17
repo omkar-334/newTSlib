@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 from cndiff_utils.layers import (
@@ -31,19 +32,18 @@ class DiTBlock(nn.Module):
     A DiT block with adaptive layer norm zero (adaLN-Zero) conditioning.
     """
 
-    def __init__(
-        self, hidden_dim, d_model, n_heads, attn_dropout, mlp_ratio=4.0
-    ) -> None:
+    def __init__(self, config) -> None:
         super().__init__()
+        d_model = config.d_model
         self.norm1 = nn.LayerNorm(d_model, elementwise_affine=False, eps=1e-6)
         self.attn = FullAttention(
-            d_model=d_model, n_heads=n_heads, attn_dropout=attn_dropout
+            d_model=d_model, n_heads=config.n_heads, attn_dropout=config.attn_dropout
         )
         self.norm2 = nn.LayerNorm(d_model, elementwise_affine=False, eps=1e-6)
-        mlp_hidden_dim = int(d_model * mlp_ratio)
+        mlp_hidden_dim = int(d_model * config.mlp_ratio)
         self.mlp = AttnMLP(in_dim=d_model, hidden_dim=mlp_hidden_dim, drop=0.1)
         self.adaLN_modulation = nn.Sequential(
-            nn.SiLU(), nn.Linear(hidden_dim, 6 * d_model, bias=True)
+            nn.SiLU(), nn.Linear(config.hidden_dim, 6 * d_model, bias=True)
         )
 
     def forward(self, x, c):
@@ -99,16 +99,7 @@ class Denoiser(nn.Module):
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
 
         d_model = config.d_model
-        self.blocks = nn.ModuleList([
-            DiTBlock(
-                config.hidden_dim,
-                d_model,
-                config.n_heads,
-                config.attn_dropout,
-                config.mlp_ratio,
-            )
-            for _ in range(config.n_depth)
-        ])
+        self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
         self.decoder = Decoder(
             config.hidden_dim,
             d_model,
@@ -121,7 +112,7 @@ class Denoiser(nn.Module):
         self.config = config
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
-                config.pred_len, config.hidden_dim, config.n_emb
+                config.feature_dim, config.hidden_dim, config.n_emb
             )
 
     def initialize_weights(self) -> None:
@@ -138,16 +129,20 @@ class Denoiser(nn.Module):
         y: (B, prediction_length, num_feat)
         k: (B, )
         """
-        # if self.config.task_name == "classification":
-        #     h = self.input_embedder(x)
-        # else:
-        #     h = self.input_embedder(y.permute(0, 2, 1))
+        if self.config.task_name == "classification":
+            h = self.input_embedder(x)
+        else:
+            h = self.input_embedder(y)
 
-        # if self.config.use_cond:
-        #     cond_info = self.cond_embedder(cond_info.permute(0, 2, 1))
-        #     h = torch.cat([h, cond_info], dim=-1)
+        if self.config.use_cond:
+            cond_info = self.cond_embedder(cond_info)
+        else:
+            cond_info = torch.zeros(
+                (h.size(0), h.size(1), self.config.hidden_dim),  # (B, L, hidden_dim)
+                device=h.device,
+            )
+        h = torch.cat([h, cond_info], dim=-1)
 
-        h = self.input_embedder(x)
         c = self.k_embedder(k)
 
         for block in self.blocks:

@@ -2,6 +2,8 @@ import argparse
 import gc
 import os
 import random
+import signal
+import sys
 
 import numpy as np
 import torch
@@ -112,7 +114,7 @@ def get_args():
     parser.add_argument("--enc_in", type=int, default=7, help="encoder input size")
     parser.add_argument("--dec_in", type=int, default=7, help="decoder input size")
     parser.add_argument("--c_out", type=int, default=7, help="output size")
-    parser.add_argument("--d_model", type=int, default=64, help="dimension of model")
+    parser.add_argument("--d_model", type=int, default=128, help="dimension of model")
     parser.add_argument("--n_heads", type=int, default=8, help="num of heads")
     parser.add_argument("--e_layers", type=int, default=2, help="num of encoder layers")
     parser.add_argument("--d_layers", type=int, default=1, help="num of decoder layers")
@@ -406,18 +408,23 @@ def clean(ckpt=None):
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
+
     args = get_args()
     exp = get_exp(args)
-    print(exp.args)
+    # print(exp.args)
 
     setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
 
-    if args.is_training:
-        print(f">>>>>>>TRAINING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        exp.train(setting)
+    try:
+        if args.is_training:
+            print(f">>>>>>>TRAINING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            exp.train(setting)
 
-    print(f">>>>>>>TESTING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    ckpt = exp.test(setting)
+        print(f">>>>>>>TESTING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        ckpt = exp.test(setting)
+        clean(ckpt)
 
-    print("-------------------------------------------------")
-    clean(ckpt)
+        print("-------------------------------------------------")
+    except KeyboardInterrupt:
+        pass
