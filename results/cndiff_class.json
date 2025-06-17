@@ -293,5 +293,47 @@
             "time": "2025-06-16 18:27:45",
             "accuracy": 0.696875
         }
+    },
+    "newcond":{
+            "classification_EthanolConcentration_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 12:57:57",
+            "accuracy": 0.29277566539923955
+        },
+        "classification_FaceDetection_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:11:40",
+            "accuracy": 0.6759364358683314
+        },
+        "classification_Handwriting_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:13:30",
+            "accuracy": 0.14588235294117646
+        },
+        "classification_Heartbeat_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:14:13",
+            "accuracy": 0.751219512195122
+        },
+        "classification_JapaneseVowels_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:14:50",
+            "accuracy": 0.9675675675675676
+        },
+        "classification_PEMS-SF_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:18:32",
+            "accuracy": 0.7456647398843931
+        },
+        "classification_SelfRegulationSCP1_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:19:03",
+            "accuracy": 0.8191126279863481
+        },
+        "classification_SelfRegulationSCP2_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:19:33",
+            "accuracy": 0.55
+        },
+        "classification_SpokenArabicDigits_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:24:30",
+            "accuracy": 0.9845384265575261
+        },
+        "classification_UWaveGestureLibrary_CnDiff_UEA_ftM_sl96_ll48_pl96_dm128_nh8_el2_dl1_df2048_expand2_dc4_fc1_ebtimeF_dtTrue_run_0": {
+            "time": "2025-06-17 13:25:07",
+            "accuracy": 0.74375
+        }
     }
 }

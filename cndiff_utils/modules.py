@@ -99,6 +99,7 @@ class Denoiser(nn.Module):
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
 
         d_model = config.d_model
+
         self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
         self.decoder = Decoder(
             config.hidden_dim,
@@ -136,12 +137,12 @@ class Denoiser(nn.Module):
 
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info)
-        else:
-            cond_info = torch.zeros(
-                (h.size(0), h.size(1), self.config.hidden_dim),  # (B, L, hidden_dim)
-                device=h.device,
-            )
-        h = torch.cat([h, cond_info], dim=-1)
+            h = torch.cat([h, cond_info], dim=-1)
+        # else:
+        #     cond_info = torch.zeros(
+        #         (h.size(0), h.size(1), self.config.hidden_dim),  # (B, L, hidden_dim)
+        #         device=h.device,
+        #     )
 
         c = self.k_embedder(k)
 

@@ -15,6 +15,7 @@ class Model(nn.Module):
 
         self.config = config
         self.device = self.config.device
+        config.d_model = config.hidden_dim * (2 if config.use_cond else 1)
 
         # betas and alphas for diffusion
         betas = make_beta_schedule(

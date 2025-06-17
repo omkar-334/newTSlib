@@ -187,7 +187,7 @@ def get_args():
         "--batch_size", type=int, default=32, help="batch size of train input data"
     )
     parser.add_argument(
-        "--patience", type=int, default=20, help="early stopping patience"
+        "--patience", type=int, default=10, help="early stopping patience"
     )
     parser.add_argument(
         "--learning_rate", type=float, default=0.0001, help="optimizer learning rate"
@@ -356,6 +356,9 @@ def get_args():
     parser.add_argument("--beta_start", type=float, default=0.0001)
     parser.add_argument("--beta_end", type=float, default=0.1)
     parser.add_argument("--timesteps", type=int, default=100)
+    parser.add_argument(
+        "--shuffle_test", type=bool, default=False, help="shuffle test data"
+    )
 
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:
