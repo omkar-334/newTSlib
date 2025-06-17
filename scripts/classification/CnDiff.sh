@@ -28,9 +28,6 @@ for dataset in "${datasets[@]}"; do
     --data UEA \
     --device "cuda:$device" \
     --gpu "$device" \
-    --pred_len 96 \
-    --d_model 64 \
-    --hidden_dim 64 \
     --batch_size 16 \
     --train_epochs 100 \
     --des "$description" \
@@ -41,9 +38,5 @@ for dataset in "${datasets[@]}"; do
     --mlp_ratio 3 \
     --n_depth 2 \
     --use_cond False \
-    --noise_type t_phi \
-    --beta_schedule quad \
-    --beta_start 0.0001 \
-    --beta_end 0.1 \
-    --timesteps 200
+    --use_tphi True 
 done

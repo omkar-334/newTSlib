@@ -10,7 +10,7 @@ from torch import optim
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.dtw_metric import accelerated_dtw
-from utils.metrics import metric, save_preds, save_results
+from utils.metrics import metric, save_results
 from utils.tools import EarlyStopping, adjust_learning_rate, visual
 
 warnings.filterwarnings("ignore")

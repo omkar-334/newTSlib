@@ -13,6 +13,7 @@ class Model(nn.Module):
     def __init__(self, config: SimpleNamespace) -> None:
         super().__init__()
 
+        self.config = config
         self.device = self.config.device
 
         # betas and alphas for diffusion
@@ -33,8 +34,8 @@ class Model(nn.Module):
             self.one_minus_alphas_bar_sqrt *= (
                 0.9999  # avoid division by 0 for 1/sqrt(alpha_bar_t) during inference
             )
-
-        self.t_phi = Tphi(config) if config.use_tphi else None
+        if self.config.use_tphi:
+            self.t_phi = Tphi(config)
 
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
@@ -54,8 +55,8 @@ class Model(nn.Module):
         sqrt_alpha_bar_t = extract(self.alphas_bar_sqrt, t, batch_y)
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
-        if self.tphi:
-            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
+        if self.config.use_tphi:
+            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)  # type: ignore
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
 

@@ -15,7 +15,8 @@ from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
 
 # from utils.print_args import print_args
 
-if __name__ == "__main__":
+
+def get_args():
     fix_seed = 2021
     random.seed(fix_seed)
     torch.manual_seed(fix_seed)
@@ -111,7 +112,7 @@ if __name__ == "__main__":
     parser.add_argument("--enc_in", type=int, default=7, help="encoder input size")
     parser.add_argument("--dec_in", type=int, default=7, help="decoder input size")
     parser.add_argument("--c_out", type=int, default=7, help="output size")
-    parser.add_argument("--d_model", type=int, default=512, help="dimension of model")
+    parser.add_argument("--d_model", type=int, default=64, help="dimension of model")
     parser.add_argument("--n_heads", type=int, default=8, help="num of heads")
     parser.add_argument("--e_layers", type=int, default=2, help="num of encoder layers")
     parser.add_argument("--d_layers", type=int, default=1, help="num of decoder layers")
@@ -375,52 +376,48 @@ if __name__ == "__main__":
         args.device_ids = [int(id_) for id_ in device_ids]
         args.gpu = args.device_ids[0]
 
-    # print("Args in experiment:")
-    # print_args(args)
+    return args
 
+
+def get_exp(args):
     if args.task_name == "long_term_forecast":
-        Exp = Exp_Long_Term_Forecast
-    elif args.task_name == "short_term_forecast":
-        Exp = Exp_Short_Term_Forecast
-    elif args.task_name == "imputation":
-        Exp = Exp_Imputation
-    elif args.task_name == "anomaly_detection":
-        Exp = Exp_Anomaly_Detection
-    elif args.task_name == "classification":
-        Exp = Exp_Classification
-    else:
-        Exp = Exp_Long_Term_Forecast
+        return Exp_Long_Term_Forecast(args)
+    if args.task_name == "short_term_forecast":
+        return Exp_Short_Term_Forecast(args)
+    if args.task_name == "imputation":
+        return Exp_Imputation(args)
+    if args.task_name == "anomaly_detection":
+        return Exp_Anomaly_Detection(args)
+    if args.task_name == "classification":
+        return Exp_Classification(args)
+    return Exp_Long_Term_Forecast(args)
+
+
+def clean(ckpt=None):
+    """
+    Clean up the cache and remove checkpoints.
+    """
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    gc.collect()
+
+    if ckpt and os.path.exists(ckpt):
+        os.remove(ckpt)
+
+
+if __name__ == "__main__":
+    args = get_args()
+    exp = get_exp(args)
+    print(exp.args)
+
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
 
     if args.is_training:
-        for ii in range(args.itr):
-            # setting record of experiments
-            exp = Exp(args)  # set experiments
-            setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_{ii}"
+        print(f">>>>>>>TRAINING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        exp.train(setting)
 
-            print(f">>>>>>>{setting}>>>>>>>")
-            print(">>>>>>>training")
-            exp.train(setting)
+    print(f">>>>>>>TESTING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    ckpt = exp.test(setting)
 
-            print(">>>>>>>testing")
-            ckpt = exp.test(setting)
-            if args.gpu_type == "mps":
-                torch.backends.mps.empty_cache()
-            elif args.gpu_type == "cuda":
-                torch.cuda.empty_cache()
-
-            gc.collect()
-            if os.path.exists(ckpt):
-                os.remove(ckpt)
-
-            print("-------------------------------------------------")
-    else:
-        exp = Exp(args)  # set experiments
-        ii = 0
-        setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_{ii}"
-
-        print(f">>>>>>>testing : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        exp.test(setting, test=1)
-        if args.gpu_type == "mps":
-            torch.backends.mps.empty_cache()
-        elif args.gpu_type == "cuda":
-            torch.cuda.empty_cache()
+    print("-------------------------------------------------")
+    clean(ckpt)
