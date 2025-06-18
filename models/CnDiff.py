@@ -43,8 +43,17 @@ class Model(nn.Module):
         if self.config.use_cond:
             self.condition_model = Condition(config)
 
-        self.classifier = nn.Sequential(
-            nn.AdaptiveAvgPool1d(1),  # Aggregate over features
+        self.classifier1 = nn.Sequential(
+            nn.AdaptiveAvgPool1d(1),  # [B, D, T] → [B, D, 1]
+            nn.Flatten(start_dim=1),  # [B, D, 1] → [B, D]
+            nn.Linear(config.d_model, config.hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(config.hidden_dim, config.num_class),
+        )
+
+        self.classifier2 = nn.Sequential(
+            nn.AdaptiveAvgPool1d(1),
             nn.Flatten(),
             nn.Linear(config.d_model, self.config.num_class),
         )
@@ -74,8 +83,13 @@ class Model(nn.Module):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
-        logits = self.classifier(dec_out)
-        return logits
+
+        if self.config.classifier == 1:
+            dec_out = self.classifier1(dec_out.permute(0, 2, 1))
+        elif self.config.classifier == 2:
+            dec_out = self.classifier2(dec_out.permute(0, 2, 1))
+        # return logits
+        return dec_out
 
     def forward(self, x, mask, *args):
         n = x.size(0)
@@ -83,8 +97,6 @@ class Model(nn.Module):
             self.device
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-        # print(x.shape, t.shape, mask.shape)
-        # print(t)
         return self.classification(x, x, t)
 
 

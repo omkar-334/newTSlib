@@ -8,8 +8,8 @@ import sys
 import numpy as np
 import torch
 import torch.backends
-import wandb
 
+import wandb
 from exp.exp_anomaly_detection import Exp_Anomaly_Detection
 from exp.exp_classification import Exp_Classification
 from exp.exp_imputation import Exp_Imputation
@@ -361,9 +361,9 @@ def get_args():
         "--shuffle_test", type=bool, default=False, help="shuffle test data"
     )
     parser.add_argument(
-        "--use_cls_token",
-        type=lambda x: str(x).lower() == "true",
-        default=True,
+        "--classifier",
+        type=int,
+        default=int,
         help="use classifier token for classification task",
     )
     parser.add_argument("--sweep", type=bool, default=False, help="sweep mode")
@@ -419,7 +419,7 @@ def clean(ckpt=None):
 def get_setting(args):
     # setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
 
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}_clstoken={args.use_cls_token}"
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}_clstoken={args.classifier}"
 
     return setting
 

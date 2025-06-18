@@ -38,5 +38,6 @@ for dataset in "${datasets[@]}"; do
     --n_depth 2 \
     --use_cond True \
     --use_tphi True \
-    --wandb True
+    --wandb False \
+    --classifier 0
 done

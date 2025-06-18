@@ -17,12 +17,10 @@ def modulate(x, shift, scale):
 class Condition(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
-
         self.dec = nn.Linear(config.seq_len, config.pred_len)
 
     def forward(self, x):
         out = self.dec(x.permute(0, 2, 1)).permute(0, 2, 1)
-
         return out
 
 
@@ -61,35 +59,37 @@ class DiTBlock(nn.Module):
         return x
 
 
-# Decoder
+# Decoder module with conditioning support
 class Decoder(nn.Module):
-    """
-    The final layer of DiT.
-    """
-
     def __init__(self, hidden_dim, d_model, pred_len, n_emb, config) -> None:
         super().__init__()
         self.norm = nn.LayerNorm(d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
-            DataEmbedding(d_model, d_model, n_emb - 1), nn.Linear(d_model, pred_len)
+            DataEmbedding(d_model, hidden_dim, n_emb - 1),
+            nn.Linear(hidden_dim, d_model),
         )
         self.adaLN_modulation = nn.Sequential(
             nn.SiLU(), nn.Linear(hidden_dim, 2 * d_model, bias=True)
         )
         self.config = config
+        self.cls_decoder = nn.Sequential(
+            nn.LayerNorm(d_model), nn.Linear(d_model, config.num_class)
+        )
 
-    def forward(self, x, k):
-        """
-        x: (B, num_feat, d_model)
-        k: (B, hidden_dim)
-        """
-        shift, scale = self.adaLN_modulation(k).chunk(2, dim=1)
+    def forward(self, x, c):
+        shift, scale = self.adaLN_modulation(c).chunk(2, dim=1)
         x = modulate(self.norm(x), shift, scale)
-        if self.config.task_name != "classification":
-            x = self.mlp(x)
+
+        if self.config.task_name == "classification" and not self.config.classifier:
+            cls_token = x[:, 0:1, :]  # (B, 1, d_model)
+            cls_out = self.cls_decoder(cls_token).squeeze(1)  # (B, num_class)
+            return cls_out
+
+        x = self.mlp(x)
         return x
 
 
+# Full model
 class Denoiser(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
@@ -109,12 +109,14 @@ class Denoiser(nn.Module):
             config,
         )
         self.act = nn.Identity()
-        self.initialize_weights()
         self.config = config
+
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
                 config.feature_dim, config.hidden_dim, config.n_emb
             )
+
+        self.initialize_weights()
 
     def initialize_weights(self) -> None:
         for block in self.blocks:
@@ -128,7 +130,8 @@ class Denoiser(nn.Module):
         """
         x: (B, context_length, num_feat)
         y: (B, prediction_length, num_feat)
-        k: (B, )
+        k: (B,)
+        cond_info: (B, context_length, num_feat)
         """
         if self.config.task_name == "classification":
             h = self.input_embedder(x)
@@ -138,19 +141,15 @@ class Denoiser(nn.Module):
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info)
             h = torch.cat([h, cond_info], dim=-1)
-        # else:
-        #     cond_info = torch.zeros(
-        #         (h.size(0), h.size(1), self.config.hidden_dim),  # (B, L, hidden_dim)
-        #         device=h.device,
-        #     )
 
         c = self.k_embedder(k)
 
         for block in self.blocks:
             h = block(h, c)
 
-        out = self.decoder(h, c).permute(0, 2, 1)
+        out = self.decoder(h, c)
 
         if self.config.task_name != "classification":
-            out = self.act(out)
+            out = self.act(out).permute(0, 2, 1)
+
         return out
