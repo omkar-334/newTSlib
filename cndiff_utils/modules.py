@@ -72,19 +72,10 @@ class Decoder(nn.Module):
             nn.SiLU(), nn.Linear(hidden_dim, 2 * d_model, bias=True)
         )
         self.config = config
-        self.cls_decoder = nn.Sequential(
-            nn.LayerNorm(d_model), nn.Linear(d_model, config.num_class)
-        )
 
     def forward(self, x, c):
         shift, scale = self.adaLN_modulation(c).chunk(2, dim=1)
         x = modulate(self.norm(x), shift, scale)
-
-        if self.config.task_name == "classification" and not self.config.classifier:
-            cls_token = x[:, 0:1, :]  # (B, 1, d_model)
-            cls_out = self.cls_decoder(cls_token).squeeze(1)  # (B, num_class)
-            return cls_out
-
         x = self.mlp(x)
         return x
 
@@ -137,6 +128,8 @@ class Denoiser(nn.Module):
             h = self.input_embedder(x)
         else:
             h = self.input_embedder(y)
+            if self.config.task_name == "anomaly_detection":
+                h = h[:, -self.config.pred_len :, :]
 
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info)
@@ -150,6 +143,8 @@ class Denoiser(nn.Module):
         out = self.decoder(h, c)
 
         if self.config.task_name != "classification":
-            out = self.act(out).permute(0, 2, 1)
+            out = self.act(out)
+            if self.config.task_name != "anomaly_detection":
+                out = out.permute(0, 2, 1)
 
         return out

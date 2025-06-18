@@ -56,7 +56,10 @@ def save_results(task, setting: str, metrics: dict, sweep=False):
     json_path = f"./results/{task}_results.json"
     if os.path.exists(json_path):
         with open(json_path) as f:
-            results_dict = json.load(f)
+            try:
+                results_dict = json.load(f)
+            except json.JSONDecodeError:
+                results_dict = {}
     else:
         results_dict = {}
 

@@ -360,12 +360,6 @@ def get_args():
     parser.add_argument(
         "--shuffle_test", type=bool, default=False, help="shuffle test data"
     )
-    parser.add_argument(
-        "--classifier",
-        type=int,
-        default=int,
-        help="use classifier token for classification task",
-    )
     parser.add_argument("--sweep", type=bool, default=False, help="sweep mode")
     parser.add_argument("--wandb", type=bool, default=False, help="use wandb")
 
@@ -419,7 +413,7 @@ def clean(ckpt=None):
 def get_setting(args):
     # setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
 
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}_clstoken={args.classifier}"
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}"
 
     return setting
 

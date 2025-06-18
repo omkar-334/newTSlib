@@ -229,5 +229,147 @@
         "recall": 0.6252638218516894,
         "f1": 0.740051817474213,
         "precision": 0.9064633504398011
+    },
+    "anomaly_detection_MSL_CnDiff_lr0.0001_mlp-ratio1_n-depth2_n-emb2_attndropout0.1_cond=True_tphi=True": {
+        "time": "2025-06-18 15:58:53",
+        "accuracy": 0.9684787326388888,
+        "recall": 0.7629410249806851,
+        "f1": 0.836037815718922,
+        "precision": 0.924625468164794
+    },
+    "anomaly_detection_PSM_CnDiff_lr0.0001_mlp-ratio1_n-depth2_n-emb2_attndropout0.1_cond=True_tphi=True": {
+        "time": "2025-06-18 15:59:06",
+        "accuracy": 0.7224385245901639,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision": 0.0
+    },
+    "anomaly_detection_SMAP_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=True": {
+        "time": "2025-06-18 16:16:05",
+        "accuracy": 0.9355471673402185,
+        "recall": 0.5671529910779581,
+        "f1": 0.6924253077532616,
+        "precision": 0.8887265434751468
+    },
+    "anomaly_detection_SMD_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=True": {
+        "time": "2025-06-18 16:03:16",
+        "accuracy": 0.9801308329945341,
+        "recall": 0.7198750169813884,
+        "f1": 0.7507393698974623,
+        "precision": 0.7843688709617733
+    },
+    "anomaly_detection_SWAT_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=True": {
+        "time": "2025-06-18 16:07:03",
+        "accuracy": 0.9583400021340163,
+        "recall": 0.6572563665989272,
+        "f1": 0.7930109011387106,
+        "precision": 0.9994432071269488
+    },
+    "tphi": "off",
+    "anomaly_detection_MSL_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=False": {
+        "time": "2025-06-18 16:16:51",
+        "accuracy": 0.9699164496527778,
+        "recall": 0.7767190316765388,
+        "f1": 0.8446996219016945,
+        "precision": 0.9257213014119091
+    },
+    "anomaly_detection_PSM_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=False": {
+        "time": "2025-06-18 16:17:03",
+        "accuracy": 0.959995446265938,
+        "recall": 0.8599319141954801,
+        "f1": 0.9226774633631124,
+        "precision": 0.9953002610966057
+    },
+    "anomaly_detection_SMAP_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=False": {
+        "time": "2025-06-18 16:17:22",
+        "accuracy": 0.9352244237389612,
+        "recall": 0.5652881380722539,
+        "f1": 0.690657284860669,
+        "precision": 0.8874824191279888
+    },
+    "anomaly_detection_SMD_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=False": {
+        "time": "2025-06-18 16:17:48",
+        "accuracy": 0.9801520079504902,
+        "recall": 0.7213014536068469,
+        "f1": 0.7513089005235603,
+        "precision": 0.7839214528274029
+    },
+    "anomaly_detection_SWAT_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=True_tphi=False": {
+        "time": "2025-06-18 16:18:21",
+        "accuracy": 0.9583266645326505,
+        "recall": 0.6572563665989272,
+        "f1": 0.7929583531204789,
+        "precision": 0.999276290151979
+    },
+    "cond": "off",
+    "anomaly_detection_MSL_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=True": {
+        "time": "2025-06-18 16:22:34",
+        "accuracy": 0.9684109157986112,
+        "recall": 0.7629410249806851,
+        "f1": 0.8357430002115805,
+        "precision": 0.9239045688445345
+    },
+    "anomaly_detection_PSM_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=True": {
+        "time": "2025-06-18 16:22:46",
+        "accuracy": 0.7224385245901639,
+        "recall": 0.0,
+        "f1": 0.0,
+        "precision": 0.0
+    },
+    "anomaly_detection_SMAP_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=True": {
+        "time": "2025-06-18 16:23:04",
+        "accuracy": 0.9342304669959587,
+        "recall": 0.5574813514699429,
+        "f1": 0.6843983570129957,
+        "precision": 0.8861377506538797
+    },
+    "anomaly_detection_SMD_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=True": {
+        "time": "2025-06-18 16:23:29",
+        "accuracy": 0.9807293784162262,
+        "recall": 0.7343091971199566,
+        "f1": 0.7600583551579282,
+        "precision": 0.7876789682684251
+    },
+    "anomaly_detection_SWAT_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=True": {
+        "time": "2025-06-18 16:24:00",
+        "accuracy": 0.9583422250675772,
+        "recall": 0.6572563665989272,
+        "f1": 0.7930196598188646,
+        "precision": 0.999471032044322
+    },
+    "anomaly_detection_MSL_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=False": {
+        "time": "2025-06-18 16:24:50",
+        "accuracy": 0.9684787326388888,
+        "recall": 0.7629410249806851,
+        "f1": 0.836037815718922,
+        "precision": 0.924625468164794
+    },
+    "anomaly_detection_PSM_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=False": {
+        "time": "2025-06-18 16:25:03",
+        "accuracy": 0.9595856102003643,
+        "recall": 0.8599319141954801,
+        "f1": 0.9219471439250694,
+        "precision": 0.9936021989479171
+    },
+    "anomaly_detection_SMAP_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=False": {
+        "time": "2025-06-18 16:25:19",
+        "accuracy": 0.9356641034276306,
+        "recall": 0.5680854175808103,
+        "f1": 0.6931614112188104,
+        "precision": 0.8888634608232971
+    },
+    "anomaly_detection_SMD_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=False": {
+        "time": "2025-06-18 16:25:42",
+        "accuracy": 0.9788786872656638,
+        "recall": 0.6907349544898791,
+        "f1": 0.7310830727200833,
+        "precision": 0.7764373520653585
+    },
+    "anomaly_detection_SWAT_CnDiff_lr0.0001_mlp-ratio1_n-depth3_n-emb2_attndropout0.1_cond=False_tphi=False": {
+        "time": "2025-06-18 16:26:13",
+        "accuracy": 0.9583400021340163,
+        "recall": 0.6572563665989272,
+        "f1": 0.7930109011387106,
+        "precision": 0.9994432071269488
     }
 }

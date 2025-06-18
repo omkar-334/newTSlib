@@ -1,5 +1,4 @@
 import os
-import pickle
 import time
 import warnings
 
@@ -22,7 +21,9 @@ class Exp_Classification(Exp_Basic):
         super().__init__(args)
 
     def _build_model(self):
-        self.load_data()
+        self.train_data, self.train_loader = self._get_data(flag="TRAIN")
+        self.test_data, self.test_loader = self._get_data(flag="TEST")
+        self.vali_data, self.vali_loader = self._get_data(flag="TEST")
         self.args.seq_len, self.args.feature_dim = get_loader_dims(self.train_loader)
         self.args.enc_in = self.train_data.feature_df.shape[1]
         self.args.num_class = len(self.train_data.class_names)
@@ -32,42 +33,13 @@ class Exp_Classification(Exp_Basic):
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
-    def load_data(self):
-        dataset_name = self.args.model_id
-        if os.path.exists(f"preprocessed/{dataset_name}.pkl"):
-            with open(f"preprocessed/{dataset_name}.pkl", "rb") as f:
-                self.data = pickle.load(f)
-            (
-                self.train_data,
-                self.train_loader,
-                self.test_data,
-                self.test_loader,
-                self.vali_data,
-                self.vali_loader,
-            ) = self.data
-            print("Data loaded from preprocessed file.")
-        else:
-            print("No preprocessed file found, loading data from scratch.")
-            self.train_data, self.train_loader = self._get_data(flag="TRAIN")
-            self.test_data, self.test_loader = self._get_data(flag="TEST")
-            self.vali_data, self.vali_loader = self._get_data(flag="TEST")
-            self.data = (
-                self.train_data,
-                self.train_loader,
-                self.test_data,
-                self.test_loader,
-                self.vali_data,
-                self.vali_loader,
-            )
-            with open(f"preprocessed/{dataset_name}.pkl", "wb") as f:
-                pickle.dump(self.data, f)
-
     def _get_data(self, flag):
         data_set, data_loader = data_provider(self.args, flag)
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        # model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = optim.RAdam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     def _select_criterion(self):
@@ -114,8 +86,6 @@ class Exp_Classification(Exp_Basic):
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
-
-        time_now = time.time()
 
         train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)

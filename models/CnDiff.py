@@ -43,20 +43,14 @@ class Model(nn.Module):
         if self.config.use_cond:
             self.condition_model = Condition(config)
 
-        self.classifier1 = nn.Sequential(
-            nn.AdaptiveAvgPool1d(1),  # [B, D, T] → [B, D, 1]
-            nn.Flatten(start_dim=1),  # [B, D, 1] → [B, D]
-            nn.Linear(config.d_model, config.hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            nn.Linear(config.hidden_dim, config.num_class),
-        )
-
-        self.classifier2 = nn.Sequential(
-            nn.AdaptiveAvgPool1d(1),
-            nn.Flatten(),
-            nn.Linear(config.d_model, self.config.num_class),
-        )
+        if self.config.task_name == "classification":
+            self.classifier = nn.Sequential(
+                nn.AdaptiveAvgPool1d(1),
+                nn.Flatten(),
+                nn.Linear(config.d_model, self.config.num_class),
+            )
+        if self.config.task_name == "anomaly_detection":
+            self.projection = nn.Linear(config.d_model, config.c_out, bias=True)
 
     def q_sample(self, batch_y, t):
         """
@@ -79,16 +73,20 @@ class Model(nn.Module):
 
         return y_t, noise
 
-    def classification(self, x, y, t):
+    def classification(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
-        y_t_batch, _ = self.q_sample(y, t)
+        y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.classifier(dec_out.permute(0, 2, 1))
 
-        if self.config.classifier == 1:
-            dec_out = self.classifier1(dec_out.permute(0, 2, 1))
-        elif self.config.classifier == 2:
-            dec_out = self.classifier2(dec_out.permute(0, 2, 1))
         # return logits
+        return dec_out
+
+    def anomaly_detection(self, x, t):
+        self.condition_info = self.condition_model(x) if self.config.use_cond else None
+        y_t_batch, _ = self.q_sample(x, t)
+        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.projection(dec_out)
         return dec_out
 
     def forward(self, x, mask, *args):
@@ -97,7 +95,11 @@ class Model(nn.Module):
             self.device
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-        return self.classification(x, x, t)
+        if self.config.task_name == "classification":
+            return self.classification(x, t)
+        if self.config.task_name == "anomaly_detection":
+            return self.anomaly_detection(x, t)
+        return None
 
 
 class Tphi(nn.Module):
@@ -111,7 +113,7 @@ class Tphi(nn.Module):
         self.w1 = nn.Parameter(torch.empty(config.feature_dim, config.feature_dim))
         self.b1 = nn.Parameter(torch.empty(config.feature_dim))
 
-        param = config.seq_len
+        param = config.pred_len
         self.w2 = nn.Parameter(torch.empty(param, param))
         self.b2 = nn.Parameter(torch.empty(param))
         self.act = nn.Tanh()
@@ -130,7 +132,6 @@ class Tphi(nn.Module):
     def forward(self, batch_y, t):
         t_emb = self.time_emb(t).unsqueeze(1)
         out = batch_y + t_emb
-
         out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
         out = out.permute(0, 2, 1)
 
