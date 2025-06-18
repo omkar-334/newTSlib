@@ -1,3 +1,5 @@
+from functools import partial
+
 from torch.utils.data import DataLoader
 
 from data_provider.data_loader import (
@@ -69,7 +71,7 @@ def data_provider(args, flag):
             shuffle=shuffle_flag,
             num_workers=args.num_workers,
             drop_last=drop_last,
-            collate_fn=lambda x: collate_fn(x, max_len=args.seq_len),
+            collate_fn=partial(collate_fn, max_len=args.seq_len),
         )
         return data_set, data_loader
     if args.data == "m4":
