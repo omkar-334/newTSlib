@@ -61,17 +61,16 @@ class DiTBlock(nn.Module):
 
 # Decoder module with conditioning support
 class Decoder(nn.Module):
-    def __init__(self, hidden_dim, d_model, pred_len, n_emb, config) -> None:
+    def __init__(self, config) -> None:
         super().__init__()
-        self.norm = nn.LayerNorm(d_model, elementwise_affine=True, eps=1e-6)
+        self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
-            DataEmbedding(d_model, hidden_dim, n_emb - 1),
-            nn.Linear(hidden_dim, d_model),
+            DataEmbedding(config.d_model, config.hidden_dim, config.n_emb - 1),
+            nn.Linear(config.hidden_dim, config.d_model),
         )
         self.adaLN_modulation = nn.Sequential(
-            nn.SiLU(), nn.Linear(hidden_dim, 2 * d_model, bias=True)
+            nn.SiLU(), nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True)
         )
-        self.config = config
 
     def forward(self, x, c):
         shift, scale = self.adaLN_modulation(c).chunk(2, dim=1)
@@ -88,17 +87,8 @@ class Denoiser(nn.Module):
             config.feature_dim, config.hidden_dim, config.n_emb
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
-
-        d_model = config.d_model
-
         self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
-        self.decoder = Decoder(
-            config.hidden_dim,
-            d_model,
-            config.pred_len,
-            config.n_emb,
-            config,
-        )
+        self.decoder = Decoder(config)
         self.act = nn.Identity()
         self.config = config
 
@@ -144,7 +134,7 @@ class Denoiser(nn.Module):
 
         if self.config.task_name != "classification":
             out = self.act(out)
-            if self.config.task_name != "anomaly_detection":
-                out = out.permute(0, 2, 1)
+            # if self.config.task_name != "anomaly_detection":
+            #     out = out.permute(0, 2, 1)
 
         return out

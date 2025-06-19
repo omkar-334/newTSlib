@@ -9,8 +9,8 @@ from torch import optim
 
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from utils.metrics import metric, save_preds, save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, visual
+from utils.metrics import metric, save_results
+from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims, visual
 
 warnings.filterwarnings("ignore")
 
@@ -20,6 +20,11 @@ class Exp_Imputation(Exp_Basic):
         super().__init__(args)
 
     def _build_model(self):
+        self.train_data, self.train_loader = self._get_data(flag="train")
+        self.test_data, self.test_loader = self._get_data(flag="test")
+        self.vali_data, self.vali_loader = self._get_data(flag="test")
+
+        self.args.seq_len, self.args.feature_dim = get_loader_dims(self.train_loader)
         model = self.model_dict[self.args.model].Model(self.args).float()
 
         if self.args.use_multi_gpu and self.args.use_gpu:
@@ -38,12 +43,12 @@ class Exp_Imputation(Exp_Basic):
         criterion = nn.MSELoss()
         return criterion
 
-    def vali(self, vali_data, vali_loader, criterion):
+    def vali(self, criterion):
         total_loss = []
         self.model.eval()
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                vali_loader
+                self.vali_loader
             ):
                 batch_x = batch_x.float().to(self.device)
                 batch_x_mark = batch_x_mark.float().to(self.device)
@@ -80,32 +85,26 @@ class Exp_Imputation(Exp_Basic):
         return total_loss
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag="train")
-        vali_data, vali_loader = self._get_data(flag="val")
-        test_data, test_loader = self._get_data(flag="test")
-
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
 
         time_now = time.time()
 
-        train_steps = len(train_loader)
+        train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
         model_optim = self._select_optimizer()
         criterion = self._select_criterion()
 
         for epoch in range(self.args.train_epochs):
-            iter_count = 0
             train_loss = []
 
             self.model.train()
             epoch_time = time.time()
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                train_loader
+                self.train_loader
             ):
-                iter_count += 1
                 model_optim.zero_grad()
 
                 batch_x = batch_x.float().to(self.device)
@@ -143,8 +142,8 @@ class Exp_Imputation(Exp_Basic):
 
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
             train_loss = np.average(train_loss)
-            vali_loss = self.vali(vali_data, vali_loader, criterion)
-            test_loss = self.vali(test_data, test_loader, criterion)
+            vali_loss = self.vali(criterion)
+            test_loss = self.vali(criterion)
 
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
@@ -161,8 +160,6 @@ class Exp_Imputation(Exp_Basic):
         return self.model
 
     def test(self, setting, test=0):
-        test_data, test_loader = self._get_data(flag="test")
-
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
             print("loading model")
@@ -175,7 +172,7 @@ class Exp_Imputation(Exp_Basic):
         self.model.eval()
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                test_loader
+                self.test_loader
             ):
                 batch_x = batch_x.float().to(self.device)
                 batch_x_mark = batch_x_mark.float().to(self.device)
