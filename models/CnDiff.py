@@ -6,7 +6,7 @@ import torch.nn as nn
 
 from cndiff_utils.layers import StepEmbedding, make_beta_schedule
 from cndiff_utils.modules import Condition, Denoiser
-from cndiff_utils.utils import extract
+from cndiff_utils.utils import extract, get_gammas
 
 
 class Model(nn.Module):
@@ -16,7 +16,7 @@ class Model(nn.Module):
         self.config = config
         self.device = self.config.device
         config.d_model = config.hidden_dim * (2 if config.use_cond else 1)
-
+        self.num_timesteps = config.timesteps
         # betas and alphas for diffusion
         betas = make_beta_schedule(
             schedule=self.config.beta_schedule,
@@ -89,7 +89,7 @@ class Model(nn.Module):
         dec_out = self.projection(dec_out)
         return dec_out
 
-    def forward(self, x, x_mark, arg1, arg2, mask):
+    def forward(self, x, x_mark=None, arg1=None, arg2=None, mask=None):
         if self.config.task_name == "imputation":
             return self.imputation(x, mask)
 
@@ -128,6 +128,91 @@ class Model(nn.Module):
 
         return pred_noise
 
+    def p_sample_loop(self, batch_y, x):
+        """
+        Inference for diffusion model
+        """
+        t = (
+            torch.tensor([self.num_timesteps - 1])
+            .repeat(batch_y.shape[0])
+            .to(self.device)
+        )
+        z = torch.randn_like(batch_y)
+
+        if self.config.use_cond:
+            self.condition_info = self.condition_model(x)
+            y_t = self.condition_info + z
+        else:
+            y_t = z
+            self.condition_info = None
+
+        for t in reversed(range(1, self.num_timesteps)):
+            y_t = self.p_sample(x, y_t, t)
+
+        z = self.p_sample_t_1to0(x, y_t)
+        return z
+
+    def p_sample(self, x, y_t, t):
+        t = torch.tensor([t]).to(self.device)
+
+        sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat = get_gammas(
+            self.alphas,
+            self.one_minus_alphas_bar_sqrt,
+            t,
+            y_t,
+        )
+
+        if self.config.use_cond:
+            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        else:
+            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+
+        if self.config.use_tphi:
+            z = torch.randn_like(y_0_reparam)
+            t1 = ((gamma_1 * sqrt_alpha_bar_t) + gamma_0) * (
+                self.t_phi(batch_y=y_0_reparam, t=t - 1)
+            )
+            t2 = (gamma_1 * sqrt_alpha_bar_t) * (self.t_phi(batch_y=y_0_reparam, t=t))
+
+            y_t_m_1_hat = (gamma_1 * y_t) - (t2 - t1)
+
+        else:
+            z = torch.randn_like(y_t)
+            y_t_m_1_hat = gamma_0 * y_0_reparam + gamma_1 * y_t
+
+        if self.config.use_cond:
+            y_t_m_1_hat = y_t_m_1_hat + gamma_2 * self.condition_info
+
+        y_t_m_1 = y_t_m_1_hat.to(self.device) + beta_t_hat.sqrt().to(
+            self.device
+        ) * z.to(self.device)
+
+        return y_t_m_1
+
+    def p_sample_t_1to0(self, x, y_t):
+        t = torch.tensor([0]).to(self.device)
+
+        if self.config.use_cond:
+            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        else:
+            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+
+        y_t_m_1 = y_0_reparam.to(self.device)
+
+        return y_t_m_1
+
+    def forecast(self, x, y, t):
+        if self.config.use_cond:
+            self.condition_info = self.condition_model(x)
+        else:
+            self.condition_info = None
+
+        y_t_batch, _ = self.q_sample(y, t)
+        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.projection(dec_out)
+
+        return dec_out
+
 
 class Tphi(nn.Module):
     """
@@ -137,14 +222,18 @@ class Tphi(nn.Module):
     def __init__(self, config):
         super().__init__()
 
-        self.w1 = nn.Parameter(torch.empty(config.feature_dim, config.feature_dim))
-        self.b1 = nn.Parameter(torch.empty(config.feature_dim))
+        param1 = (
+            config.c_out if config.task_name != "classification" else config.feature_dim
+        )
+        param2 = config.pred_len
 
-        param = config.pred_len
-        self.w2 = nn.Parameter(torch.empty(param, param))
-        self.b2 = nn.Parameter(torch.empty(param))
+        self.w1 = nn.Parameter(torch.empty(param1, param1))
+        self.b1 = nn.Parameter(torch.empty(param1))
+
+        self.w2 = nn.Parameter(torch.empty(param2, param2))
+        self.b2 = nn.Parameter(torch.empty(param2))
         self.act = nn.Tanh()
-        self.time_emb = StepEmbedding(config.feature_dim, freq_dim=256)
+        self.time_emb = StepEmbedding(param1, freq_dim=256)
 
         self.init_weights(self.w1, self.b1)
 

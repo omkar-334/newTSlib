@@ -14,7 +14,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-from torch import optim
+from torch.optim.adam import Adam
 
 from utils.tools import get_loader_dims
 
@@ -43,7 +43,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = Adam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     def _select_criterion(self):
@@ -57,7 +57,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             for i, (batch_x, _) in enumerate(self.vali_loader):
                 batch_x = batch_x.float().to(self.device)
 
-                outputs = self.model(batch_x, None, None, None)
+                outputs = self.model(batch_x, None, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -90,20 +90,12 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 batch_x = batch_x.float().to(self.device)
 
-                outputs = self.model(batch_x, None, None, None)
+                outputs = self.model(batch_x, None, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
                 loss = criterion(outputs, batch_x)
                 train_loss.append(loss.item())
-
-                # if (i + 1) % 100 == 0:
-                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                #     speed = (time.time() - time_now) / iter_count
-                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                #     iter_count = 0
-                #     time_now = time.time()
 
                 loss.backward()
                 model_optim.step()
@@ -143,7 +135,10 @@ class Exp_Anomaly_Detection(Exp_Basic):
             for i, (batch_x, batch_y) in enumerate(self.train_loader):
                 batch_x = batch_x.float().to(self.device)
                 # reconstruction
-                outputs = self.model(batch_x, None, None, None)
+                if "cndiff" in self.args.model.lower():
+                    outputs = self.model.p_sample_loop(batch_x, batch_x)
+                else:
+                    outputs = self.model(batch_x, None, None, None)
                 # criterion
                 score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)
                 score = score.detach().cpu().numpy()
@@ -158,7 +153,11 @@ class Exp_Anomaly_Detection(Exp_Basic):
         for i, (batch_x, batch_y) in enumerate(self.test_loader):
             batch_x = batch_x.float().to(self.device)
             # reconstruction
-            outputs = self.model(batch_x, None, None, None)
+            # outputs = self.model(batch_x, None, None, None)
+            if "cndiff" in self.args.model.lower():
+                outputs = self.model.p_sample_loop(batch_x, batch_x)
+            else:
+                outputs = self.model(batch_x, None, None, None)
             # criterion
             score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)
             score = score.detach().cpu().numpy()
@@ -193,5 +192,5 @@ class Exp_Anomaly_Detection(Exp_Basic):
         }
 
         # save_preds(setting, pred, gt)
-        save_results("anomaly_detection", setting, metrics)
+        save_results("anomaly_detection_diffusion", setting, metrics)
         return PATH

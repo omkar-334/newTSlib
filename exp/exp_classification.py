@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-from torch import optim
+from torch.optim.radam import RAdam
 
 import wandb
 from data_provider.data_factory import data_provider
@@ -39,7 +39,7 @@ class Exp_Classification(Exp_Basic):
 
     def _select_optimizer(self):
         # model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
-        model_optim = optim.RAdam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = RAdam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     def _select_criterion(self):
@@ -57,7 +57,7 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
-                outputs = self.model(batch_x, padding_mask, None, None)
+                outputs = self.model(batch_x, padding_mask, None, None, None)
 
                 pred = outputs.detach().cpu()
                 loss = criterion(pred, label.long().squeeze().cpu())
@@ -106,17 +106,9 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
-                outputs = self.model(batch_x, padding_mask, None, None)
+                outputs = self.model(batch_x, padding_mask, None, None, None)
                 loss = criterion(outputs, label.long().squeeze(-1))
                 train_loss.append(loss.item())
-
-                # if (i + 1) % 100 == 0:
-                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                #     speed = (time.time() - time_now) / iter_count
-                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                #     iter_count = 0
-                #     time_now = time.time()
 
                 loss.backward()
                 nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=4.0)
@@ -167,7 +159,10 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
-                outputs = self.model(batch_x, padding_mask, None, None)
+                if "cndiff" in self.args.model:
+                    outputs = self.model.p_sample_loop(batch_x, batch_x)
+                else:
+                    outputs = self.model(batch_x, padding_mask, None, None)
 
                 preds.append(outputs.detach())
                 trues.append(label)
@@ -185,5 +180,7 @@ class Exp_Classification(Exp_Basic):
         accuracy = cal_accuracy(predictions, trues)
 
         # save_preds(setting, preds, trues)
-        save_results("classification", setting, {"accuracy": accuracy}, self.args.sweep)
+        save_results(
+            "classification_diffusion", setting, {"accuracy": accuracy}, self.args.sweep
+        )
         return PATH

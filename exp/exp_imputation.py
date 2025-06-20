@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-from torch import optim
+from torch.optim.adam import Adam
 
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
@@ -36,7 +36,7 @@ class Exp_Imputation(Exp_Basic):
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = Adam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     def _select_criterion(self):
@@ -89,8 +89,6 @@ class Exp_Imputation(Exp_Basic):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        time_now = time.time()
-
         train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
@@ -128,14 +126,6 @@ class Exp_Imputation(Exp_Basic):
 
                 loss = criterion(outputs[mask == 0], batch_x[mask == 0])
                 train_loss.append(loss.item())
-
-                # if (i + 1) % 100 == 0:
-                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                #     speed = (time.time() - time_now) / iter_count
-                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                #     iter_count = 0
-                #     time_now = time.time()
 
                 loss.backward()
                 model_optim.step()
@@ -185,7 +175,10 @@ class Exp_Imputation(Exp_Basic):
                 inp = batch_x.masked_fill(mask == 0, 0)
 
                 # imputation
-                outputs = self.model(inp, batch_x_mark, None, None, mask)
+                if "cndiff" in self.args.model.lower():
+                    outputs = self.model.p_sample_loop(inp, batch_x)
+                else:
+                    outputs = self.model(inp, batch_x_mark, None, None, mask)
 
                 # eval
                 f_dim = -1 if self.args.features == "MS" else 0

@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-from torch import optim
+from torch.optim.adam import Adam
 
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
@@ -32,7 +32,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
+        model_optim = Adam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     def _select_criterion(self):
@@ -47,8 +47,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         path = os.path.join(self.args.checkpoints, setting)
         if not os.path.exists(path):
             os.makedirs(path)
-
-        time_now = time.time()
 
         train_steps = len(train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
