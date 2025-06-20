@@ -3,6 +3,8 @@
 model_name="CnDiff"
 description="run"
 device=1
+cond=True
+tphi=True
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -25,8 +27,8 @@ python -u run.py \
   --attn_dropout 0.1 \
   --mlp_ratio 1 \
   --n_depth 3 \
-  --use_cond False \
-  --use_tphi False
+  --use_cond $cond \
+  --use_tphi $tphi
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -49,9 +51,8 @@ python -u run.py \
   --attn_dropout 0.1 \
   --mlp_ratio 1 \
   --n_depth 3 \
-  --use_cond False \
-  --use_tphi False
-
+  --use_cond $cond \
+  --use_tphi $tphi
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -74,8 +75,8 @@ python -u run.py \
   --attn_dropout 0.1 \
   --mlp_ratio 1 \
   --n_depth 3 \
-  --use_cond False \
-  --use_tphi False
+  --use_cond $cond \
+  --use_tphi $tphi
 
 
 python -u run.py \
@@ -99,8 +100,8 @@ python -u run.py \
   --attn_dropout 0.1 \
   --mlp_ratio 1 \
   --n_depth 3 \
-  --use_cond False \
-  --use_tphi False
+  --use_cond $cond \
+  --use_tphi $tphi
 
 
 
@@ -125,5 +126,5 @@ python -u run.py \
   --attn_dropout 0.1 \
   --mlp_ratio 1 \
   --n_depth 3 \
-  --use_cond False \
-  --use_tphi False
+  --use_cond $cond \
+  --use_tphi $tphi

@@ -1,14 +1,15 @@
 
-model_name=CnDiff
+model_name=CnDiff_imputation
 device=1
-
+cond=True
+tphi=True
 # ECL dataset
 
 for rate in 0.125 0.25 0.375 0.5
 do
   python -u run.py \
     --task_name imputation \
-    --is_training 1 \
+    --is_training 10 \
     --root_path ./dataset/electricity/ \
     --data_path electricity.csv \
     --model_id ECL_mask_$rate \
@@ -17,21 +18,15 @@ do
     --data custom \
     --gpu $device \
     --wandb False \
-    --use_tphi True \
-    --use_cond True \
+    --use_tphi $tphi \
+    --use_cond $cond \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 321 \
-    --batch_size 16 \
     --d_model 96 \
-    --top_k 5 \
-    --learning_rate 0.001
 done
 
-# # weather dataset
+# weather dataset
 
 
 for rate in 0.125 0.25 0.375 0.5
@@ -47,17 +42,12 @@ do
     --data custom \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 21 \
     --gpu $device \
     --wandb False \
     --use_tphi True \
     --use_cond True \
-    --batch_size 16 \
     --d_model 96 \
-    --learning_rate 0.001
 done
 
 # ETTh1
@@ -75,17 +65,12 @@ do
     --data custom \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 7 \
     --gpu $device \
     --wandb False \
-    --use_tphi True \
-    --use_cond True \
-    --batch_size 16 \
+    --use_tphi $tphi \
+    --use_cond $cond \
     --d_model 96 \
-    --learning_rate 0.001
 done
 
 # ETTh2
@@ -102,17 +87,12 @@ do
     --data custom \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 7 \
     --gpu $device \
     --wandb False \
-    --use_tphi True \
-    --use_cond True \
-    --batch_size 16 \
+    --use_tphi $tphi \
+    --use_cond $cond \
     --d_model 96 \
-    --learning_rate 0.001
 done
 
 # ETTm1
@@ -129,17 +109,12 @@ do
     --data custom \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 7 \
     --gpu $device \
     --wandb False \
-    --use_tphi True \
-    --use_cond True \
-    --batch_size 16 \
+    --use_tphi $tphi \
+    --use_cond $cond \
     --d_model 96 \
-    --learning_rate 0.001
 done
 
 
@@ -157,15 +132,10 @@ do
     --data custom \
     --features M \
     --pred_len 96 \
-    --e_layers 2 \
-    --d_layers 1 \
-    --factor 3 \
     --c_out 7 \
     --gpu $device \
     --wandb False \
-    --use_tphi True \
-    --use_cond True \
-    --batch_size 16 \
+    --use_tphi $tphi \
+    --use_cond $cond \
     --d_model 96 \
-    --learning_rate 0.001
 done

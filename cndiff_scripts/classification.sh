@@ -7,7 +7,7 @@ device=1
 datasets=(
   "EthanolConcentration"
   "FaceDetection"
-  "Handwriting"s
+  "Handwriting"
   "Heartbeat"
   "JapaneseVowels"
   "PEMS-SF"
