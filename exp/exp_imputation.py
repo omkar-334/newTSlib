@@ -65,7 +65,8 @@ class Exp_Imputation(Exp_Basic):
                 mask[mask > self.args.mask_rate] = 1  # remained
                 inp = batch_x.masked_fill(mask == 0, 0)
 
-                outputs = self.model(inp, batch_x_mark, None, None, mask)
+                # outputs = self.model(inp, batch_x_mark, None, None, mask)
+                outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -115,7 +116,7 @@ class Exp_Imputation(Exp_Basic):
                 mask[mask > self.args.mask_rate] = 1  # remained
                 inp = batch_x.masked_fill(mask == 0, 0)
 
-                outputs = self.model(inp, batch_x_mark, None, None, mask)
+                outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -188,12 +189,14 @@ class Exp_Imputation(Exp_Basic):
                 batch_x = batch_x[:, :, f_dim:]
                 mask = mask[:, :, f_dim:]
 
-                outputs = outputs.detach().cpu().numpy()
-                pred = outputs
+                pred = outputs.detach().cpu().numpy()
                 true = batch_x.detach().cpu().numpy()
                 preds.append(pred)
                 trues.append(true)
                 masks.append(mask.detach().cpu())
+                print("Pred sample:", pred[0, :10, -1])
+                print("True sample:", true[0, :10, -1])
+                print("Mask sample:", mask[0, :10, -1])
 
                 if i % 20 == 0:
                     filled = true[0, :, -1].copy()

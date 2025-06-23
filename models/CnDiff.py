@@ -89,9 +89,9 @@ class Model(nn.Module):
         dec_out = self.projection(dec_out)
         return dec_out
 
-    def forward(self, x, x_mark=None, arg1=None, arg2=None, mask=None):
+    def forward(self, x, x_mark=None, original_x=None, arg2=None, mask=None):
         if self.config.task_name == "imputation":
-            return self.imputation(x, mask)
+            return self.imputation(x, original_x, mask)
 
         n = x.size(0)
         t = torch.randint(low=1, high=self.config.timesteps, size=(n // 2 + 1,)).to(
@@ -105,7 +105,7 @@ class Model(nn.Module):
 
         return None
 
-    def imputation(self, x, mask):
+    def imputation(self, x, original_x, mask):
         observed_mask = mask
         missing_mask = 1 - observed_mask
 
@@ -115,13 +115,13 @@ class Model(nn.Module):
         B = x.size(0)
         t = torch.randint(0, self.config.timesteps, (B,), device=x.device).long()
 
-        x_t, _ = self.q_sample(x, t)
+        x_t, _ = self.q_sample(original_x, t)
 
-        # Mix observed values with noised input
-        x_t_masked = observed_mask * x + missing_mask * x_t
+        # # Mix observed values with noised input
+        # x_t_masked = observed_mask * x + missing_mask * x_t
 
         # Predict noise using diffusion model
-        pred_noise = self.diffusion_model(x, x_t_masked, t, self.condition_info)
+        pred_noise = self.diffusion_model(x, x_t, t, self.condition_info)
 
         # Project to correct output dim
         pred_noise = self.projection(pred_noise)
