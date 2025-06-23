@@ -21,11 +21,11 @@ python -u run.py \
   --c_out 55 \
   --anomaly_ratio 1 \
   --batch_size 128 \
-  --train_epochs 10 \
+  --train_epochs 3 \
   --n_emb 2 \
   --n_heads 8 \
   --attn_dropout 0.1 \
-  --mlp_ratio 1 \
+  --mlp_ratio 10 \
   --n_depth 3 \
   --use_cond $cond \
   --use_tphi $tphi

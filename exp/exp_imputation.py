@@ -176,7 +176,7 @@ class Exp_Imputation(Exp_Basic):
 
                 # imputation
                 if "cndiff" in self.args.model.lower():
-                    outputs = self.model.p_sample_loop(inp, batch_x)
+                    outputs = self.model.p_sample_loop(inp, inp)
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 

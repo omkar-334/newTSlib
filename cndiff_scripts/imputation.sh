@@ -1,5 +1,4 @@
-
-model_name=CnDiff_imputation
+model_name=CnDiff
 device=1
 cond=True
 tphi=True
@@ -9,7 +8,7 @@ for rate in 0.125 0.25 0.375 0.5
 do
   python -u run.py \
     --task_name imputation \
-    --is_training 10 \
+    --is_training 1 \
     --root_path ./dataset/electricity/ \
     --data_path electricity.csv \
     --model_id ECL_mask_$rate \
@@ -23,7 +22,7 @@ do
     --features M \
     --pred_len 96 \
     --c_out 321 \
-    --d_model 96 \
+    --d_model 96 
 done
 
 # weather dataset
@@ -47,7 +46,7 @@ do
     --wandb False \
     --use_tphi True \
     --use_cond True \
-    --d_model 96 \
+    --d_model 96 
 done
 
 # ETTh1
@@ -70,7 +69,7 @@ do
     --wandb False \
     --use_tphi $tphi \
     --use_cond $cond \
-    --d_model 96 \
+    --d_model 96 
 done
 
 # ETTh2
@@ -92,7 +91,7 @@ do
     --wandb False \
     --use_tphi $tphi \
     --use_cond $cond \
-    --d_model 96 \
+    --d_model 96 
 done
 
 # ETTm1
@@ -114,7 +113,7 @@ do
     --wandb False \
     --use_tphi $tphi \
     --use_cond $cond \
-    --d_model 96 \
+    --d_model 96 
 done
 
 
@@ -137,5 +136,5 @@ do
     --wandb False \
     --use_tphi $tphi \
     --use_cond $cond \
-    --d_model 96 \
+    --d_model 96 
 done
