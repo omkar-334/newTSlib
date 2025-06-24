@@ -1,6 +1,6 @@
 program: run.py
-project: cndiff-classification
-name: Heartbeat Sweep
+project: uwave-classify
+name: Uwave Sweep
 method: bayes  # or "grid", "random"
 metric:
   name: accuracy
@@ -17,13 +17,13 @@ parameters:
   gpu:
     value: 1
   model_id:
-    values: ["Heartbeat"]  # You can include other dataset names for a sweep
+    values: ["UWaveGestureLibrary"]  # You can include other dataset names for a sweep
   root_path:
-    values: ["./dataset/Heartbeat/"]
+    values: ["./dataset/UWaveGestureLibrary/"]
   learning_rate:
-    values: [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.0002, 0.002, 0.02]
+    values: [0.0001, 0.001, 0.01]
   n_heads:
-    values: [4, 8, 16, 32]
+    values: [4, 8, 16]
   mlp_ratio:
     values: [1, 2, 3, 4]
   n_depth:
@@ -34,10 +34,8 @@ parameters:
     values: [True, False]
   use_tphi:
     values: [True, False]
-  use_cls_token:
-    values: [True, False]
   attn_dropout:
-    values: [0.1, 0.2, 0.3, 0.4]
+    values: [0.0, 0.1, 0.2, 0.3]
 
 
   batch_size:

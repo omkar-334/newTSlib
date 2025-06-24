@@ -363,6 +363,10 @@ def get_args():
     parser.add_argument("--sweep", type=bool, default=False, help="sweep mode")
     parser.add_argument("--wandb", type=bool, default=False, help="use wandb")
 
+    parser.add_argument(
+        "--normalize", type=bool, default=False, help="use normalization"
+    )
+
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:
         args.device = torch.device(f"cuda:{args.gpu}")
