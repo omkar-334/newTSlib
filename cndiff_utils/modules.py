@@ -65,11 +65,12 @@ class Decoder(nn.Module):
         super().__init__()
         self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
-            DataEmbedding(config.d_model, config.hidden_dim, config.n_emb - 1),
-            nn.Linear(config.hidden_dim, config.d_model),
+            DataEmbedding(config.d_model, config.d_model, config.n_emb - 1),
+            nn.Linear(config.d_model, config.pred_len),
         )
         self.adaLN_modulation = nn.Sequential(
-            nn.SiLU(), nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True)
+            nn.SiLU(),
+            nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True),
         )
 
     def forward(self, x, c):
@@ -84,7 +85,7 @@ class Denoiser(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
         self.input_embedder = DataEmbedding(
-            config.feature_dim, config.hidden_dim, config.n_emb
+            config.pred_len, config.hidden_dim, config.n_emb
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
         self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
@@ -94,7 +95,7 @@ class Denoiser(nn.Module):
 
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
-                config.feature_dim, config.hidden_dim, config.n_emb
+                config.pred_len, config.hidden_dim, config.n_emb
             )
 
         self.initialize_weights()
@@ -115,14 +116,12 @@ class Denoiser(nn.Module):
         cond_info: (B, context_length, num_feat)
         """
         if self.config.task_name == "classification":
-            h = self.input_embedder(x)
+            h = self.input_embedder(x.permute(0, 2, 1))
         else:
-            h = self.input_embedder(y)
-            if self.config.task_name == "anomaly_detection":
-                h = h[:, -self.config.pred_len :, :]
+            h = self.input_embedder(y.permute(0, 2, 1))
 
         if self.config.use_cond:
-            cond_info = self.cond_embedder(cond_info)
+            cond_info = self.cond_embedder(cond_info.permute(0, 2, 1))
             h = torch.cat([h, cond_info], dim=-1)
 
         c = self.k_embedder(k)
@@ -130,7 +129,7 @@ class Denoiser(nn.Module):
         for block in self.blocks:
             h = block(h, c)
 
-        out = self.decoder(h, c)
+        out = self.decoder(h, c).permute(0, 2, 1)
 
         if self.config.task_name != "classification":
             out = self.act(out)
