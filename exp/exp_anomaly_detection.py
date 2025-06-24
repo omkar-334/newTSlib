@@ -1,6 +1,7 @@
 import torch.multiprocessing
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
+from cndiff_utils.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import save_results
@@ -57,7 +58,13 @@ class Exp_Anomaly_Detection(Exp_Basic):
             for i, (batch_x, _) in enumerate(self.vali_loader):
                 batch_x = batch_x.float().to(self.device)
 
-                outputs = self.model(batch_x, None, None, None, None)
+                if "cndiff" in self.args.model.lower():
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                else:
+                    outputs = self.model(batch_x, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -90,7 +97,12 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 batch_x = batch_x.float().to(self.device)
 
-                outputs = self.model(batch_x, None, None, None, None)
+                if "cndiff" in self.args.model.lower():
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                else:
+                    outputs = self.model(batch_x, None, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -132,13 +144,18 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
         # (1) stastic on the train set
         with torch.no_grad():
-            for i, (batch_x, batch_y) in enumerate(self.train_loader):
+            for i, (batch_x, _) in enumerate(self.train_loader):
                 batch_x = batch_x.float().to(self.device)
+
                 # reconstruction
                 if "cndiff" in self.args.model.lower():
-                    outputs = self.model.p_sample_loop(batch_x, batch_x)
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
                 else:
                     outputs = self.model(batch_x, None, None, None)
+
                 # criterion
                 score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)
                 score = score.detach().cpu().numpy()
@@ -155,7 +172,10 @@ class Exp_Anomaly_Detection(Exp_Basic):
             # reconstruction
             # outputs = self.model(batch_x, None, None, None)
             if "cndiff" in self.args.model.lower():
-                outputs = self.model.p_sample_loop(batch_x, batch_x)
+                batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                outputs = self.model(batch_x, None, None, None, None)
+                outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
             else:
                 outputs = self.model(batch_x, None, None, None)
             # criterion

@@ -8,6 +8,7 @@ import torch.nn as nn
 from torch.optim.radam import RAdam
 
 import wandb
+from cndiff_utils.utils import normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import save_results
@@ -57,7 +58,13 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
-                outputs = self.model(batch_x, padding_mask, None, None, None)
+                if "cndiff" in self.args.model.lower():
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x, padding_mask, None, None, None)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                else:
+                    outputs = self.model(batch_x, padding_mask, None, None, None)
 
                 pred = outputs.detach().cpu()
                 loss = criterion(pred, label.long().squeeze().cpu())
@@ -106,7 +113,14 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
-                outputs = self.model(batch_x, padding_mask, None, None, None)
+                if "cndiff" in self.args.model.lower():
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x, padding_mask, None, None, None)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                else:
+                    outputs = self.model(batch_x, padding_mask, None, None, None)
+
                 loss = criterion(outputs, label.long().squeeze(-1))
                 train_loss.append(loss.item())
 
@@ -160,7 +174,9 @@ class Exp_Classification(Exp_Basic):
                 label = label.to(self.device)
 
                 if "cndiff" in self.args.model:
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
                     outputs = self.model.p_sample_loop(batch_x, batch_x)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None)
 

@@ -54,17 +54,23 @@ def modify_gammas(sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat):
 
 
 # preprocessing in dlinear
-def instance_normalization(x, y0, device):
+def normalize(device, x, y0=None):
     x = x.to(device)
-    y0 = y0.to(device)
-    x_mean = x[:, -1:, :].to(device)
+    # x_mean = x[:, -1:, :].to(device)
+    x_mean = x.mean(dim=1, keepdim=True)
+
     x_std = torch.ones_like(x_mean).to(device)
     x_norm = (x - x_mean) / x_std
-    y0_norm = (y0 - x_mean) / x_std
+
+    if y0 is not None:
+        y0 = y0.to(device)
+        y0_norm = (y0 - x_mean) / x_std
+    else:
+        y0_norm = None
     return x_norm, y0_norm, x_mean, x_std
 
 
-def instance_denormalization(y0, mean, std, pred_len):
+def denormalize(y0, mean, std, pred_len):
     B = mean.shape[0]
     n_samples = y0.shape[0] // B
     std = torch.repeat_interleave(std, n_samples, dim=0).repeat(1, pred_len, 1)

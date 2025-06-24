@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
+from cndiff_utils.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -47,7 +48,7 @@ class Exp_Imputation(Exp_Basic):
         total_loss = []
         self.model.eval()
         with torch.no_grad():
-            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
+            for i, (batch_x, _, batch_x_mark, batch_y_mark) in enumerate(
                 self.vali_loader
             ):
                 batch_x = batch_x.float().to(self.device)
@@ -65,8 +66,13 @@ class Exp_Imputation(Exp_Basic):
                 mask[mask > self.args.mask_rate] = 1  # remained
                 inp = batch_x.masked_fill(mask == 0, 0)
 
-                # outputs = self.model(inp, batch_x_mark, None, None, mask)
-                outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                if "cndiff" in self.args.model.lower():
+                    inp, _, x_mean, x_std = normalize(self.device, inp)
+                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                else:
+                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -116,7 +122,13 @@ class Exp_Imputation(Exp_Basic):
                 mask[mask > self.args.mask_rate] = 1  # remained
                 inp = batch_x.masked_fill(mask == 0, 0)
 
-                outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                if "cndiff" in self.args.model.lower():
+                    inp, _, x_mean, x_std = normalize(self.device, inp)
+                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                else:
+                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -177,7 +189,10 @@ class Exp_Imputation(Exp_Basic):
 
                 # imputation
                 if "cndiff" in self.args.model.lower():
+                    inp, _, x_mean, x_std = normalize(self.device, inp)
                     outputs = self.model.p_sample_loop(inp, inp)
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
@@ -194,9 +209,6 @@ class Exp_Imputation(Exp_Basic):
                 preds.append(pred)
                 trues.append(true)
                 masks.append(mask.detach().cpu())
-                print("Pred sample:", pred[0, :10, -1])
-                print("True sample:", true[0, :10, -1])
-                print("Mask sample:", mask[0, :10, -1])
 
                 if i % 20 == 0:
                     filled = true[0, :, -1].copy()
@@ -222,5 +234,5 @@ class Exp_Imputation(Exp_Basic):
         }
 
         # save_preds(setting, preds, trues)
-        save_results("imputation", setting, argsdict)
+        save_results("imputation_diffusion", setting, argsdict)
         return PATH
