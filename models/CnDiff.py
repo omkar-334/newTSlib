@@ -5,7 +5,11 @@ import torch
 import torch.nn as nn
 
 from cndiff_utils.layers import StepEmbedding, make_beta_schedule
-from cndiff_utils.modules import ClassificationCondition, Condition, Denoiser
+from cndiff_utils.modules import (
+    ClassificationCondition,
+    Condition,
+    Denoiser,
+)
 from cndiff_utils.utils import extract, get_gammas
 
 
@@ -52,12 +56,17 @@ class Model(nn.Module):
             #     nn.Flatten(),
             #     nn.Linear(config.feature_dim, self.config.num_class),
             # )
+            # self.classifier = nn.Sequential(
+            #     nn.Conv1d(config.d_model, 64, kernel_size=3, padding=1),
+            #     nn.ReLU(),
+            #     nn.AdaptiveAvgPool1d(1),
+            #     nn.Flatten(),
+            #     nn.Linear(64, config.num_class),
+            # )
             self.classifier = nn.Sequential(
-                nn.Conv1d(config.feature_dim, 64, kernel_size=3, padding=1),
-                nn.ReLU(),
                 nn.AdaptiveAvgPool1d(1),
                 nn.Flatten(),
-                nn.Linear(64, config.num_class),
+                nn.Linear(config.d_model, self.config.num_class),
             )
 
     def q_sample(self, batch_y, t):
