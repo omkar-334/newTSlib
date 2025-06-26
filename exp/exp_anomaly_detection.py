@@ -59,9 +59,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
 
                 if "cndiff" in self.args.model.lower():
-                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
                     outputs = self.model(batch_x, None, None, None, None)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
                 else:
                     outputs = self.model(batch_x, None, None, None)
@@ -98,9 +98,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
 
                 if "cndiff" in self.args.model.lower():
-                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
                     outputs = self.model(batch_x, None, None, None, None)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
                 else:
                     outputs = self.model(batch_x, None, None, None, None)
 
@@ -149,9 +149,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 # reconstruction
                 if "cndiff" in self.args.model.lower():
-                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
                     outputs = self.model(batch_x, None, None, None, None)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
                 else:
                     outputs = self.model(batch_x, None, None, None)
@@ -172,9 +172,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
             # reconstruction
             # outputs = self.model(batch_x, None, None, None)
             if "cndiff" in self.args.model.lower():
-                batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
                 outputs = self.model(batch_x, None, None, None, None)
-                outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
             else:
                 outputs = self.model(batch_x, None, None, None)

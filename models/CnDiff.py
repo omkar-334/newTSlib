@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 from cndiff_utils.layers import StepEmbedding, make_beta_schedule
-from cndiff_utils.modules import Condition, Denoiser
+from cndiff_utils.modules import ClassificationCondition, Condition, Denoiser
 from cndiff_utils.utils import extract, get_gammas
 
 
@@ -41,13 +41,23 @@ class Model(nn.Module):
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
         if self.config.use_cond:
-            self.condition_model = Condition(config)
+            if self.config.task_name == "classification":
+                self.condition_model = ClassificationCondition(config)
+            else:
+                self.condition_model = Condition(config)
 
         if self.config.task_name == "classification":
+            # self.classifier = nn.Sequential(
+            #     nn.AdaptiveAvgPool1d(1),
+            #     nn.Flatten(),
+            #     nn.Linear(config.feature_dim, self.config.num_class),
+            # )
             self.classifier = nn.Sequential(
+                nn.Conv1d(config.feature_dim, 64, kernel_size=3, padding=1),
+                nn.ReLU(),
                 nn.AdaptiveAvgPool1d(1),
                 nn.Flatten(),
-                nn.Linear(config.feature_dim, self.config.num_class),
+                nn.Linear(64, config.num_class),
             )
 
     def q_sample(self, batch_y, t):
@@ -71,21 +81,20 @@ class Model(nn.Module):
 
         return y_t, noise
 
-    def classification(self, x, t):
+    def classification(self, x, x_mark_enc, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
-        dec_out = self.classifier(dec_out.permute(0, 2, 1))
-        return dec_out
+        output = self.classifier(dec_out.permute(0, 2, 1))
+        return output
 
     def anomaly_detection(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
-        dec_out = self.projection(dec_out)
         return dec_out
 
-    def forward(self, x, x_mark=None, original_x=None, arg2=None, arg3=None):
+    def forward(self, x, x_mark=None, original_x=None, arg2=None, mask=None):
         if self.config.task_name == "imputation":
             return self.imputation(x, original_x)
 
@@ -95,7 +104,7 @@ class Model(nn.Module):
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
         if self.config.task_name == "classification":
-            return self.classification(x, t)
+            return self.classification(x, x_mark, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
 
@@ -122,13 +131,12 @@ class Model(nn.Module):
             .repeat(batch_y.shape[0])
             .to(self.device)
         )
-        z = torch.randn_like(batch_y)
+        y_t = torch.randn_like(batch_y)
 
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
-            y_t = self.condition_info + z
+            y_t = self.condition_info + y_t
         else:
-            y_t = z
             self.condition_info = None
 
         for t in reversed(range(1, self.num_timesteps)):
@@ -166,7 +174,8 @@ class Model(nn.Module):
             y_t_m_1_hat = gamma_0 * y_0_reparam + gamma_1 * y_t
 
         if self.config.use_cond:
-            y_t_m_1_hat = y_t_m_1_hat + gamma_2 * self.condition_info
+            y_t_m_1_hat = y_t_m_1_hat + gamma_2
+            # * self.condition_info
 
         y_t_m_1 = y_t_m_1_hat.to(self.device) + beta_t_hat.sqrt().to(
             self.device
@@ -177,10 +186,7 @@ class Model(nn.Module):
     def p_sample_t_1to0(self, x, y_t):
         t = torch.tensor([0]).to(self.device)
 
-        if self.config.use_cond:
-            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
-        else:
-            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
 
         y_t_m_1 = y_0_reparam.to(self.device)
 
@@ -237,4 +243,4 @@ class Tphi(nn.Module):
         out = (out @ self.w1.T) + self.b1
         out = self.act(out)
 
-        return out
+        return out + batch_y

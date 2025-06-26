@@ -7,13 +7,9 @@ from cndiff_utils.layers import (
     FullAttention,
     StepEmbedding,
 )
+from cndiff_utils.utils import modulate
 
 
-def modulate(x, shift, scale):
-    return x * (1 + scale.unsqueeze(1)) + shift.unsqueeze(1)
-
-
-# Condition network
 class Condition(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
@@ -21,7 +17,36 @@ class Condition(nn.Module):
 
     def forward(self, x):
         out = self.dec(x.permute(0, 2, 1)).permute(0, 2, 1)
+
         return out
+
+
+class ClassificationCondition(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv1d(
+                config.feature_dim,
+                config.hidden_dim,
+                kernel_size=3,
+                padding=2,
+                dilation=2,
+            ),
+            nn.ReLU(),
+            nn.Conv1d(
+                config.hidden_dim,
+                config.hidden_dim,
+                kernel_size=3,
+                padding=4,
+                dilation=4,
+            ),
+            nn.ReLU(),
+        )
+        self.project = nn.Linear(config.hidden_dim, config.feature_dim)
+
+    def forward(self, x):
+        out = self.net(x.permute(0, 2, 1)).permute(0, 2, 1)  # (B, T, H)
+        return self.project(out)  # (B, T, pred_len)
 
 
 # Encoder

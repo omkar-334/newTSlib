@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
-from cndiff_utils.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -67,9 +66,9 @@ class Exp_Imputation(Exp_Basic):
                 inp = batch_x.masked_fill(mask == 0, 0)
 
                 if "cndiff" in self.args.model.lower():
-                    inp, _, x_mean, x_std = normalize(self.device, inp)
+                    # inp, _, x_mean, x_std = normalize(self.device, inp)
                     outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
                 else:
                     outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
@@ -123,9 +122,9 @@ class Exp_Imputation(Exp_Basic):
                 inp = batch_x.masked_fill(mask == 0, 0)
 
                 if "cndiff" in self.args.model.lower():
-                    inp, _, x_mean, x_std = normalize(self.device, inp)
+                    # inp, _, x_mean, x_std = normalize(self.device, inp)
                     outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
                 else:
                     outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
@@ -189,9 +188,9 @@ class Exp_Imputation(Exp_Basic):
 
                 # imputation
                 if "cndiff" in self.args.model.lower():
-                    inp, _, x_mean, x_std = normalize(self.device, inp)
+                    # inp, _, x_mean, x_std = normalize(self.device, inp)
                     outputs = self.model.p_sample_loop(inp, inp)
-                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)

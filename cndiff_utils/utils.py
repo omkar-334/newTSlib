@@ -43,6 +43,10 @@ def get_gammas(alphas, one_minus_alphas_bar_sqrt, t, y_t, squeeze=False):
     return sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat
 
 
+def modulate(x, shift, scale):
+    return x * (1 + scale.unsqueeze(1)) + shift.unsqueeze(1)
+
+
 def modify_gammas(sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat):
     return (
         sqrt_alpha_bar_t.unsqueeze(1).unsqueeze(2),

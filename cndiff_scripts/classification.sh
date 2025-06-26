@@ -31,11 +31,11 @@ for dataset in "${datasets[@]}"; do
     --train_epochs 100 \
     --des "$description" \
     --learning_rate 0.001 \
-    --n_emb 2 \
-    --n_heads 8 \
-    --attn_dropout 0.1 \
-    --mlp_ratio 1 \
-    --n_depth 2 \
+    --n_emb 4 \
+    --n_heads 16 \
+    --attn_dropout 0.2 \
+    --mlp_ratio 2 \
+    --n_depth 4 \
     --use_cond True \
     --use_tphi True \
     --wandb False
