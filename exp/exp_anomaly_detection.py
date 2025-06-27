@@ -1,6 +1,7 @@
 import torch.multiprocessing
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
+import wandb
 from cndiff_utils.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
@@ -59,9 +60,14 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
 
                 if "cndiff" in self.args.model.lower():
-                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
                     outputs = self.model(batch_x, None, None, None, None)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
 
                 else:
                     outputs = self.model(batch_x, None, None, None)
@@ -98,11 +104,17 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
 
                 if "cndiff" in self.args.model.lower():
-                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
                     outputs = self.model(batch_x, None, None, None, None)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
+
                 else:
-                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = self.model(batch_x, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -120,6 +132,14 @@ class Exp_Anomaly_Detection(Exp_Basic):
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
             )
+            if self.args.wandb:
+                wandb.log({
+                    "train_loss": train_loss,
+                    "vali_loss": vali_loss,
+                    # "vali_accuracy": val_accuracy,
+                    "test_loss": test_loss,
+                    # "test_accuracy": test_accuracy,
+                })
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
@@ -149,9 +169,14 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 # reconstruction
                 if "cndiff" in self.args.model.lower():
-                    # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
                     outputs = self.model(batch_x, None, None, None, None)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
 
                 else:
                     outputs = self.model(batch_x, None, None, None)
@@ -172,9 +197,12 @@ class Exp_Anomaly_Detection(Exp_Basic):
             # reconstruction
             # outputs = self.model(batch_x, None, None, None)
             if "cndiff" in self.args.model.lower():
-                # batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                if self.args.normalize:
+                    batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
                 outputs = self.model(batch_x, None, None, None, None)
-                # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                if self.args.normalize:
+                    outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
             else:
                 outputs = self.model(batch_x, None, None, None)

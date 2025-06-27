@@ -7,6 +7,8 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
+import wandb
+from cndiff_utils.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -66,12 +68,18 @@ class Exp_Imputation(Exp_Basic):
                 inp = batch_x.masked_fill(mask == 0, 0)
 
                 if "cndiff" in self.args.model.lower():
-                    # inp, _, x_mean, x_std = normalize(self.device, inp)
-                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    if self.args.normalize:
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
+
+                    outputs = self.model.p_sample_loop(inp, inp)
+
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
 
                 else:
-                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                    outputs = self.model(inp, batch_x_mark, None, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -122,12 +130,18 @@ class Exp_Imputation(Exp_Basic):
                 inp = batch_x.masked_fill(mask == 0, 0)
 
                 if "cndiff" in self.args.model.lower():
-                    # inp, _, x_mean, x_std = normalize(self.device, inp)
-                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+                    if self.args.normalize:
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
+
+                    outputs = self.model.p_sample_loop(inp, inp)
+
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
 
                 else:
-                    outputs = self.model(inp, batch_x_mark, batch_x, None, mask)
+                    outputs = self.model(inp, batch_x_mark, None, None, mask)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
@@ -150,6 +164,14 @@ class Exp_Imputation(Exp_Basic):
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
             )
+            if self.args.wandb:
+                wandb.log({
+                    "train_loss": train_loss,
+                    "vali_loss": vali_loss,
+                    # "vali_accuracy": val_accuracy,
+                    "test_loss": test_loss,
+                    # "test_accuracy": test_accuracy,
+                })
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
@@ -188,9 +210,15 @@ class Exp_Imputation(Exp_Basic):
 
                 # imputation
                 if "cndiff" in self.args.model.lower():
-                    # inp, _, x_mean, x_std = normalize(self.device, inp)
+                    if self.args.normalize:
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
+
                     outputs = self.model.p_sample_loop(inp, inp)
-                    # outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
+
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
+                        )
 
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
