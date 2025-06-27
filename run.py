@@ -345,9 +345,8 @@ def get_args():
     parser.add_argument("--attn_dropout", type=float, default=0.1)
     parser.add_argument("--mlp_ratio", type=int, default=1)
     parser.add_argument("--n_depth", type=int, default=1)
-    parser.add_argument(
-        "--use_cond", type=lambda x: str(x).lower() == "true", default=True
-    )
+
+    parser.add_argument("--use_cond", type=int, default=1)
     parser.add_argument(
         "--use_tphi", type=lambda x: str(x).lower() == "true", default=True
     )
@@ -364,6 +363,7 @@ def get_args():
     parser.add_argument(
         "--normalize", type=bool, default=False, help="use normalization"
     )
+    parser.add_argument("--classifier", type=int, default=1, help="use classifier")
 
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:
@@ -414,6 +414,9 @@ def clean(ckpt=None):
 
 def get_setting(args):
     setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}_timesteps{args.timesteps}_{args.des}"
+
+    if args.task_name == "classification":
+        setting += f"_use_cond{args.use_cond}_use_tphi{args.use_tphi}_classifier{args.classifier}"
 
     return setting
 

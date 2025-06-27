@@ -2,7 +2,7 @@ import os
 
 import torch
 
-from classification import CnDiffOld, CnDiffOld2, CnDiffOldCond, CnDiffOldCond2
+from classification import cCnDiff, cCnDiffOld
 from models import (
     MICN,
     Autoformer,
@@ -37,10 +37,8 @@ from models import (
 )
 
 class_dict = {
-    "CnDiff": CnDiffOld,
-    "CnDiffCond": CnDiffOldCond,
-    "CnDiff2": CnDiffOld2,
-    "CnDiffCond2": CnDiffOldCond2,
+    "CnDiffOld": cCnDiffOld,
+    "CnDiff": cCnDiff,
 }
 
 
@@ -78,9 +76,8 @@ class Exp_Basic:
             "TimeXer": TimeXer,
             "WPMixer": WPMixer,
             "MultiPatchFormer": MultiPatchFormer,
+            **class_dict,
         }
-
-        self.model_dict.update(class_dict)
 
         if args.model == "Mamba":
             print("Please make sure you have successfully installed mamba_ssm")

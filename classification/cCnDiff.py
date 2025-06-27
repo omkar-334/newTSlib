@@ -1,9 +1,11 @@
-import math
 from types import SimpleNamespace
 
 import torch
 import torch.nn as nn
 
+from classification.classifiers import classifier
+from classification.conditions import condition
+from classification.tphi import Tphi
 from cndiff_utils.layers import (
     AttnMLP,
     DataEmbedding,
@@ -12,6 +14,15 @@ from cndiff_utils.layers import (
     make_beta_schedule,
 )
 from cndiff_utils.utils import extract, get_gammas, modulate
+
+# "classification_EthanolConcentration_CnDiff_attndropout0.1_hiddendim64_mlp-ratio1_n-depth2_n-emb2_n-heads8_timesteps100_base_use_cond1_use_tphiTrue_classifier1": {
+#     "time": "2025-06-27 17:00:01",
+#     "accuracy": 0.2737642585551331
+# },
+# "classification_EthanolConcentration_CnDiff_attndropout0.1_hiddendim64_mlp-ratio1_n-depth2_n-emb2_n-heads8_timesteps100_base_use_cond2_use_tphiTrue_classifier1": {
+#     "time": "2025-06-27 17:01:25",
+#     "accuracy": 0.3193916349809886
+# }
 
 
 class Model(nn.Module):
@@ -46,16 +57,8 @@ class Model(nn.Module):
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
         if self.config.use_cond:
-            self.condition_model = Condition(config)
-
-        if self.config.task_name == "classification":
-            self.classifier = nn.Sequential(
-                nn.Conv1d(config.d_model, config.hidden_dim, kernel_size=3, padding=1),
-                nn.ReLU(),
-                nn.AdaptiveAvgPool1d(1),
-                nn.Flatten(),
-                nn.Linear(config.hidden_dim, config.num_class),
-            )
+            self.condition_model = condition(config)
+        self.classifier = classifier(config)
 
     def q_sample(self, batch_y, t):
         """
@@ -82,7 +85,7 @@ class Model(nn.Module):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
-        dec_out = self.classifier(dec_out.permute(0, 2, 1))
+        dec_out = self.classifier(dec_out)  # (B, num_class)
         return dec_out
 
     def forward(self, x, x_mark=None, original_x=None, arg2=None, arg3=None):
@@ -105,13 +108,12 @@ class Model(nn.Module):
             .repeat(batch_y.shape[0])
             .to(self.device)
         )
-        z = torch.randn_like(batch_y)
+        y_t = torch.randn_like(batch_y)
 
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
-            y_t = self.condition_info + z
+            y_t = self.condition_info + y_t
         else:
-            y_t = z
             self.condition_info = None
 
         for t in reversed(range(1, self.num_timesteps)):
@@ -174,78 +176,6 @@ class Model(nn.Module):
         return dec_out
 
 
-class Tphi(nn.Module):
-    """
-    T_Phi network for Time dependent non linear transformation
-    """
-
-    def __init__(self, config):
-        super().__init__()
-
-        param1 = (
-            config.c_out if config.task_name != "classification" else config.feature_dim
-        )
-        param2 = config.pred_len
-
-        self.w1 = nn.Parameter(torch.empty(param1, param1))
-        self.b1 = nn.Parameter(torch.empty(param1))
-
-        self.w2 = nn.Parameter(torch.empty(param2, param2))
-        self.b2 = nn.Parameter(torch.empty(param2))
-        self.act = nn.Tanh()
-        self.time_emb = StepEmbedding(param1, freq_dim=256)
-
-        self.init_weights(self.w1, self.b1)
-
-    @staticmethod
-    def init_weights(weight, bias):
-        nn.init.kaiming_uniform_(weight, a=math.sqrt(5))
-
-        fan_in, _ = nn.init._calculate_fan_in_and_fan_out(weight)
-        bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
-        nn.init.uniform_(bias, -bound, bound)
-
-    def forward(self, batch_y, t):
-        t_emb = self.time_emb(t).unsqueeze(1)
-        out = batch_y + t_emb
-        out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
-        out = out.permute(0, 2, 1)
-
-        out = (out @ self.w1.T) + self.b1
-        out = self.act(out)
-
-        return out
-
-
-# Condition network
-class Condition(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Conv1d(
-                config.feature_dim,
-                config.hidden_dim,
-                kernel_size=3,
-                padding=2,
-                dilation=2,
-            ),
-            nn.ReLU(),
-            nn.Conv1d(
-                config.hidden_dim,
-                config.hidden_dim,
-                kernel_size=3,
-                padding=4,
-                dilation=4,
-            ),
-            nn.ReLU(),
-        )
-        self.project = nn.Linear(config.hidden_dim, config.feature_dim)
-
-    def forward(self, x):
-        out = self.net(x.permute(0, 2, 1)).permute(0, 2, 1)  # (B, T, H)
-        return self.project(out)
-
-
 # Encoder
 class DiTBlock(nn.Module):
     """
@@ -287,8 +217,8 @@ class Decoder(nn.Module):
         super().__init__()
         self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
-            DataEmbedding(config.d_model, config.hidden_dim, config.n_emb - 1),
-            nn.Linear(config.hidden_dim, config.d_model),
+            DataEmbedding(config.d_model, config.d_model, config.n_emb - 1),
+            nn.Linear(config.d_model, config.pred_len),
         )
         self.adaLN_modulation = nn.Sequential(
             nn.SiLU(), nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True)
@@ -306,7 +236,7 @@ class Denoiser(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
         self.input_embedder = DataEmbedding(
-            config.feature_dim, config.hidden_dim, config.n_emb
+            config.pred_len, config.hidden_dim, config.n_emb
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
         self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
@@ -316,7 +246,7 @@ class Denoiser(nn.Module):
 
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
-                config.feature_dim, config.hidden_dim, config.n_emb
+                config.pred_len, config.hidden_dim, config.n_emb
             )
 
         self.initialize_weights()
@@ -337,14 +267,12 @@ class Denoiser(nn.Module):
         cond_info: (B, context_length, num_feat)
         """
         if self.config.task_name == "classification":
-            h = self.input_embedder(x)
+            h = self.input_embedder(x.permute(0, 2, 1))
         else:
-            h = self.input_embedder(y)
-            if self.config.task_name == "anomaly_detection":
-                h = h[:, -self.config.pred_len :, :]
+            h = self.input_embedder(y.permute(0, 2, 1))
 
         if self.config.use_cond:
-            cond_info = self.cond_embedder(cond_info)
+            cond_info = self.cond_embedder(cond_info.permute(0, 2, 1))
             h = torch.cat([h, cond_info], dim=-1)
 
         c = self.k_embedder(k)
@@ -353,4 +281,12 @@ class Denoiser(nn.Module):
             h = block(h, c)
 
         out = self.decoder(h, c)
+        if self.config.classifier == 2:
+            out = out.permute(0, 2, 1)
+
+        # if self.config.task_name != "classification":
+        #     out = self.act(out)
+        # if self.config.task_name != "anomaly_detection":
+        #     out = out.permute(0, 2, 1)
+
         return out
