@@ -6,7 +6,6 @@ import torch.nn as nn
 
 from cndiff_utils.layers import StepEmbedding, make_beta_schedule
 from cndiff_utils.modules import (
-    ClassificationCondition,
     Condition,
     Denoiser,
 )
@@ -45,29 +44,7 @@ class Model(nn.Module):
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
         if self.config.use_cond:
-            if self.config.task_name == "classification":
-                self.condition_model = ClassificationCondition(config)
-            else:
-                self.condition_model = Condition(config)
-
-        if self.config.task_name == "classification":
-            # self.classifier = nn.Sequential(
-            #     nn.AdaptiveAvgPool1d(1),
-            #     nn.Flatten(),
-            #     nn.Linear(config.feature_dim, self.config.num_class),
-            # )
-            # self.classifier = nn.Sequential(
-            #     nn.Conv1d(config.d_model, 64, kernel_size=3, padding=1),
-            #     nn.ReLU(),
-            #     nn.AdaptiveAvgPool1d(1),
-            #     nn.Flatten(),
-            #     nn.Linear(64, config.num_class),
-            # )
-            self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool1d(1),
-                nn.Flatten(),
-                nn.Linear(config.d_model, self.config.num_class),
-            )
+            self.condition_model = Condition(config)
 
     def q_sample(self, batch_y, t):
         """
@@ -90,13 +67,6 @@ class Model(nn.Module):
 
         return y_t, noise
 
-    def classification(self, x, x_mark_enc, t):
-        self.condition_info = self.condition_model(x) if self.config.use_cond else None
-        y_t_batch, _ = self.q_sample(x, t)
-        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
-        output = self.classifier(dec_out.permute(0, 2, 1))
-        return output
-
     def anomaly_detection(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
@@ -112,8 +82,6 @@ class Model(nn.Module):
             self.device
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-        if self.config.task_name == "classification":
-            return self.classification(x, x_mark, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
 

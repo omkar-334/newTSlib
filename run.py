@@ -2,8 +2,6 @@ import argparse
 import gc
 import os
 import random
-import signal
-import sys
 
 import numpy as np
 import torch
@@ -415,16 +413,12 @@ def clean(ckpt=None):
 
 
 def get_setting(args):
-    # setting = f"{args.task_name}_{args.model_id}_{args.model}_{args.data}_ft{args.features}_sl{args.seq_len}_ll{args.label_len}_pl{args.pred_len}_dm{args.d_model}_nh{args.n_heads}_el{args.e_layers}_dl{args.d_layers}_df{args.d_ff}_expand{args.expand}_dc{args.d_conv}_fc{args.factor}_eb{args.embed}_dt{args.distil}_{args.des}_0"
-
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_lr{args.learning_rate}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_attndropout{args.attn_dropout}_cond={args.use_cond}_tphi={args.use_tphi}"
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}_timesteps{args.timesteps}_{args.des}"
 
     return setting
 
 
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
-
     args = get_args()
     setting = get_setting(args)
 
