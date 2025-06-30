@@ -2,7 +2,7 @@ import os
 
 import torch
 
-from classification import cCnDiff, cCnDiffOld
+from classification import CnDiffOld
 from models import (
     MICN,
     Autoformer,
@@ -36,17 +36,13 @@ from models import (
     iTransformer,
 )
 
-class_dict = {
-    "CnDiffOld": cCnDiffOld,
-    "CnDiff": cCnDiff,
-}
-
 
 class Exp_Basic:
     def __init__(self, args):
         self.args = args
         self.model_dict = {
             "CnDiff": CnDiff,
+            "CnDiffOld": CnDiffOld,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,
@@ -76,7 +72,6 @@ class Exp_Basic:
             "TimeXer": TimeXer,
             "WPMixer": WPMixer,
             "MultiPatchFormer": MultiPatchFormer,
-            **class_dict,
         }
 
         if args.model == "Mamba":
@@ -87,6 +82,7 @@ class Exp_Basic:
 
         self.device = self._acquire_device()
         self.model = self._build_model().to(self.device)
+        print(self.model)
 
     def _build_model(self):
         raise NotImplementedError
