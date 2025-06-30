@@ -159,3 +159,6 @@ run_anylearn.py
 environment.txt
 plots/
 wandb/
+results/
+sweeps/
+*.ipynb
