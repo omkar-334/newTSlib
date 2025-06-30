@@ -238,7 +238,11 @@ class Exp_Anomaly_Detection(Exp_Basic):
             "f1": float(f_score),
             "precision": float(precision),
         }
+        if self.args.wandb:
+            wandb.log(metrics)
 
         # save_preds(setting, pred, gt)
-        save_results("anomaly_detection_diffusion", setting, metrics)
+        save_results(
+            f"{self.args.model_id}_anomaly_detection_diffusion", setting, metrics
+        )
         return PATH
