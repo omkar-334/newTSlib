@@ -3,9 +3,8 @@ import math
 import torch
 import torch.nn as nn
 
-from cndiff_utils.layers import (
-    StepEmbedding,
-)
+from cndiff_utils.layers import StepEmbedding
+from cndiff_utils.modules import Condition
 
 
 class Tphi(nn.Module):
@@ -86,21 +85,10 @@ def classifier2(config):
 
 def condition(config):
     if config.use_cond == 1:
-        return Condition1(config)
+        return Condition(config)
     if config.use_cond == 2:
         return Condition2(config)
     raise ValueError("Invalid condition network type specified in config.")
-
-
-# Condition network
-class Condition1(nn.Module):
-    def __init__(self, config) -> None:
-        super().__init__()
-        self.dec = nn.Linear(config.seq_len, config.pred_len)
-
-    def forward(self, x):
-        out = self.dec(x.permute(0, 2, 1)).permute(0, 2, 1)
-        return out
 
 
 # Condition network

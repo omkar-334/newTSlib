@@ -130,7 +130,7 @@ class Denoiser(nn.Module):
 
         if self.config.task_name != "classification":
             out = self.act(out)
-            # if self.config.task_name != "anomaly_detection":
-            #     out = out.permute(0, 2, 1)
+        elif hasattr(self.config, "classifier") and self.config.classifier == 1:
+            out = out.permute(0, 2, 1)
 
         return out

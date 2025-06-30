@@ -410,6 +410,9 @@ def clean(ckpt=None):
 
     if ckpt and os.path.exists(ckpt):
         os.remove(ckpt)
+        parent_dir = os.path.dirname(ckpt)
+        if not os.listdir(parent_dir):
+            os.rmdir(parent_dir)
 
 
 def get_setting(args):
