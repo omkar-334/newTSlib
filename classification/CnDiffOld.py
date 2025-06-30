@@ -3,7 +3,6 @@ from types import SimpleNamespace
 import torch
 import torch.nn as nn
 
-from classification.denoiser import OldDenoiser
 from classification.utils import Tphi, classifier, condition
 from cndiff_utils.layers import (
     DataEmbedding,

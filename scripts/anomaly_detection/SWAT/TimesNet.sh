@@ -3,9 +3,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -23,9 +23,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -43,9 +43,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -63,9 +63,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -83,9 +83,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -103,9 +103,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -123,9 +123,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \
@@ -143,9 +143,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model TimesNet \
-  --data SWAT \
+  --data SWaT \
   --features M \
   --seq_len 100 \
   --pred_len 0 \

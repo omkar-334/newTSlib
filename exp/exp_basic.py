@@ -82,7 +82,6 @@ class Exp_Basic:
 
         self.device = self._acquire_device()
         self.model = self._build_model().to(self.device)
-        print(self.model)
 
     def _build_model(self):
         raise NotImplementedError

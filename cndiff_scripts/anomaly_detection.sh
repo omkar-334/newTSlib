@@ -3,8 +3,23 @@
 model_name="CnDiff"
 description="run"
 device=1
-cond=True
+cond=1
 tphi=True
+
+attn_dropout=0.1
+# 0.1
+hidden_dim=512
+# 512
+mlp_ratio=3
+# 1
+n_depth=4
+# 2
+n_emb=2
+# 2
+n_heads=8
+# 8
+timesteps=100
+# 100
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -22,13 +37,15 @@ python -u run.py \
   --anomaly_ratio 1 \
   --batch_size 128 \
   --train_epochs 3 \
-  --n_emb 2 \
-  --n_heads 8 \
-  --attn_dropout 0.1 \
-  --mlp_ratio 10 \
-  --n_depth 3 \
   --use_cond $cond \
-  --use_tphi $tphi
+  --use_tphi $tphi \
+  --attn_dropout $attn_dropout \
+  --hidden_dim $hidden_dim \
+  --mlp_ratio $mlp_ratio \
+  --n_depth $n_depth \
+  --n_emb $n_emb \
+  --n_heads $n_heads \
+  --timesteps $timesteps 
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -46,14 +63,16 @@ python -u run.py \
   --anomaly_ratio 1 \
   --batch_size 128 \
   --train_epochs 3 \
-  --n_emb 2 \
-  --n_heads 8 \
-  --attn_dropout 0.1 \
-  --mlp_ratio 1 \
-  --n_depth 3 \
   --use_cond $cond \
-  --use_tphi $tphi
-
+  --use_tphi $tphi \
+  --attn_dropout $attn_dropout \
+  --hidden_dim $hidden_dim \
+  --mlp_ratio $mlp_ratio \
+  --n_depth $n_depth \
+  --n_emb $n_emb \
+  --n_heads $n_heads \
+  --timesteps $timesteps
+ 
 python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
@@ -70,13 +89,15 @@ python -u run.py \
   --anomaly_ratio 1 \
   --batch_size 128 \
   --train_epochs 3 \
-  --n_emb 2 \
-  --n_heads 8 \
-  --attn_dropout 0.1 \
-  --mlp_ratio 1 \
-  --n_depth 3 \
   --use_cond $cond \
-  --use_tphi $tphi
+  --use_tphi $tphi \
+  --attn_dropout $attn_dropout \
+  --hidden_dim $hidden_dim \
+  --mlp_ratio $mlp_ratio \
+  --n_depth $n_depth \
+  --n_emb $n_emb \
+  --n_heads $n_heads \
+  --timesteps $timesteps 
 
 
 python -u run.py \
@@ -95,13 +116,15 @@ python -u run.py \
   --anomaly_ratio 1 \
   --batch_size 128 \
   --train_epochs 3 \
-  --n_emb 2 \
-  --n_heads 8 \
-  --attn_dropout 0.1 \
-  --mlp_ratio 1 \
-  --n_depth 3 \
   --use_cond $cond \
-  --use_tphi $tphi
+  --use_tphi $tphi \
+  --attn_dropout $attn_dropout \
+  --hidden_dim $hidden_dim \
+  --mlp_ratio $mlp_ratio \
+  --n_depth $n_depth \
+  --n_emb $n_emb \
+  --n_heads $n_heads \
+  --timesteps $timesteps 
 
 
 
@@ -109,9 +132,9 @@ python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
   --root_path ./dataset/SWaT \
-  --model_id SWAT \
+  --model_id SWaT \
   --model $model_name \
-  --data SWAT \
+  --data SWaT \
   --device $device \
   --wandb False \
   --features M \
@@ -121,10 +144,12 @@ python -u run.py \
   --anomaly_ratio 1 \
   --batch_size 128 \
   --train_epochs 3 \
-  --n_emb 2 \
-  --n_heads 8 \
-  --attn_dropout 0.1 \
-  --mlp_ratio 1 \
-  --n_depth 3 \
   --use_cond $cond \
-  --use_tphi $tphi
+  --use_tphi $tphi \
+  --attn_dropout $attn_dropout \
+  --hidden_dim $hidden_dim \
+  --mlp_ratio $mlp_ratio \
+  --n_depth $n_depth \
+  --n_emb $n_emb \
+  --n_heads $n_heads \
+  --timesteps $timesteps 

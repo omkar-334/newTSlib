@@ -685,7 +685,7 @@ class SMDSegLoader(Dataset):
         )
 
 
-class SWATSegLoader(Dataset):
+class SWaTSegLoader(Dataset):
     def __init__(self, args, root_path, win_size, step=1, flag="train"):
         self.flag = flag
         self.step = step

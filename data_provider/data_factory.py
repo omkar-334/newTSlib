@@ -11,7 +11,7 @@ from data_provider.data_loader import (
     PSMSegLoader,
     SMAPSegLoader,
     SMDSegLoader,
-    SWATSegLoader,
+    SWaTSegLoader,
     UEAloader,
 )
 from data_provider.uea import collate_fn
@@ -27,7 +27,7 @@ data_dict = {
     "MSL": MSLSegLoader,
     "SMAP": SMAPSegLoader,
     "SMD": SMDSegLoader,
-    "SWAT": SWATSegLoader,
+    "SWaT": SWaTSegLoader,
     "UEA": UEAloader,
 }
 
