@@ -222,7 +222,7 @@ class Exp_Imputation(Exp_Basic):
                     if self.args.normalize:
                         inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model.p_sample_loop(inp, inp)
+                    outputs = self.model.p_sample_loop(inp)
 
                     if self.args.normalize:
                         outputs = denormalize(

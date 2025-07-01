@@ -189,7 +189,7 @@ class Exp_Classification(Exp_Basic):
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model.p_sample_loop(batch_x, padding_mask)
+                    outputs = self.model.p_sample_loop(batch_x)
 
                     if self.args.normalize:
                         outputs = denormalize(

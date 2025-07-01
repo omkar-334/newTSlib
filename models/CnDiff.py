@@ -100,16 +100,12 @@ class Model(nn.Module):
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise
 
-    def p_sample_loop(self, batch_y, x):
+    def p_sample_loop(self, x):
         """
         Inference for diffusion model
         """
-        t = (
-            torch.tensor([self.num_timesteps - 1])
-            .repeat(batch_y.shape[0])
-            .to(self.device)
-        )
-        y_t = torch.randn_like(batch_y)
+        t = torch.tensor([self.num_timesteps - 1]).repeat(x.shape[0]).to(self.device)
+        y_t = torch.randn_like(x)
 
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
