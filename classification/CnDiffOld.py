@@ -72,11 +72,11 @@ class Model(nn.Module):
     def classification(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
-        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         dec_out = self.classifier(dec_out)
         return dec_out
 
-    def forward(self, x, x_mark=None, original_x=None, arg2=None, arg3=None):
+    def forward(self, x, padding_mask=None):
         n = x.size(0)
         t = torch.randint(low=1, high=self.config.timesteps, size=(n // 2 + 1,)).to(
             self.device
@@ -160,7 +160,7 @@ class Model(nn.Module):
             self.condition_info = None
 
         y_t_batch, _ = self.q_sample(y, t)
-        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
 
@@ -211,17 +211,13 @@ class OldDenoiser(nn.Module):
         nn.init.constant_(self.decoder.adaLN_modulation[-1].weight, 0)
         nn.init.constant_(self.decoder.adaLN_modulation[-1].bias, 0)
 
-    def forward(self, x, y, k, cond_info):
+    def forward(self, y, k, cond_info):
         """
-        x: (B, context_length, num_feat)
         y: (B, prediction_length, num_feat)
         k: (B,)
         cond_info: (B, context_length, num_feat)
         """
-        if self.config.task_name == "classification":
-            h = self.input_embedder(x)
-        else:
-            h = self.input_embedder(y)
+        h = self.input_embedder(y)
 
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info)

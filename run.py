@@ -364,6 +364,9 @@ def get_args():
         "--normalize", type=bool, default=False, help="use normalization"
     )
     parser.add_argument("--classifier", type=int, default=1, help="use classifier")
+    parser.add_argument(
+        "--tphi_loss", type=bool, default=False, help="use mu-t-phi loss"
+    )
 
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:

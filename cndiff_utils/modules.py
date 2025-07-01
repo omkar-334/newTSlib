@@ -105,17 +105,13 @@ class Denoiser(nn.Module):
         nn.init.constant_(self.decoder.adaLN_modulation[-1].weight, 0)
         nn.init.constant_(self.decoder.adaLN_modulation[-1].bias, 0)
 
-    def forward(self, x, y, k, cond_info):
+    def forward(self, y, k, cond_info):
         """
-        x: (B, context_length, num_feat)
         y: (B, prediction_length, num_feat)
         k: (B,)
         cond_info: (B, context_length, num_feat)
         """
-        if self.config.task_name == "classification":
-            h = self.input_embedder(x.permute(0, 2, 1))
-        else:
-            h = self.input_embedder(y.permute(0, 2, 1))
+        h = self.input_embedder(y.permute(0, 2, 1))
 
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info.permute(0, 2, 1))
@@ -130,6 +126,8 @@ class Denoiser(nn.Module):
 
         if self.config.task_name != "classification":
             out = self.act(out)
+            # if self.config.task_name != "anomaly_detection":
+            #     out = out.permute(0, 2, 1)
         elif hasattr(self.config, "classifier") and self.config.classifier == 1:
             out = out.permute(0, 2, 1)
 

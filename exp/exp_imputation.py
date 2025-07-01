@@ -71,7 +71,7 @@ class Exp_Imputation(Exp_Basic):
                     if self.args.normalize:
                         inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model.p_sample_loop(inp, inp)
+                    outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
                         outputs = denormalize(
@@ -133,7 +133,7 @@ class Exp_Imputation(Exp_Basic):
                     if self.args.normalize:
                         inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model.p_sample_loop(inp, inp)
+                    outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
                         outputs = denormalize(
@@ -150,7 +150,16 @@ class Exp_Imputation(Exp_Basic):
                 batch_x = batch_x[:, :, f_dim:]
                 mask = mask[:, :, f_dim:]
 
-                loss = criterion(outputs[mask == 0], batch_x[mask == 0])
+                if self.args.tphi_loss:
+                    # print("Using t_phi loss")
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs[mask == 0],
+                        batch_x[mask == 0],
+                        self.model.t,
+                        self.model.condition_info,
+                    )
+                else:
+                    loss = criterion(outputs[mask == 0], batch_x[mask == 0])
                 train_loss.append(loss.item())
 
                 loss.backward()

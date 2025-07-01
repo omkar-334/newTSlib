@@ -63,7 +63,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = self.model(batch_x)
                     if self.args.normalize:
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
@@ -107,7 +107,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = self.model(batch_x)
                     if self.args.normalize:
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
@@ -118,7 +118,15 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
-                loss = criterion(outputs, batch_x)
+
+                if self.args.tphi_loss:
+                    # print("Using t_phi loss")
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs, batch_x, self.model.t, self.model.condition_info
+                    )
+                else:
+                    loss = criterion(outputs, batch_x)
+
                 train_loss.append(loss.item())
 
                 loss.backward()
@@ -172,7 +180,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model(batch_x, None, None, None, None)
+                    outputs = self.model.p_sample_loop(batch_x, batch_x)
                     if self.args.normalize:
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
@@ -195,12 +203,11 @@ class Exp_Anomaly_Detection(Exp_Basic):
         for i, (batch_x, batch_y) in enumerate(self.test_loader):
             batch_x = batch_x.float().to(self.device)
             # reconstruction
-            # outputs = self.model(batch_x, None, None, None)
             if "cndiff" in self.args.model.lower():
                 if self.args.normalize:
                     batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                outputs = self.model(batch_x, None, None, None, None)
+                outputs = self.model.p_sample_loop(batch_x, batch_x)
                 if self.args.normalize:
                     outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 

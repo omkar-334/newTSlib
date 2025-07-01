@@ -70,10 +70,10 @@ class Model(nn.Module):
     def anomaly_detection(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
-        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
-    def forward(self, x, x_mark=None, original_x=None, arg2=None, mask=None):
+    def forward(self, x, original_x=None):
         if self.config.task_name == "imputation":
             return self.imputation(x, original_x)
 
@@ -82,6 +82,7 @@ class Model(nn.Module):
             self.device
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
+        self.t = t
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
 
@@ -96,7 +97,7 @@ class Model(nn.Module):
 
         x_t, _ = self.q_sample(original_x, t)
         # x_t_masked = observed_mask * x + missing_mask * x_t
-        pred_noise = self.diffusion_model(x, x_t, t, self.condition_info)
+        pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise
 
     def p_sample_loop(self, batch_y, x):
@@ -151,8 +152,7 @@ class Model(nn.Module):
             y_t_m_1_hat = gamma_0 * y_0_reparam + gamma_1 * y_t
 
         if self.config.use_cond:
-            y_t_m_1_hat = y_t_m_1_hat + gamma_2
-            # * self.condition_info
+            y_t_m_1_hat = y_t_m_1_hat + gamma_2 * self.condition_info
 
         y_t_m_1 = y_t_m_1_hat.to(self.device) + beta_t_hat.sqrt().to(
             self.device
@@ -176,8 +176,53 @@ class Model(nn.Module):
             self.condition_info = None
 
         y_t_batch, _ = self.q_sample(y, t)
-        dec_out = self.diffusion_model(x, y_t_batch, t, self.condition_info)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
+
+    def get_prior(self, batch_y, cond_info=None):
+        """
+        Prior loss term in transformed forward process
+        """
+        T = (
+            torch.tensor([self.num_timesteps - 1])
+            .repeat(batch_y.shape[0])
+            .to(self.device)
+        )
+        batch_y_mean = self.t_phi(t=T, batch_y=batch_y)
+        sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, T, batch_y)
+        sqrt_alpha_bar_t = (1 - sqrt_one_minus_alpha_bar_t.square()).sqrt()
+
+        u = sqrt_alpha_bar_t * batch_y_mean
+
+        if self.config.use_cond:
+            u = u - (sqrt_alpha_bar_t) * cond_info
+
+        return (1 / 2) * (torch.mean((u) ** 2, dim=(1, 2)))
+
+    def get_mu_t_phi_loss(self, pred_noise, batch_y, t, condition_info=None):
+        gamma_0, gamma_1, gamma_2, sqrt_alpha_bar_t, beta_t_hat = get_gammas(
+            self.alphas,
+            self.one_minus_alphas_bar_sqrt,
+            t,
+            pred_noise,
+        )
+
+        term_1 = (gamma_1 * sqrt_alpha_bar_t) * (
+            self.t_phi(batch_y=pred_noise, t=t) - self.t_phi(batch_y=batch_y, t=t)
+        )
+        term_2 = ((gamma_1 * sqrt_alpha_bar_t) + gamma_0) * (
+            self.t_phi(batch_y=batch_y, t=t - 1)
+            - self.t_phi(batch_y=pred_noise, t=t - 1)
+        )
+
+        diff_term = (torch.mean((term_1 + term_2) ** 2, dim=(1, 2), keepdim=True)) * (
+            1 / (2 * beta_t_hat)
+        )
+
+        prior_term = self.get_prior(batch_y=batch_y, cond_info=condition_info)
+        recon_term = torch.mean((pred_noise - batch_y) ** 2, dim=(1, 2), keepdim=True)
+
+        return torch.mean(diff_term + prior_term + recon_term)
 
 
 class Tphi(nn.Module):
@@ -220,4 +265,6 @@ class Tphi(nn.Module):
         out = (out @ self.w1.T) + self.b1
         out = self.act(out)
 
-        return out + batch_y
+        return out
+
+    # + batch_y
