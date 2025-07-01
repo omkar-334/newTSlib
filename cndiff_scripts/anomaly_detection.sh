@@ -6,17 +6,17 @@ device=1
 cond=1
 tphi=True
 
-attn_dropout=0.1
+attn_dropout=0.0
 # 0.1
 hidden_dim=512
 # 512
-mlp_ratio=3
+mlp_ratio=1
 # 1
-n_depth=4
+n_depth=1
 # 2
-n_emb=2
+n_emb=8
 # 2
-n_heads=8
+n_heads=4
 # 8
 timesteps=100
 # 100
@@ -28,7 +28,6 @@ python -u run.py \
   --model_id MSL \
   --model $model_name \
   --data MSL \
-  --device $device \
   --wandb False \
   --features M \
   --pred_len 96 \
@@ -36,7 +35,7 @@ python -u run.py \
   --c_out 55 \
   --anomaly_ratio 1 \
   --batch_size 128 \
-  --train_epochs 3 \
+  --train_epochs 10 \
   --use_cond $cond \
   --use_tphi $tphi \
   --attn_dropout $attn_dropout \
@@ -45,7 +44,8 @@ python -u run.py \
   --n_depth $n_depth \
   --n_emb $n_emb \
   --n_heads $n_heads \
-  --timesteps $timesteps 
+  --timesteps $timesteps \
+  --tphi_loss True
 
 python -u run.py \
   --task_name anomaly_detection \
@@ -54,7 +54,6 @@ python -u run.py \
   --model_id PSM \
   --model $model_name \
   --data PSM \
-  --device $device \
   --wandb False \
   --features M \
   --pred_len 96 \
@@ -71,8 +70,9 @@ python -u run.py \
   --n_depth $n_depth \
   --n_emb $n_emb \
   --n_heads $n_heads \
-  --timesteps $timesteps
- 
+  --timesteps $timesteps \
+  --tphi_loss True
+
 python -u run.py \
   --task_name anomaly_detection \
   --is_training 1 \
@@ -80,7 +80,6 @@ python -u run.py \
   --model_id SMAP \
   --model $model_name \
   --data SMAP \
-  --device $device \
   --wandb False \
   --features M \
   --pred_len 96 \
@@ -97,7 +96,8 @@ python -u run.py \
   --n_depth $n_depth \
   --n_emb $n_emb \
   --n_heads $n_heads \
-  --timesteps $timesteps 
+  --timesteps $timesteps  \
+  --tphi_loss True
 
 
 python -u run.py \
@@ -107,7 +107,6 @@ python -u run.py \
   --model_id SMD \
   --model $model_name \
   --data SMD \
-  --device $device \
   --wandb False \
   --features M \
   --pred_len 96 \
@@ -115,7 +114,7 @@ python -u run.py \
   --c_out 38 \
   --anomaly_ratio 1 \
   --batch_size 128 \
-  --train_epochs 3 \
+  --train_epochs 10 \
   --use_cond $cond \
   --use_tphi $tphi \
   --attn_dropout $attn_dropout \
@@ -124,7 +123,8 @@ python -u run.py \
   --n_depth $n_depth \
   --n_emb $n_emb \
   --n_heads $n_heads \
-  --timesteps $timesteps 
+  --timesteps $timesteps \
+  --tphi_loss True
 
 
 
@@ -135,7 +135,6 @@ python -u run.py \
   --model_id SWaT \
   --model $model_name \
   --data SWaT \
-  --device $device \
   --wandb False \
   --features M \
   --pred_len 96 \
@@ -152,4 +151,5 @@ python -u run.py \
   --n_depth $n_depth \
   --n_emb $n_emb \
   --n_heads $n_heads \
-  --timesteps $timesteps 
+  --timesteps $timesteps \
+  --tphi_loss True

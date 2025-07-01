@@ -19,7 +19,7 @@ class Tphi(nn.Module):
         param2 = config.pred_len
 
         self.time_emb = StepEmbedding(param1, freq_dim=256)
-        self.backward_time_emb = StepEmbedding(config.num_class, freq_dim=256)
+        # self.backward_time_emb = StepEmbedding(config.num_class, freq_dim=256)
 
         self.w1 = nn.Parameter(torch.empty(param1, param1))
         self.b1 = nn.Parameter(torch.empty(param1))
@@ -30,7 +30,7 @@ class Tphi(nn.Module):
 
         self.init_weights(self.w1, self.b1)
 
-        self.backward_mapper = nn.Linear(128, param1, bias=False)
+        # self.backward_mapper = nn.Linear(128, param1, bias=False)
 
     @staticmethod
     def init_weights(weight, bias):
@@ -40,12 +40,12 @@ class Tphi(nn.Module):
         bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
         nn.init.uniform_(bias, -bound, bound)
 
-    def forward(self, batch_y, t, forward=True):
-        print("Tphi forward", batch_y.shape, t.shape)
+    def forward(self, batch_y, t):
+        # print("Tphi forward", batch_y.shape, t.shape)
         t_emb = self.time_emb(t).unsqueeze(1)
-        print("t_emb shape:", t_emb.shape)
+        # print("t_emb shape:", t_emb.shape)
         out = batch_y + t_emb
-        print(out.shape)
+        # print(out.shape)
 
         out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
         out = out.permute(0, 2, 1)
