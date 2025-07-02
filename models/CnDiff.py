@@ -5,10 +5,7 @@ import torch
 import torch.nn as nn
 
 from cndiff_utils.layers import StepEmbedding, make_beta_schedule
-from cndiff_utils.modules import (
-    Condition,
-    Denoiser,
-)
+from cndiff_utils.modules import Condition, Denoiser
 from cndiff_utils.utils import extract, get_gammas
 
 
@@ -46,6 +43,13 @@ class Model(nn.Module):
         if self.config.use_cond:
             self.condition_model = Condition(config)
 
+        if self.config.task_name == "classification":
+            self.classifier = nn.Sequential(
+                nn.AdaptiveAvgPool1d(1),
+                nn.Flatten(),
+                nn.Linear(config.feature_dim, self.config.num_class),
+            )
+
     def q_sample(self, batch_y, t):
         """
         Forward process for conditional and learnable mean
@@ -67,13 +71,20 @@ class Model(nn.Module):
 
         return y_t, noise
 
+    def classification(self, x, t):
+        self.condition_info = self.condition_model(x) if self.config.use_cond else None
+        y_t_batch, _ = self.q_sample(x, t)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
+        dec_out = self.classifier(dec_out.permute(0, 2, 1))
+        return dec_out
+
     def anomaly_detection(self, x, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
-    def forward(self, x, original_x=None):
+    def forward(self, x, original_x=None, padding_mask=None):
         if self.config.task_name == "imputation":
             return self.imputation(x, original_x)
 
@@ -83,6 +94,8 @@ class Model(nn.Module):
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
         self.t = t
+        if self.config.task_name == "classification":
+            return self.classification(x, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
 
@@ -128,11 +141,7 @@ class Model(nn.Module):
             t,
             y_t,
         )
-
-        if self.config.use_cond:
-            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
-        else:
-            y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
 
         if self.config.use_tphi:
             z = torch.randn_like(y_0_reparam)
@@ -262,5 +271,3 @@ class Tphi(nn.Module):
         out = self.act(out)
 
         return out
-
-    # + batch_y

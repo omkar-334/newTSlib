@@ -2,7 +2,6 @@ import os
 
 import torch
 
-from classification import CnDiffOld
 from models import (
     MICN,
     Autoformer,
@@ -42,7 +41,6 @@ class Exp_Basic:
         self.args = args
         self.model_dict = {
             "CnDiff": CnDiff,
-            "CnDiffOld": CnDiffOld,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,

@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# model_name="CnDiff"
+model="CnDiffOld"
+use_cond=1
+classifier=1
+
 description="base"
-device=1
-# classification_Handwriting_CnDiffOld_attndropout0.2_hiddendim64_mlp-ratio2_n-depth4_n-emb4_n-heads16_timesteps100_base_use_cond2_use_tphiTrue_classifier1
-# ---accuracy - 0.39647058823529413----------------------------------------------------
+
 
 datasets=(
   "EthanolConcentration"
@@ -18,9 +19,6 @@ datasets=(
   "SpokenArabicDigits"
   "UWaveGestureLibrary"
 )
-model="CnDiffOld"
-use_cond=1
-classifier=1
 
 attn_dropout=0.1
 # 0.1
@@ -42,24 +40,24 @@ for dataset in "${datasets[@]}"; do
   python -u run.py \
     --task_name classification \
     --is_training 1 \
-    --root_path ./dataset/"$dataset"/ \
-    --model_id "$dataset" \
-    --model "$model" \
+    --root_path ./dataset/$dataset/ \
+    --model_id $dataset \
+    --model $model \
     --data UEA \
     --gpu "$device" \
     --batch_size 16 \
-    --train_epochs 100 \
-    --des "$description" \
+    --train_epochs 1 \
+    --des $description \
     --learning_rate 0.001 \
-    --n_emb 4 \
-    --n_heads 16 \
-    --attn_dropout 0.2 \
-    --mlp_ratio 2 \
-    --n_depth 4 \
+    --n_emb $n_emb \
+    --n_heads $n_heads \
+    --attn_dropout $attn_dropout \
+    --mlp_ratio $mlp_ratio \
+    --n_depth $mlp_ratio \
     --use_tphi True \
     --classifier $classifier \
     --wandb False \
-    --use_cond "$use_cond"
+    --use_cond $use_cond
 done
 
 
