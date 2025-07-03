@@ -4,9 +4,14 @@ from types import SimpleNamespace
 import torch
 import torch.nn as nn
 
-from cndiff_utils.layers import StepEmbedding, make_beta_schedule
-from cndiff_utils.modules import Condition, Denoiser
-from cndiff_utils.utils import extract, get_gammas
+# from cndiff_utils.class_utils import condition
+from cndiff_utils.layers import (
+    DataEmbedding,
+    StepEmbedding,
+    make_beta_schedule,
+)
+from cndiff_utils.modules import DiTBlock
+from cndiff_utils.utils import extract, get_gammas, modulate
 
 
 class Model(nn.Module):
@@ -36,12 +41,13 @@ class Model(nn.Module):
                 0.9999  # avoid division by 0 for 1/sqrt(alpha_bar_t) during inference
             )
         if self.config.use_tphi:
-            self.t_phi = Tphi(config)
+            self.t_phi = Tphi_cls(config)
 
         # model initialisation for condition network
-        self.diffusion_model = Denoiser(config)
+        self.diffusion_model = OldDenoiser(config)
         if self.config.use_cond:
-            self.condition_model = Condition(config)
+            self.condition_model = condition_cls(config)
+        # self.classifier = classifier(config)
 
     def q_sample(self, batch_y, t):
         """
@@ -51,7 +57,7 @@ class Model(nn.Module):
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
         if self.config.use_tphi:
-            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)  # type: ignore
+            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
 
@@ -59,52 +65,46 @@ class Model(nn.Module):
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y + sqrt_one_minus_alpha_bar_t * noise
 
+        # print(y_t.shape, self.condition_info.shape)
+        # exit()
         if self.config.use_cond:
             y_t = y_t + (1 - sqrt_alpha_bar_t) * self.condition_info
 
         return y_t, noise
 
-    def anomaly_detection(self, x, t):
+    def classification(self, x, y, t):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
-        y_t_batch, _ = self.q_sample(x, t)
+        y_t_batch, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
+        # dec_out = self.classifier(dec_out)
+        dec_out = dec_out.squeeze(1)
+        # print("dec_out shape:", dec_out.shape)
+        # exit()
         return dec_out
 
-    def forward(self, x, original_x=None, padding_mask=None):
-        if self.config.task_name == "imputation":
-            return self.imputation(x, original_x)
-
+    def forward(self, x, y, padding_mask=None):
+        y = y.unsqueeze(2)
         n = x.size(0)
         t = torch.randint(low=1, high=self.config.timesteps, size=(n // 2 + 1,)).to(
             self.device
         )
         t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-        self.t = t
-        if self.config.task_name == "anomaly_detection":
-            return self.anomaly_detection(x, t)
+        if self.config.task_name == "classification":
+            return self.classification(x, y, t)
+
         return None
 
-    def imputation(self, x, original_x):
-        self.condition_info = self.condition_model(x) if self.config.use_cond else None
-
-        # Sample random timestep for each sample
-        B = x.size(0)
-        t = torch.randint(0, self.config.timesteps, (B,), device=x.device).long()
-
-        x_t, _ = self.q_sample(original_x, t)
-        # x_t_masked = observed_mask * x + missing_mask * x_t
-        pred_noise = self.diffusion_model(x_t, t, self.condition_info)
-        return pred_noise
-
-    def p_sample_loop(self, x):
+    def p_sample_loop(self, x, shape):
         """
         Inference for diffusion model
         """
         t = torch.tensor([self.num_timesteps - 1]).repeat(x.shape[0]).to(self.device)
-        y_t = torch.randn_like(x)
+        y_t = torch.randn(shape).unsqueeze(2).to(self.device)
 
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
+            # print(y_t.shape, self.condition_info.shape)
+            # exit()
             y_t = self.condition_info + y_t
         else:
             self.condition_info = None
@@ -124,6 +124,7 @@ class Model(nn.Module):
             t,
             y_t,
         )
+
         y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
 
         if self.config.use_tphi:
@@ -165,55 +166,78 @@ class Model(nn.Module):
 
         # y_t_batch, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y, t, self.condition_info)
+        # print(dec_out.shape)
+        dec_out = dec_out.permute(0, 2, 1)
         return dec_out
 
-    def get_prior(self, batch_y, cond_info=None):
-        """
-        Prior loss term in transformed forward process
-        """
-        T = (
-            torch.tensor([self.num_timesteps - 1])
-            .repeat(batch_y.shape[0])
-            .to(self.device)
+
+# Decoder module with conditioning support
+class OldDecoder(nn.Module):
+    def __init__(self, config) -> None:
+        super().__init__()
+        self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
+        self.mlp = nn.Sequential(
+            DataEmbedding(config.d_model, config.hidden_dim, config.n_emb - 1),
+            nn.Linear(config.hidden_dim, 1),
         )
-        batch_y_mean = self.t_phi(t=T, batch_y=batch_y)
-        sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, T, batch_y)
-        sqrt_alpha_bar_t = (1 - sqrt_one_minus_alpha_bar_t.square()).sqrt()
+        self.adaLN_modulation = nn.Sequential(
+            nn.SiLU(), nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True)
+        )
 
-        u = sqrt_alpha_bar_t * batch_y_mean
+    def forward(self, x, c):
+        shift, scale = self.adaLN_modulation(c).chunk(2, dim=1)
+        x = modulate(self.norm(x), shift, scale)
+        x = self.mlp(x)
+        return x
 
+
+class OldDenoiser(nn.Module):
+    def __init__(self, config) -> None:
+        super().__init__()
+        self.input_embedder = DataEmbedding(1, config.hidden_dim, config.n_emb)
+        self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
+        self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
+        self.decoder = OldDecoder(config)
+        self.act = nn.Identity()
+        self.config = config
+
+        if config.use_cond:
+            self.cond_embedder = DataEmbedding(1, config.hidden_dim, config.n_emb)
+
+        self.initialize_weights()
+
+    def initialize_weights(self) -> None:
+        for block in self.blocks:
+            nn.init.constant_(block.adaLN_modulation[-1].weight, 0)
+            nn.init.constant_(block.adaLN_modulation[-1].bias, 0)
+
+        nn.init.constant_(self.decoder.adaLN_modulation[-1].weight, 0)
+        nn.init.constant_(self.decoder.adaLN_modulation[-1].bias, 0)
+
+    def forward(self, y, k, cond_info):
+        """
+        y: (B, prediction_length, num_feat)
+        k: (B,)
+        cond_info: (B, context_length, num_feat)
+        """
+        # print(y.shape)
+        h = self.input_embedder(y)
+        # print(h.shape)
         if self.config.use_cond:
-            u = u - (sqrt_alpha_bar_t) * cond_info
+            cond_info = self.cond_embedder(cond_info)
+            h = torch.cat([h, cond_info], dim=-1)
+        # print(h.shape)
+        c = self.k_embedder(k)
+        # print(k.shape, c.shape)
+        for block in self.blocks:
+            h = block(h, c)
+        # print(h.shape)
+        out = self.decoder(h, c)
 
-        return (1 / 2) * (torch.mean((u) ** 2, dim=(1, 2)))
-
-    def get_mu_t_phi_loss(self, pred_noise, batch_y, t, condition_info=None):
-        gamma_0, gamma_1, gamma_2, sqrt_alpha_bar_t, beta_t_hat = get_gammas(
-            self.alphas,
-            self.one_minus_alphas_bar_sqrt,
-            t,
-            pred_noise,
-        )
-
-        term_1 = (gamma_1 * sqrt_alpha_bar_t) * (
-            self.t_phi(batch_y=pred_noise, t=t) - self.t_phi(batch_y=batch_y, t=t)
-        )
-        term_2 = ((gamma_1 * sqrt_alpha_bar_t) + gamma_0) * (
-            self.t_phi(batch_y=batch_y, t=t - 1)
-            - self.t_phi(batch_y=pred_noise, t=t - 1)
-        )
-
-        diff_term = (torch.mean((term_1 + term_2) ** 2, dim=(1, 2), keepdim=True)) * (
-            1 / (2 * beta_t_hat)
-        )
-
-        prior_term = self.get_prior(batch_y=batch_y, cond_info=condition_info)
-        recon_term = torch.mean((pred_noise - batch_y) ** 2, dim=(1, 2), keepdim=True)
-
-        return torch.mean(diff_term + prior_term + recon_term)
+        return out.permute(0, 2, 1)
 
 
-class Tphi(nn.Module):
+class Tphi_cls(nn.Module):
     """
     T_Phi network for Time dependent non linear transformation
     """
@@ -221,10 +245,11 @@ class Tphi(nn.Module):
     def __init__(self, config):
         super().__init__()
 
-        param1 = (
-            config.c_out if config.task_name != "classification" else config.feature_dim
-        )
-        param2 = config.pred_len
+        param1 = 1
+        param2 = config.num_class
+
+        self.time_emb = StepEmbedding(param1, freq_dim=256)
+        # self.backward_time_emb = StepEmbedding(config.num_class, freq_dim=256)
 
         self.w1 = nn.Parameter(torch.empty(param1, param1))
         self.b1 = nn.Parameter(torch.empty(param1))
@@ -232,9 +257,11 @@ class Tphi(nn.Module):
         self.w2 = nn.Parameter(torch.empty(param2, param2))
         self.b2 = nn.Parameter(torch.empty(param2))
         self.act = nn.Tanh()
-        self.time_emb = StepEmbedding(param1, freq_dim=256)
 
         self.init_weights(self.w1, self.b1)
+        # self.init_weights(self.w2, self.b2)
+
+        # self.backward_mapper = nn.Linear(128, param1, bias=False)
 
     @staticmethod
     def init_weights(weight, bias):
@@ -245,12 +272,31 @@ class Tphi(nn.Module):
         nn.init.uniform_(bias, -bound, bound)
 
     def forward(self, batch_y, t):
+        # print("Tphi forward", batch_y.shape, t.shape)
         t_emb = self.time_emb(t).unsqueeze(1)
+        # print("t_emb shape:", t_emb.shape)
         out = batch_y + t_emb
+        # print(out.shape)
+
         out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
         out = out.permute(0, 2, 1)
 
         out = (out @ self.w1.T) + self.b1
         out = self.act(out)
+        # print("out", out.shape)
+        return out
+
+
+class condition_cls(nn.Module):
+    def __init__(self, config) -> None:
+        super().__init__()
+        # self.dec = nn.Sequential(*[nn.Linear(config.seq_len, config.seq_len), nn.Linear(config.seq_len, 1)]) #
+        self.dec = nn.Linear(config.seq_len, 1)
+        self.dec2 = nn.Linear(config.feature_dim, config.num_class)
+
+    def forward(self, x):
+        # print(x.shape)
+        out = self.dec(x.permute(0, 2, 1)).permute(0, 2, 1)
+        out = self.dec2(out).permute(0, 2, 1)
 
         return out

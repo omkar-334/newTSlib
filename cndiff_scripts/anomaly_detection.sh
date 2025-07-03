@@ -2,24 +2,40 @@
 
 model_name="CnDiff"
 description="run"
-device=1
 cond=1
 tphi=True
 
-attn_dropout=0.0
+
+attn_dropout=0.1
 # 0.1
 hidden_dim=512
 # 512
-mlp_ratio=1
+mlp_ratio=3
 # 1
-n_depth=1
+n_depth=4
 # 2
-n_emb=8
+n_emb=2
 # 2
-n_heads=4
+n_heads=8
 # 8
 timesteps=100
 # 100
+# 100
+# attn_dropout=0.1
+# # 0.1
+# hidden_dim=512
+# # 512
+# mlp_ratio=3
+# # 1
+# n_depth=4
+# # 2
+# n_emb=2
+# # 2
+# n_heads=8
+# # 8
+# timesteps=100
+# # 100
+
 
 python -u run.py \
   --task_name anomaly_detection \

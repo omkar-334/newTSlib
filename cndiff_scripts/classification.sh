@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model="CnDiffOld"
+model="class_cndiff"
 use_cond=1
 classifier=1
 
@@ -24,9 +24,9 @@ attn_dropout=0.1
 # 0.1
 hidden_dim=512
 # 512
-mlp_ratio=3
+mlp_ratio=1
 # 1
-n_depth=4
+n_depth=2
 # 2
 n_emb=2
 # 2
@@ -44,9 +44,8 @@ for dataset in "${datasets[@]}"; do
     --model_id $dataset \
     --model $model \
     --data UEA \
-    --gpu "$device" \
     --batch_size 16 \
-    --train_epochs 1 \
+    --train_epochs 100 \
     --des $description \
     --learning_rate 0.001 \
     --n_emb $n_emb \

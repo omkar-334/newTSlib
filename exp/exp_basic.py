@@ -32,6 +32,7 @@ from models import (
     Transformer,
     TSMixer,
     WPMixer,
+    class_cndiff,
     iTransformer,
 )
 
@@ -41,6 +42,7 @@ class Exp_Basic:
         self.args = args
         self.model_dict = {
             "CnDiff": CnDiff,
+            "class_cndiff": class_cndiff,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,

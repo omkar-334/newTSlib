@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.optim.radam import RAdam
 
 import wandb
@@ -58,11 +59,18 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
+                #########################################################################################
+                labels_inp = label.squeeze(1).long()
+                labels_inp = F.one_hot(
+                    labels_inp, num_classes=self.model.config.num_class
+                ).float()
+                #########################################################################################
+
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model(batch_x, padding_mask=padding_mask)
+                    outputs = self.model(batch_x, labels_inp, padding_mask)
 
                     if self.args.normalize:
                         outputs = denormalize(
@@ -113,17 +121,26 @@ class Exp_Classification(Exp_Basic):
             epoch_time = time.time()
 
             for i, (batch_x, label, padding_mask) in enumerate(self.train_loader):
+                # print(batch_x.shape, label.shape, padding_mask.shape)
+                # exit()
                 model_optim.zero_grad()
 
                 batch_x = batch_x.float().to(self.device)
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
+                #########################################################################################
+                labels_inp = label.squeeze(1).long()
+                labels_inp = F.one_hot(
+                    labels_inp, num_classes=self.model.config.num_class
+                ).float()
+                #########################################################################################
+
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model(batch_x, padding_mask=padding_mask)
+                    outputs = self.model(batch_x, labels_inp, padding_mask)
 
                     if self.args.normalize:
                         outputs = denormalize(
@@ -185,11 +202,22 @@ class Exp_Classification(Exp_Basic):
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
+                #########################################################################################
+                labels_inp = label.squeeze(1).long()
+                labels_inp = F.one_hot(
+                    labels_inp, num_classes=self.model.config.num_class
+                ).float()
+                #########################################################################################
+
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
 
-                    outputs = self.model.p_sample_loop(batch_x)
+                    outputs = self.model.p_sample_loop(
+                        batch_x, labels_inp.shape
+                    ).squeeze(2)
+                    # print(outputs.shape)
+                    # exit()
 
                     if self.args.normalize:
                         outputs = denormalize(
