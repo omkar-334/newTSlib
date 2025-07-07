@@ -419,7 +419,7 @@ def clean(ckpt=None):
 
 
 def get_setting(args):
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}_timesteps{args.timesteps}_{args.des}"
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}_timesteps{args.timesteps}_{args.des}_normalize{args.normalize}_tphi-loss{args.tphi_loss}"
 
     if args.task_name == "classification":
         setting += f"_use_cond{args.use_cond}_use_tphi{args.use_tphi}_classifier{args.classifier}"

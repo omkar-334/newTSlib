@@ -2,10 +2,10 @@ import os
 
 import torch
 
+from CnDiff import CnDiff, class_cndiff
 from models import (
     MICN,
     Autoformer,
-    CnDiff,
     Crossformer,
     DLinear,
     ETSformer,
@@ -32,7 +32,6 @@ from models import (
     Transformer,
     TSMixer,
     WPMixer,
-    class_cndiff,
     iTransformer,
 )
 
