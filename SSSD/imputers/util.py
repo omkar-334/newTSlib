@@ -44,7 +44,7 @@ def print_size(net):
     """
     if net is not None and isinstance(net, torch.nn.Module):
         module_parameters = filter(lambda p: p.requires_grad, net.parameters())
-        params = sum([np.prod(p.size()) for p in module_parameters])
+        params = sum(np.prod(p.size()) for p in module_parameters)
         print(f"{net.__class__.__name__} Parameters: {params / 1e6:.6f}M", flush=True)
 
 
@@ -133,9 +133,8 @@ def sampling(
     cond,
     mask,
     only_generate_missing=0,
-    guidance_weight=0,
 ):
-    """
+    r"""
     Perform the complete sampling step according to p(x_0|x_T) = \\prod_{t=1}^T p_{\theta}(x_{t-1}|x_t)
 
     Parameters
@@ -195,10 +194,6 @@ def training_loss(net, loss_fn, X, diffusion_hyperparams, only_generate_missing=
     X (torch.tensor):               training data, shape=(batchsize, 1, length of audio)
     diffusion_hyperparams (dict):   dictionary of diffusion hyperparameters returned by calc_diffusion_hyperparams
                                     note, the tensors need to be cuda tensors
-
-    Returns
-    -------
-    training loss
     """
     _dh = diffusion_hyperparams
     T, Alpha_bar = _dh["T"], _dh["Alpha_bar"]
@@ -214,7 +209,7 @@ def training_loss(net, loss_fn, X, diffusion_hyperparams, only_generate_missing=
     ).cuda()  # randomly sample diffusion steps from 1~T
 
     z = std_normal(audio.shape)
-    if only_generate_missing == 1:
+    if only_generate_missing:
         z = audio * mask.float() + z * (1 - mask).float()
     transformed_X = (
         torch.sqrt(Alpha_bar[diffusion_steps]) * audio
@@ -227,10 +222,9 @@ def training_loss(net, loss_fn, X, diffusion_hyperparams, only_generate_missing=
         diffusion_steps.view(B, 1),
     ))  # predict \epsilon according to \epsilon_\theta
 
-    if only_generate_missing == 1:
+    if only_generate_missing:
         return loss_fn(epsilon_theta[loss_mask], z[loss_mask])
-    if only_generate_missing == 0:
-        return loss_fn(epsilon_theta, z)
+    return loss_fn(epsilon_theta, z)
 
 
 def get_mask_rm(sample, k):

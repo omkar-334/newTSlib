@@ -47,7 +47,7 @@ def train(
     learning_rate (float):          learning rate
 
     use_model (int):                0:DiffWave. 1:SSSDSA. 2:SSSDS4.
-    only_generate_missing (int):    0:all sample diffusion.  1:only apply diffusion to missing portions of the signal
+    only_generate_missing (bool):    False:all sample diffusion.  True:only apply diffusion to missing portions of the signal
     masking(str):                   'mnr': missing not at random, 'bm': blackout missing, 'rm': random missing
     missing_k (int):                k missing time steps for each feature across the sample length.
     """
