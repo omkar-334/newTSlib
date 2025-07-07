@@ -1,8 +1,8 @@
 import torch.multiprocessing
+import wandb
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
-import wandb
-from cndiff_utils.utils import denormalize, normalize
+from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import save_results

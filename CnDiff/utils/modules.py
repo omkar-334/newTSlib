@@ -1,13 +1,13 @@
 import torch
 import torch.nn as nn
 
-from utils.layers import (
+from .layers import (
     AttnMLP,
     DataEmbedding,
     FullAttention,
     StepEmbedding,
 )
-from utils.utils import modulate
+from .utils import modulate
 
 
 class Condition(nn.Module):

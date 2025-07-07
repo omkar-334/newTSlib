@@ -4,14 +4,15 @@ from types import SimpleNamespace
 import torch
 import torch.nn as nn
 
-# from cndiff_utils.class_utils import condition
-from cndiff_utils.layers import (
+from CnDiff.utils import (
     DataEmbedding,
+    DiTBlock,
     StepEmbedding,
+    extract,
+    get_gammas,
     make_beta_schedule,
+    modulate,
 )
-from cndiff_utils.modules import DiTBlock
-from cndiff_utils.utils import extract, get_gammas, modulate
 
 
 class Model(nn.Module):

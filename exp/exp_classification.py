@@ -6,10 +6,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import wandb
 from torch.optim.radam import RAdam
 
-import wandb
-from cndiff_utils.utils import denormalize, normalize
+from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import save_results

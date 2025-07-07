@@ -5,10 +5,10 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
+import wandb
 from torch.optim.adam import Adam
 
-import wandb
-from cndiff_utils.utils import denormalize, normalize
+from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -270,5 +270,5 @@ class Exp_Imputation(Exp_Basic):
         }
 
         # save_preds(setting, preds, trues)
-        save_results("imputation_diffusion", setting, argsdict)
+        save_results("impsweep", setting, argsdict)
         return PATH

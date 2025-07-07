@@ -4,9 +4,14 @@ from types import SimpleNamespace
 import torch
 import torch.nn as nn
 
-from cndiff_utils.layers import StepEmbedding, make_beta_schedule
-from cndiff_utils.modules import Condition, Denoiser
-from cndiff_utils.utils import extract, get_gammas
+from CnDiff.utils import (
+    Condition,
+    Denoiser,
+    StepEmbedding,
+    extract,
+    get_gammas,
+    make_beta_schedule,
+)
 
 
 class Model(nn.Module):
