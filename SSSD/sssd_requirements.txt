@@ -1,0 +1,8 @@
+torch
+einops
+tqdm
+numpy
+opt_einsum
+pytorch-lightning
+scipy
+scikit-learn
