@@ -48,22 +48,5 @@
         "f1": 0.6965410567374296,
         "precision": 0.9000637274781299
     },
-
-
-
-        attn_dropout: 0.05        batch_size: 128
-        c_out: 7
-        d_model: 64
-        data: custom
-        data_path: ETTh1.csv
-        des: run        features: M
-        gpu: 1        hidden_dim: 256
-        is_training: 1        mask_rate: 0.25        mlp_ratio: 1
-        model: CnDiff        model_id: ETTh1_mask_0.25
-        n_depth: 4        n_emb: 2
-        n_heads: 8        pred_len: 96
-        root_path: ./dataset/ETT-small/
-        sweep: True
-        task_name: imputation        timesteps: 50        train_epochs: 10
-        wandb: True
-2025-07-07 14:39:20,323 - wandb.wandb_agent - INFO - About to run command: /usr/bin/env python run.py --attn_dropout=0.05 --batch_size=128 --c_out=7 --d_model=64 --data=custom --data_path=ETTh1.csv --des=run --features=M --gpu=1 --hidden_dim=256 --is_training=1 --mask_rate=0.25 --mlp_ratio=1 --model=CnDiff --model_id=ETTh1_mask_0.25 --n_depth=4 --n_emb=2 --n_heads=8 --pred_len=96 --root_path=./dataset/ETT-small/ --sweep=True --task_name=imputation --timesteps=50 --train_epochs=10 --wandb=True
+CnDiff_attndropout0.15_hiddendim576_mlp-ratio4_n-depth4_n-emb2_n-heads8_timesteps80_test_normalizeFalse_tphi-lossFalse
+  Average MSE: 0.145404
