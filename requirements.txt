@@ -2,6 +2,7 @@ einops
 matplotlib
 numpy
 openpyxl
+opt_einsum
 pandas
 patool
 scikit-learn
@@ -11,3 +12,4 @@ sympy
 torch
 tqdm
 PyWavelets
+wandb

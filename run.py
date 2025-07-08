@@ -348,7 +348,10 @@ def get_args():
 
     parser.add_argument("--use_cond", type=int, default=1)
     parser.add_argument(
-        "--use_tphi", type=lambda x: str(x).lower() == "true", default=True
+        "--use_tphi",
+        type=int,
+        default=1,
+        help="0 for No TPhi, 1 for Tphi, 2 for KanTphi",
     )
     parser.add_argument("--beta_schedule", type=str, default="quad")
     parser.add_argument("--beta_start", type=float, default=0.0001)

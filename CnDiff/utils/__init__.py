@@ -7,6 +7,7 @@ from .layers import (
     make_beta_schedule,
 )
 from .modules import Condition, Decoder, Denoiser, DiTBlock
+from .tphi import KanTphi, Tphi
 from .utils import denormalize, extract, get_gammas, modify_gammas, modulate, normalize
 
 __all__ = [
@@ -17,8 +18,10 @@ __all__ = [
     "Denoiser",
     "DiTBlock",
     "FullAttention",
+    "KanTphi",
     "MLPResidual",
     "StepEmbedding",
+    "Tphi",
     "denormalize",
     "extract",
     "get_gammas",
