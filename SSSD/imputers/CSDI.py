@@ -8,11 +8,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import wandb
 from torch.optim import Adam
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-
-import wandb
 
 """ Standalone CSDI imputer. The imputer class is located in the last part of the notebook, please see more documentation there"""
 

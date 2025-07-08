@@ -44,20 +44,9 @@ def get_logger(name=__name__, level=logging.INFO) -> logging.Logger:
 
 log = get_logger(__name__)
 
-""" Cauchy kernel """
-
-try:  # Try CUDA extension
-    from extensions.cauchy.cauchy import cauchy_mult
-
-    has_cauchy_extension = True
-except:
-    log.warning(
-        "CUDA extension for cauchy multiplication not found. Install by going to extensions/cauchy/ and running `python setup.py install`. This should speed up end-to-end training by 10-50%"
-    )
-    has_cauchy_extension = False
+has_cauchy_extension = False
 
 try:  # Try pykeops
-    import pykeops
     from pykeops.torch import Genred
 
     has_pykeops = True
@@ -91,21 +80,17 @@ try:  # Try pykeops
 
 except ImportError:
     has_pykeops = False
-    if not has_cauchy_extension:
-        log.error(
-            "Falling back on slow Cauchy kernel. Install at least one of pykeops or the CUDA extension for efficiency."
-        )
 
-        def cauchy_slow(v, z, w):
-            """
-            v, w: (..., N)
-            z: (..., L)
-            returns: (..., L)
-            """
-            cauchy_matrix = v.unsqueeze(-1) / (
-                z.unsqueeze(-2) - w.unsqueeze(-1)
-            )  # (... N L)
-            return torch.sum(cauchy_matrix, dim=-2)
+    def cauchy_slow(v, z, w):
+        """
+        v, w: (..., N)
+        z: (..., L)
+        returns: (..., L)
+        """
+        cauchy_matrix = v.unsqueeze(-1) / (
+            z.unsqueeze(-2) - w.unsqueeze(-1)
+        )  # (... N L)
+        return torch.sum(cauchy_matrix, dim=-2)
 
 
 def _broadcast_dims(*tensors):

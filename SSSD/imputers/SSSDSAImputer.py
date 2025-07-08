@@ -2,8 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
-from imputers.S4Model import S4, LinearActivation
-from imputers.util import calc_diffusion_step_embedding
+
+from .S4Model import S4, LinearActivation
+from .util import calc_diffusion_step_embedding
 
 
 def swish(x):
@@ -241,7 +242,7 @@ class ResidualBlock(nn.Module):
         return x, state
 
 
-class SSSDSAImputer(nn.Module):
+class Model(nn.Module):
     def __init__(
         self,
         d_model=128,
