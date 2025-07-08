@@ -138,5 +138,12 @@
         "recall": 0.6572563665989272,
         "f1": 0.7929495957944958,
         "precision": 0.9992484760764885
+    },
+        "anomaly_detection_SWaT_CnDiff_attndropout0.3_hiddendim512_mlp-ratio2_n-depth1_n-emb4_n-heads8_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-08 16:57:06",
+        "accuracy": 0.9592336214255228,
+        "recall": 0.664488017429194,
+        "f1": 0.7983151689779938,
+        "precision": 0.9996419521868459
     }
 }
