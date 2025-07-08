@@ -11,7 +11,7 @@ from .kat_1dgroup_torch import Rational_CUDA_A_1DGroup
 
 class rational_1dgroup(torch.autograd.Function):
     @staticmethod
-    @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
+    @torch.amp.custom_fwd(cast_inputs=torch.float32, device_type="cuda")
     def forward(ctx, input, weight_numerator, weight_denominator, group):
         """
         Forward pass of the custom autograd function.
@@ -34,7 +34,7 @@ class rational_1dgroup(torch.autograd.Function):
         return x
 
     @staticmethod
-    @torch.cuda.amp.custom_bwd
+    @torch.amp.custom_bwd(device_type="cuda")
     def backward(ctx, grad_output):
         """
         Backward pass of the custom autograd function.

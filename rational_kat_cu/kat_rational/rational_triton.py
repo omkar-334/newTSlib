@@ -3,6 +3,7 @@ import triton
 import triton.language as tl
 from torch import Tensor
 
+
 # --------------------
 # Forward kernel
 # --------------------
@@ -25,9 +26,15 @@ from torch import Tensor
 # The grid is 1D.
 @triton.jit
 def rational_fwd_kernel(
-    x_ptr, a_ptr, b_ptr, result_ptr,
-    D, group, x_size, D_per_group,
-    BLOCK_SIZE: tl.constexpr
+    x_ptr,
+    a_ptr,
+    b_ptr,
+    result_ptr,
+    D,
+    group,
+    x_size,
+    D_per_group,
+    BLOCK_SIZE: tl.constexpr,
 ):
     pid = tl.program_id(axis=0)
     offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
@@ -77,6 +84,7 @@ def rational_fwd_kernel(
 
     tl.store(result_ptr + offs, P / Q, mask=mask)
 
+
 def rational_fwd_triton(x, n, d, group):
     D = x.shape[-1]
     x_size = x.numel()
@@ -86,13 +94,12 @@ def rational_fwd_triton(x, n, d, group):
     BLOCK_SIZE = 256
     num_blocks = (x_size + BLOCK_SIZE - 1) // BLOCK_SIZE
 
-    rational_fwd_kernel[(num_blocks,)](
-        x, n, d, result,
-        D, group, x_size, D_per_group,
-        BLOCK_SIZE=BLOCK_SIZE
+    rational_fwd_kernel[num_blocks,](
+        x, n, d, result, D, group, x_size, D_per_group, BLOCK_SIZE=BLOCK_SIZE
     )
 
     return result
+
 
 # --------------------
 # Backward kernel
@@ -118,10 +125,20 @@ def rational_fwd_triton(x, n, d, group):
 # The results for d_a and d_b are accumulated via atomic adds.
 @triton.jit
 def rational_bwd_kernel(
-    grad_output_ptr, x_ptr, a_ptr, b_ptr,
-    d_x_ptr, d_a_ptr, d_b_ptr,
-    D, group, x_size, n_size, d_size, D_per_group,
-    BLOCK_SIZE: tl.constexpr
+    grad_output_ptr,
+    x_ptr,
+    a_ptr,
+    b_ptr,
+    d_x_ptr,
+    d_a_ptr,
+    d_b_ptr,
+    D,
+    group,
+    x_size,
+    n_size,
+    d_size,
+    D_per_group,
+    BLOCK_SIZE: tl.constexpr,
 ):
     pid = tl.program_id(axis=0)
     offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
@@ -171,10 +188,12 @@ def rational_bwd_kernel(
     # Compute P, Q, R, S.
     P = a0 + a1 * xp + a2 * xp2 + a3 * xp3 + a4 * xp4 + a5 * xp5
     Q = 1.0 + b0_abs * axp + b1_abs * axp2 + b2_abs * axp3 + b3_abs * axp4
-    R = a1 + 2.0*a2 * xp + 3.0*a3 * xp2 + 4.0*a4 * xp3 + 5.0*a5 * xp4
+    R = a1 + 2.0 * a2 * xp + 3.0 * a3 * xp2 + 4.0 * a4 * xp3 + 5.0 * a5 * xp4
     # Compute sign(x): if x<0 then -1, else 1.
     sign_x = tl.where(x_val < 0, -1.0, 1.0)
-    S = sign_x * (b0_abs + 2.0*b1_abs * axp + 3.0*b2_abs * axp2 + 4.0*b3_abs * axp3)
+    S = sign_x * (
+        b0_abs + 2.0 * b1_abs * axp + 3.0 * b2_abs * axp2 + 4.0 * b3_abs * axp3
+    )
 
     mpq2 = -P / (Q * Q)
 
@@ -214,7 +233,8 @@ def rational_bwd_kernel(
     tl.atomic_add(d_b_ptr + (b_offset + 1), db1, mask=mask)
     tl.atomic_add(d_b_ptr + (b_offset + 2), db2, mask=mask)
     tl.atomic_add(d_b_ptr + (b_offset + 3), db3, mask=mask)
-        
+
+
 def rational_bwd_triton(grad_output, x, n, d, group):
     D = x.shape[-1]
     x_size = x.numel()
@@ -229,11 +249,21 @@ def rational_bwd_triton(grad_output, x, n, d, group):
     BLOCK_SIZE = 256
     num_blocks = (x_size + BLOCK_SIZE - 1) // BLOCK_SIZE
 
-    rational_bwd_kernel[(num_blocks,)](
-        grad_output, x, n, d,
-        d_x, d_n, d_d,
-        D, group, x_size, n_size, d_size, D_per_group,
-        BLOCK_SIZE=BLOCK_SIZE
+    rational_bwd_kernel[num_blocks,](
+        grad_output,
+        x,
+        n,
+        d,
+        d_x,
+        d_n,
+        d_d,
+        D,
+        group,
+        x_size,
+        n_size,
+        d_size,
+        D_per_group,
+        BLOCK_SIZE=BLOCK_SIZE,
     )
 
     return d_x, d_n, d_d
@@ -241,22 +271,24 @@ def rational_bwd_triton(grad_output, x, n, d, group):
 
 class RationalTriton1DGroup(torch.autograd.Function):
     @staticmethod
-    @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
-    def forward(ctx: torch.autograd.Function, 
-                input: Tensor, 
-                weight_numerator: Tensor, 
-                weight_denominator: Tensor, 
-                group: int) -> Tensor:
+    @torch.amp.custom_fwd(cast_inputs=torch.float32, device_type="cuda")
+    def forward(
+        ctx: torch.autograd.Function,
+        input: Tensor,
+        weight_numerator: Tensor,
+        weight_denominator: Tensor,
+        group: int,
+    ) -> Tensor:
         """
         Forward pass of the rational function computed with Triton kernels.
-        
+
         Args:
             ctx: The context object for storing information for the backward pass.
             input (Tensor): Input tensor.
             weight_numerator (Tensor): Weights for the numerator polynomial.
             weight_denominator (Tensor): Weights for the denominator polynomial.
             group (int): The group number (non-differentiable).
-        
+
         Returns:
             Tensor: Output tensor resulting from applying the rational function.
         """
@@ -269,15 +301,15 @@ class RationalTriton1DGroup(torch.autograd.Function):
         return output
 
     @staticmethod
-    @torch.cuda.amp.custom_bwd
+    @torch.amp.custom_bwd(device_type="cuda")
     def backward(ctx: torch.autograd.Function, grad_output: Tensor):
         """
         Backward pass of the rational function computed with Triton kernels.
-        
+
         Args:
             ctx: The context object with saved tensors.
             grad_output (Tensor): Gradient of the loss with respect to the output.
-        
+
         Returns:
             Tuple[Tensor, Tensor, Tensor, None]:
                 - Gradient with respect to the input.
