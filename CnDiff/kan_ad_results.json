@@ -145,5 +145,124 @@
         "recall": 0.664488017429194,
         "f1": 0.7983151689779938,
         "precision": 0.9996419521868459
+    },
+        "anomaly_detection_SWaT_CnDiff_attndropout0.3_hiddendim512_mlp-ratio2_n-depth1_n-emb4_n-heads8_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-08 16:57:06",
+        "accuracy": 0.9592336214255228,
+        "recall": 0.664488017429194,
+        "f1": 0.7983151689779938,
+        "precision": 0.9996419521868459
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads8_timesteps150_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 10:17:34",
+        "accuracy": 0.9796789617486339,
+        "recall": 0.9438497190435174,
+        "f1": 0.9626639335689933,
+        "precision": 0.9822434693529111
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads8_timesteps150_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-09 10:18:06",
+        "accuracy": 0.9764571948998179,
+        "recall": 0.9309298224026906,
+        "f1": 0.9564283005351649,
+        "precision": 0.9833629392140721
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads8_timesteps150_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossFalse": {
+        "time": "2025-07-09 10:18:37",
+        "accuracy": 0.9553392531876138,
+        "recall": 0.8452893646692097,
+        "f1": 0.9130945260406282,
+        "precision": 0.9927263969171484
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads8_timesteps150_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossFalse": {
+        "time": "2025-07-09 10:19:09",
+        "accuracy": 0.9604394353369763,
+        "recall": 0.8607112095484188,
+        "f1": 0.9235339421278469,
+        "precision": 0.9962495252563616
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps150_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 10:20:06",
+        "accuracy": 0.9796903460837887,
+        "recall": 0.9438497190435174,
+        "f1": 0.9626840696117804,
+        "precision": 0.9822853971912751
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps150_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-09 10:20:39",
+        "accuracy": 0.9759904371584699,
+        "recall": 0.9239571797711332,
+        "f1": 0.9552827428280644,
+        "precision": 0.9888069528575191
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps150_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossFalse": {
+        "time": "2025-07-09 10:21:12",
+        "accuracy": 0.9553392531876138,
+        "recall": 0.8452893646692097,
+        "f1": 0.9130945260406282,
+        "precision": 0.9927263969171484
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps150_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossFalse": {
+        "time": "2025-07-09 10:21:44",
+        "accuracy": 0.9604394353369763,
+        "recall": 0.8607112095484188,
+        "f1": 0.9235339421278469,
+        "precision": 0.9962495252563616
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim512_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 10:26:22",
+        "accuracy": 0.9824795081967214,
+        "recall": 0.9591485172880522,
+        "f1": 0.9681425821275539,
+        "precision": 0.9773069207622869
+    },
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim768_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 10:30:50",
+        "accuracy": 0.9907786885245902,
+        "recall": 0.9873672121734137,
+        "f1": 0.9834545305989051,
+        "precision": 0.9795727365208545
+    },
+    "anomaly_detection_SMD_CnDiff_attndropout0.0_hiddendim768_mlp-ratio1_n-depth1_n-emb8_n-heads4_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 11:09:02",
+        "accuracy": 0.9860442923612053,
+        "recall": 0.7731286509985056,
+        "f1": 0.8215974302522828,
+        "precision": 0.8765498652291105
+    },
+    "anomaly_detection_SWaT_CnDiff_attndropout0.3_hiddendim768_mlp-ratio2_n-depth1_n-emb4_n-heads8_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 11:45:35",
+        "accuracy": 0.9869691634656423,
+        "recall": 0.9555116164112704,
+        "f1": 0.9468270382061609,
+        "precision": 0.9382989051291731
+    },
+    "anomaly_detection_MSL_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 11:55:33",
+        "accuracy": 0.9486355251736112,
+        "recall": 0.5607777491630183,
+        "f1": 0.6969672721453148,
+        "precision": 0.9205242020714437
+    },
+    "anomaly_detection_MSL_CnDiff_attndropout0.3_hiddendim512_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 11:57:37",
+        "accuracy": 0.9486626519097222,
+        "recall": 0.5607777491630183,
+        "f1": 0.6970788315326131,
+        "precision": 0.92091351237048
+    },
+    "anomaly_detection_MSL_CnDiff_attndropout0.3_hiddendim768_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-09 12:01:39",
+        "accuracy": 0.9486490885416666,
+        "recall": 0.5607777491630183,
+        "f1": 0.6970230473751601,
+        "precision": 0.9207188160676533
+    },
+        "anomaly_detection_MSL_CnDiff_attndropout0.3_hiddendim768_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps100_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossFalse": {
+        "time": "2025-07-09 12:31:37",
+        "accuracy": 0.9718560112847222,
+        "recall": 0.7952613958279681,
+        "f1": 0.8561724544257295,
+        "precision": 0.9271881098934094
     }
 }
