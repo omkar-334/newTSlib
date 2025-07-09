@@ -153,8 +153,8 @@ class Exp_Imputation(Exp_Basic):
                 if self.args.tphi_loss:
                     # print("Using t_phi loss")
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs[mask == 0],
-                        batch_x[mask == 0],
+                        outputs,
+                        batch_x,
                         self.model.t,
                         self.model.condition_info,
                     )
