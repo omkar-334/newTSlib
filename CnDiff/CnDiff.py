@@ -73,34 +73,29 @@ class Model(nn.Module):
         return y_t, noise
 
     def anomaly_detection(self, x, t):
-        self.condition_info = self.condition_model(x) if self.config.use_cond else None
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
     def forward(self, x, original_x=None, padding_mask=None):
-        if self.config.task_name == "imputation":
-            return self.imputation(x, original_x)
+        self.condition_info = self.condition_model(x) if self.config.use_cond else None
 
         n = x.size(0)
-        t = torch.randint(low=1, high=self.config.timesteps, size=(n // 2 + 1,)).to(
-            self.device
-        )
-        t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-        self.t = t
+        t = torch.randint(
+            low=1,
+            high=self.config.timesteps,
+            size=(n // 2 + 1,),
+        ).to(self.device)
+        self.t = t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
+
+        if self.config.task_name == "imputation":
+            return self.imputation(original_x, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
         return None
 
-    def imputation(self, x, original_x):
-        self.condition_info = self.condition_model(x) if self.config.use_cond else None
-
-        # Sample random timestep for each sample
-        B = x.size(0)
-        t = torch.randint(0, self.config.timesteps, (B,), device=x.device).long()
-
+    def imputation(self, original_x, t):
         x_t, _ = self.q_sample(original_x, t)
-        # x_t_masked = observed_mask * x + missing_mask * x_t
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise
 

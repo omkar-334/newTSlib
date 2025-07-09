@@ -46,6 +46,7 @@ class Tphi(nn.Module):
 
         out = (out @ self.w1.T) + self.b1
         out = self.act(out)
+        return out
 
 
 class KAN(nn.Module):
