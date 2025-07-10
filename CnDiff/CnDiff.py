@@ -2,7 +2,6 @@ from types import SimpleNamespace
 
 import torch
 import torch.nn as nn
-from tqdm import tqdm
 
 from CnDiff.utils import (
     Condition,
@@ -112,9 +111,10 @@ class Model(nn.Module):
         else:
             self.condition_info = None
 
-        for t in tqdm(
-            range(self.num_timesteps - 1, 0, -1), desc="Reverse diffusion sampling"
-        ):
+        for t in reversed(range(1, self.num_timesteps)):
+            # for t in tqdm(
+            #     range(self.num_timesteps - 1, 0, -1), desc="Reverse diffusion sampling"
+            # ):
             y_t = self.p_sample(x, y_t, t)
 
         z = self.p_sample_t_1to0(x, y_t)

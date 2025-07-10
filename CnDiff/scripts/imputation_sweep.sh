@@ -3,57 +3,55 @@
 model_name=CnDiff
 device=1
 cond=1
-tphi=True
+tphi=1
+tphi_loss=True
 
-n_depth=4
-n_emb=2
-n_heads=8
-
-# JSON keys from finished runs
-RESULTS_FILE=results/impsweep_results.json
-
-for attn_dropout in 0.05 0.1 0.15
+for attn_dropout in  0.1 0.2
 do
-  for mlp_ratio in 3 3.5 4
+  for mlp_ratio in 2 4
   do
-    for timesteps in 80 100 120
+    for timesteps in 50 100 200
     do
-      for hidden_dim in 512 576
+      for hidden_dim in 256 512
       do
         for rate in 0.125 0.25 0.375 0.5
         do
-          # Construct identifier string as used in results.json
-          key="imputation_ETTh2_mask_${rate}_${model_name}_attndropout${attn_dropout}_hiddendim${hidden_dim}_mlp-ratio${mlp_ratio}_n-depth${n_depth}_n-emb${n_emb}_n-heads${n_heads}_timesteps${timesteps}_test_normalizeFalse_tphi-lossFalse"
+          for n_depth in 1 2 4
+          do
+            for n_emb in 2 4
+            do
+              for n_heads in 1 2 4 8
+              do
 
-          # Check if the run is already completed
-          if grep -q "$config_id" "$RESULTS_FILE"; then
-            echo "✅ Skipping already completed: $key"
-            continue
-          fi
 
-          echo "Running: $key"
-
-          python -u run.py \
-            --task_name imputation \
-            --is_training 1 \
-            --root_path ./dataset/ETT-small/ \
-            --data_path ETTh2.csv \
-            --model_id ETTh2_mask_${rate} \
-            --mask_rate $rate \
-            --model $model_name \
-            --data custom \
-            --features M \
-            --pred_len 96 \
-            --c_out 7 \
-            --gpu $device \
-            --d_model 96 \
-            --attn_dropout $attn_dropout \
-            --hidden_dim $hidden_dim \
-            --mlp_ratio $mlp_ratio \
-            --n_depth $n_depth \
-            --n_emb $n_emb \
-            --n_heads $n_heads \
-            --timesteps $timesteps
+                python -u run.py \
+                --task_name imputation \
+                --is_training 1 \
+                --root_path ./dataset/ETT-small/ \
+                --data_path ETTh2.csv \
+                --model_id ETTh2_mask_${rate} \
+                --mask_rate $rate \
+                --model $model_name \
+                --data custom \
+                --features M \
+                --pred_len 96 \
+                --c_out 7 \
+                --gpu $device \
+                --d_model 96 \
+                --attn_dropout $attn_dropout \
+                --hidden_dim $hidden_dim \
+                --mlp_ratio $mlp_ratio \
+                --n_depth $n_depth \
+                --n_emb $n_emb \
+                --n_heads $n_heads \
+                --timesteps $timesteps \
+                --tphi_loss $tphi_loss \
+                --use_cond $cond \
+                --use_tphi $tphi \
+                --normalize False
+              done
+            done
+          done
         done
       done
     done
