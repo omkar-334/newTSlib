@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from scipy import signal
 from scipy import special as ss
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 
 def transition(N):

@@ -13,3 +13,8 @@ torch
 tqdm
 PyWavelets
 wandb
+
+### KAN-AD ###
+# easyTSAD
+# torchinfo
+# statsmodels

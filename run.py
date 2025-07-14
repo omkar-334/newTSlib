@@ -428,7 +428,10 @@ def clean(ckpt=None):
 
 
 def get_setting(args):
-    setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}_timesteps{args.timesteps}_{args.des}_use_cond{args.use_cond}_use_tphi{args.use_tphi}_normalize{args.normalize}_tphi-loss{args.tphi_loss}"
+    setting = f"{args.task_name}_{args.model_id}_{args.model}_attndropout{args.attn_dropout}_hiddendim{args.hidden_dim}_mlp-ratio{args.mlp_ratio}_n-depth{args.n_depth}_n-emb{args.n_emb}_n-heads{args.n_heads}"
+
+    if "cndiff" in args.model.lower():
+        setting += f"_timesteps{args.timesteps}_{args.des}_use_cond{args.use_cond}_use_tphi{args.use_tphi}_normalize{args.normalize}_tphi-loss{args.tphi_loss}"
 
     if args.task_name == "classification":
         setting += f"_classifier{args.classifier}"
@@ -437,8 +440,16 @@ def get_setting(args):
 
 
 if __name__ == "__main__":
+    import json
+
     args = get_args()
     setting = get_setting(args)
+
+    filename = "results/mf_impsweep_results.json"
+    resultdict = json.load(open(filename))
+    if setting in resultdict:
+        print(f"{args.task_name} Experiment {setting} already exists. Exiting.")
+        exit(0)
 
     if args.wandb:
         wandb.init(

@@ -34,6 +34,10 @@ from models import (
     WPMixer,
     iTransformer,
 )
+from Other_Models.AnomalyTransformer import AnomalyTransformer
+from Other_Models.KAN_AD import KANAD
+
+# from SSSD.imputers import SSSDSAImputer
 
 
 class Exp_Basic:
@@ -71,6 +75,9 @@ class Exp_Basic:
             "TimeXer": TimeXer,
             "WPMixer": WPMixer,
             "MultiPatchFormer": MultiPatchFormer,
+            "KANAD": KANAD,
+            "AnomalyTransformer": AnomalyTransformer,
+            # "SSSDsa": SSSDSAImputer,
         }
 
         if args.model == "Mamba":
