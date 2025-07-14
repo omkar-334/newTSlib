@@ -55,7 +55,7 @@ def std_normal(size):
     """
     Generate the standard Gaussian variable of a certain size
     """
-    return torch.normal(0, 1, size=size).cuda()
+    return torch.normal(0, 1, size=size).cuda("cuda:1")
 
 
 def calc_diffusion_step_embedding(diffusion_steps, diffusion_step_embed_dim_in):
@@ -79,7 +79,7 @@ def calc_diffusion_step_embedding(diffusion_steps, diffusion_step_embed_dim_in):
 
     half_dim = diffusion_step_embed_dim_in // 2
     _embed = np.log(10000) / (half_dim - 1)
-    _embed = torch.exp(torch.arange(half_dim) * -_embed).cuda()
+    _embed = torch.exp(torch.arange(half_dim) * -_embed).cuda("cuda:1")
     _embed = diffusion_steps * _embed
     diffusion_step_embed = torch.cat((torch.sin(_embed), torch.cos(_embed)), 1)
 
@@ -164,9 +164,9 @@ def sampling(
         for t in range(T - 1, -1, -1):
             if only_generate_missing == 1:
                 x = x * (1 - mask).float() + cond * mask.float()
-            diffusion_steps = (
-                t * torch.ones((size[0], 1))
-            ).cuda()  # use the corresponding reverse step
+            diffusion_steps = (t * torch.ones((size[0], 1))).cuda(
+                "cuda:1"
+            )  # use the corresponding reverse step
             epsilon_theta = net((
                 x,
                 cond,
@@ -204,9 +204,9 @@ def training_loss(net, loss_fn, X, diffusion_hyperparams, only_generate_missing=
     loss_mask = X[3]
 
     B, C, L = audio.shape  # B is batchsize, C=1, L is audio length
-    diffusion_steps = torch.randint(
-        T, size=(B, 1, 1)
-    ).cuda()  # randomly sample diffusion steps from 1~T
+    diffusion_steps = torch.randint(T, size=(B, 1, 1)).cuda(
+        "cuda:1"
+    )  # randomly sample diffusion steps from 1~T
 
     z = std_normal(audio.shape)
     if only_generate_missing:

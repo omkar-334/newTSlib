@@ -66,15 +66,15 @@ def train(
     # map diffusion hyperparameters to gpu
     for key in diffusion_hyperparams:
         if key != "T":
-            diffusion_hyperparams[key] = diffusion_hyperparams[key].cuda()
+            diffusion_hyperparams[key] = diffusion_hyperparams[key].cuda("cuda:1")
 
     # predefine model
     if use_model == 0:
-        net = DiffWaveImputer(**model_config).cuda()
+        net = DiffWaveImputer(**model_config).cuda("cuda:1")
     elif use_model == 1:
-        net = SSSDSAImputer(**model_config).cuda()
+        net = SSSDSAImputer(**model_config).cuda("cuda:1")
     elif use_model == 2:
-        net = SSSDS4Imputer(**model_config).cuda()
+        net = SSSDS4Imputer(**model_config).cuda("cuda:1")
     else:
         print("Model chosen not available.")
     print_size(net)
@@ -111,7 +111,7 @@ def train(
     training_data = np.load(trainset_config["train_data_path"])
     training_data = np.split(training_data, 160, 0)
     training_data = np.array(training_data)
-    training_data = torch.from_numpy(training_data).float().cuda()
+    training_data = torch.from_numpy(training_data).float().cuda("cuda:1")
     print("Data loaded")
 
     # training
@@ -126,7 +126,7 @@ def train(
                 transposed_mask = get_mask_bm(batch[0], missing_k)
 
             mask = transposed_mask.permute(1, 0)
-            mask = mask.repeat(batch.size()[0], 1, 1).float().cuda()
+            mask = mask.repeat(batch.size()[0], 1, 1).float().cuda("cuda:1")
             loss_mask = ~mask.bool()
             batch = batch.permute(0, 2, 1)
 

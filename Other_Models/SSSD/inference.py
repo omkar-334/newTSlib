@@ -62,15 +62,15 @@ def generate(
     # map diffusion hyperparameters to gpu
     for key in diffusion_hyperparams:
         if key != "T":
-            diffusion_hyperparams[key] = diffusion_hyperparams[key].cuda()
+            diffusion_hyperparams[key] = diffusion_hyperparams[key].cuda("cuda:1")
 
     # predefine model
     if use_model == 0:
-        net = DiffWaveImputer(**model_config).cuda()
+        net = DiffWaveImputer(**model_config).cuda("cuda:1")
     elif use_model == 1:
-        net = SSSDSAImputer(**model_config).cuda()
+        net = SSSDSAImputer(**model_config).cuda("cuda:1")
     elif use_model == 2:
-        net = SSSDS4Imputer(**model_config).cuda()
+        net = SSSDS4Imputer(**model_config).cuda("cuda:1")
     else:
         print("Model chosen not available.")
     print_size(net)
@@ -92,7 +92,7 @@ def generate(
     testing_data = np.load(trainset_config["test_data_path"])
     testing_data = np.split(testing_data, 4, 0)
     testing_data = np.array(testing_data)
-    testing_data = torch.from_numpy(testing_data).float().cuda()
+    testing_data = torch.from_numpy(testing_data).float().cuda("cuda:1")
     print("Data loaded")
 
     all_mse = []
@@ -102,18 +102,18 @@ def generate(
             mask_T = get_mask_mnr(batch[0], missing_k)
             mask = mask_T.permute(1, 0)
             mask = mask.repeat(batch.size()[0], 1, 1)
-            mask = mask.type(torch.float).cuda()
+            mask = mask.type(torch.float).cuda("cuda:1")
 
         elif masking == "bm":
             mask_T = get_mask_bm(batch[0], missing_k)
             mask = mask_T.permute(1, 0)
             mask = mask.repeat(batch.size()[0], 1, 1)
-            mask = mask.type(torch.float).cuda()
+            mask = mask.type(torch.float).cuda("cuda:1")
 
         elif masking == "rm":
             mask_T = get_mask_rm(batch[0], missing_k)
             mask = mask_T.permute(1, 0)
-            mask = mask.repeat(batch.size()[0], 1, 1).float().cuda()
+            mask = mask.repeat(batch.size()[0], 1, 1).float().cuda("cuda:1")
 
         batch = batch.permute(0, 2, 1)
 

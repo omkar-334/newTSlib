@@ -701,25 +701,25 @@ class Custom_Train_Dataset(Dataset):
                     observed_values, observed_masks, gt_masks = mask_missing_train_rm(
                         sample, missing_ratio_or_k
                     )
-                    observed_values = torch.from_numpy(observed_values).cuda()
-                    observed_masks = torch.from_numpy(observed_masks).cuda()
-                    gt_masks = torch.from_numpy(gt_masks).cuda()
+                    observed_values = torch.from_numpy(observed_values).cuda("cuda:1")
+                    observed_masks = torch.from_numpy(observed_masks).cuda("cuda:1")
+                    gt_masks = torch.from_numpy(gt_masks).cuda("cuda:1")
                 elif masking == "nrm":
                     sample = sample.detach().cpu().numpy()
                     observed_values, observed_masks, gt_masks = mask_missing_train_nrm(
                         sample, missing_ratio_or_k
                     )
-                    observed_values = torch.from_numpy(observed_values).cuda()
-                    observed_masks = torch.from_numpy(observed_masks).cuda()
-                    gt_masks = torch.from_numpy(gt_masks).cuda()
+                    observed_values = torch.from_numpy(observed_values).cuda("cuda:1")
+                    observed_masks = torch.from_numpy(observed_masks).cuda("cuda:1")
+                    gt_masks = torch.from_numpy(gt_masks).cuda("cuda:1")
                 elif masking == "bm":
                     sample = sample.detach().cpu().numpy()
                     observed_values, observed_masks, gt_masks = mask_missing_train_bm(
                         sample, missing_ratio_or_k
                     )
-                    observed_values = torch.from_numpy(observed_values).cuda()
-                    observed_masks = torch.from_numpy(observed_masks).cuda()
-                    gt_masks = torch.from_numpy(gt_masks).cuda()
+                    observed_values = torch.from_numpy(observed_values).cuda("cuda:1")
+                    observed_masks = torch.from_numpy(observed_masks).cuda("cuda:1")
+                    gt_masks = torch.from_numpy(gt_masks).cuda("cuda:1")
 
                 self.observed_values.append(observed_values)
                 self.observed_masks.append(observed_masks)

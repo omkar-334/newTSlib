@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from einops import rearrange
 
 from .S4Model import S4, LinearActivation
-from .util import calc_diffusion_step_embedding
+from .util import calc_diffusion_hyperparams, calc_diffusion_step_embedding
 
 
 def swish(x):
@@ -13,7 +13,7 @@ def swish(x):
 
 class Conv(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=3, dilation=1, stride=1):
-        super(Conv, self).__init__()
+        super().__init__()
         self.padding = dilation * (kernel_size - 1) // 2
         self.conv = nn.Conv1d(
             in_channels,
@@ -242,7 +242,54 @@ class ResidualBlock(nn.Module):
         return x, state
 
 
+def std_normal(size):
+    """
+    Generate the standard Gaussian variable of a certain size
+    """
+    return torch.normal(0, 1, size=size).cuda("cuda:1")
+
+
 class Model(nn.Module):
+    def __init__(self, args):
+        super().__init__()
+        self.args = args
+        self.model = SSSDSAImputer(
+            d_model=args.d_model,
+            in_channels=args.c_out,
+            out_channels=args.c_out,
+        )
+        self.diffusion_config = {"T": 200, "beta_0": 0.0001, "beta_T": 0.02}
+        self.diffusion_hyperparams = calc_diffusion_hyperparams(**self.diffusion_config)
+
+    def forward(self, batch_x, mask):
+        loss_mask = ~mask.bool()
+        assert batch_x.size() == mask.size() == loss_mask.size()
+
+        X = batch_x, batch_x, mask, loss_mask
+        T = self.diffusion_hyperparams["T"]
+        Alpha_bar = self.diffusion_hyperparams["Alpha_bar"].cuda("cuda:1")
+
+        audio = X[0]
+        cond = X[1]
+        mask = X[2]
+        loss_mask = X[3]
+
+        B, C, L = audio.shape  # B is batchsize, C=1, L is audio length
+        diffusion_steps = torch.randint(T, size=(B, 1, 1)).cuda(
+            "cuda:1"
+        )  # randomly sample diffusion steps from 1~T
+        z = std_normal(audio.shape)
+
+        z = audio * mask.float() + z * (1 - mask).float()
+        transformed_X = (
+            torch.sqrt(Alpha_bar[diffusion_steps]) * audio.cuda("cuda:1")
+            + torch.sqrt(1 - Alpha_bar[diffusion_steps]) * z
+        )  # compute x_t from q(x_t|x_0)
+
+        return self.model((transformed_X, cond, mask, diffusion_steps.view(B, 1)))
+
+
+class SSSDSAImputer(nn.Module):
     def __init__(
         self,
         d_model=128,
@@ -263,7 +310,6 @@ class Model(nn.Module):
         bidirectional=True,
         s4_lmax=1,
         s4_d_state=64,
-        s4_dropout=0.0,
         s4_bidirectional=True,
     ):
         """
@@ -416,8 +462,9 @@ class Model(nn.Module):
         # audio_cond: same shape as audio, audio_mask: same shape as audio but binary to be imputed where zero
         noise, conditional, mask, diffusion_steps = input_data
 
-        conditional = conditional * mask
-        conditional = torch.cat([conditional, mask.float()], dim=1)
+        # conditional = conditional * mask
+        # conditional = torch.cat([conditional, mask.float()], dim=1)
+        conditional = conditional + mask.float()  # (batch, in_channels + 1, length)
 
         diffusion_step_embed = calc_diffusion_step_embedding(
             diffusion_steps, self.diffusion_step_embed_dim_in
@@ -426,6 +473,7 @@ class Model(nn.Module):
         diffusion_step_embed = swish(self.fc_t2(diffusion_step_embed))
 
         x = noise
+        x = x.permute(0, 2, 1)
         x = self.init_conv(x)
 
         # Down blocks
