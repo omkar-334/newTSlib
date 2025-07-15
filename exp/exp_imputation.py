@@ -5,9 +5,9 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-import wandb
 from torch.optim.adam import Adam
 
+import wandb
 from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
@@ -77,7 +77,8 @@ class Exp_Imputation(Exp_Basic):
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
                         )
-
+                elif "sssd" in self.args.model.lower():
+                    outputs = self.model(inp, batch_x_mark, None, None, mask)
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
@@ -139,6 +140,8 @@ class Exp_Imputation(Exp_Basic):
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
                         )
+                elif "sssd" in self.args.model.lower():
+                    outputs = self.model(inp, batch_x_mark, None, None, mask)
 
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
@@ -153,8 +156,8 @@ class Exp_Imputation(Exp_Basic):
                 if self.args.tphi_loss:
                     # print("Using t_phi loss")
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs,
-                        batch_x,
+                        outputs.masked_fill(mask != 0, 0),
+                        batch_x.masked_fill(mask != 0, 0),
                         self.model.t,
                         self.model.condition_info,
                     )
@@ -269,6 +272,7 @@ class Exp_Imputation(Exp_Basic):
             "mspe": float(mspe),
         }
 
+        filename = self.args.filename or "imputation"
         # save_preds(setting, preds, trues)
-        save_results("impsweep", setting, argsdict)
+        save_results(filename, setting, argsdict)
         return PATH

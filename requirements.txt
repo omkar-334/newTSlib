@@ -18,3 +18,11 @@ wandb
 # easyTSAD
 # torchinfo
 # statsmodels
+
+### DiffusionAE ###
+# transformers
+# tadpak
+
+### CSDI ###
+# pyyaml
+# linear_attention_transformer

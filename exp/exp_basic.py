@@ -2,9 +2,10 @@ import os
 
 import torch
 
-from CnDiff import CnDiff, class_cndiff
+from CnDiff import CnDiff
 from models import (
     MICN,
+    SSSD,
     Autoformer,
     Crossformer,
     DLinear,
@@ -45,7 +46,7 @@ class Exp_Basic:
         self.args = args
         self.model_dict = {
             "CnDiff": CnDiff,
-            "class_cndiff": class_cndiff,
+            # "class_cndiff": class_cndiff,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,
@@ -69,6 +70,7 @@ class Exp_Basic:
             "TimeMixer": TimeMixer,
             "TSMixer": TSMixer,
             "SegRNN": SegRNN,
+            "SSSD": SSSD,
             "TemporalFusionTransformer": TemporalFusionTransformer,
             "SCINet": SCINet,
             "PAttn": PAttn,
