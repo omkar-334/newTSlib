@@ -8,7 +8,6 @@ import torch.nn as nn
 from torch.optim.adam import Adam
 
 import wandb
-from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -20,6 +19,8 @@ warnings.filterwarnings("ignore")
 class Exp_Imputation(Exp_Basic):
     def __init__(self, args):
         super().__init__(args)
+        self.pred_len = args.pred_len
+        self.seq_len = args.seq_len
 
     def _build_model(self):
         self.train_data, self.train_loader = self._get_data(flag="train")
@@ -69,13 +70,30 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        # inp, _, x_mean, x_std = normalize(self.device, inp)
+                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
+                        means = means.unsqueeze(1).detach()
+                        x_enc = inp.sub(means)
+                        x_enc = x_enc.masked_fill(mask == 0, 0)
+                        stdev = torch.sqrt(
+                            torch.sum(x_enc * x_enc, dim=1)
+                            / torch.sum(mask == 1, dim=1)
+                            + 1e-5
+                        )
+                        stdev = stdev.unsqueeze(1).detach()
+                        inp = x_enc.div(stdev)
 
                     outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
+                        # outputs = denormalize(
+                        #     outputs, x_mean, x_std, self.args.pred_len
+                        # )
+                        dec_out = outputs.mul(
+                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
+                        )
+                        outputs = dec_out.add(
+                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
                         )
                 elif "sssd" in self.args.model.lower():
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
@@ -132,13 +150,30 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        #     inp, _, x_mean, x_std = normalize(self.device, inp)
+                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
+                        means = means.unsqueeze(1).detach()
+                        x_enc = inp.sub(means)
+                        x_enc = x_enc.masked_fill(mask == 0, 0)
+                        stdev = torch.sqrt(
+                            torch.sum(x_enc * x_enc, dim=1)
+                            / torch.sum(mask == 1, dim=1)
+                            + 1e-5
+                        )
+                        stdev = stdev.unsqueeze(1).detach()
+                        inp = x_enc.div(stdev)
 
                     outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
+                        # outputs = denormalize(
+                        #     outputs, x_mean, x_std, self.args.pred_len
+                        # )
+                        dec_out = outputs.mul(
+                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
+                        )
+                        outputs = dec_out.add(
+                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
                         )
                 elif "sssd" in self.args.model.lower():
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
@@ -223,13 +258,30 @@ class Exp_Imputation(Exp_Basic):
                 # imputation
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        # inp, _, x_mean, x_std = normalize(self.device, inp)
+                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
+                        means = means.unsqueeze(1).detach()
+                        x_enc = inp.sub(means)
+                        x_enc = x_enc.masked_fill(mask == 0, 0)
+                        stdev = torch.sqrt(
+                            torch.sum(x_enc * x_enc, dim=1)
+                            / torch.sum(mask == 1, dim=1)
+                            + 1e-5
+                        )
+                        stdev = stdev.unsqueeze(1).detach()
+                        inp = x_enc.div(stdev)
 
                     outputs = self.model.p_sample_loop(inp)
 
                     if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
+                        # outputs = denormalize(
+                        #     outputs, x_mean, x_std, self.args.pred_len
+                        # )
+                        dec_out = outputs.mul(
+                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
+                        )
+                        outputs = dec_out.add(
+                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
                         )
 
                 else:

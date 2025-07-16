@@ -162,3 +162,6 @@ wandb/
 results/
 sweeps/
 *.ipynb
+
+CnDiff/scripts
+Other_Models/
