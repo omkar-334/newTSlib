@@ -271,5 +271,26 @@
         "recall": 0.8709074853960059,
         "f1": 0.8728640479270202,
         "precision": 0.87482942139738
+    },
+    "anomaly_detection_SMAP_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps100_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue_QS": {
+        "time": "2025-07-16 16:46:25",
+        "accuracy": 0.9869850134710373,
+        "recall": 0.9588086880210619,
+        "f1": 0.9496156666757205,
+        "precision": 0.9405972558514931
+    },
+    "anomaly_detection_SMD_CnDiff_attndropout0.2_hiddendim256_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue_QS": {
+        "time": "2025-07-16 16:48:06",
+        "accuracy": 0.9809608912680128,
+        "recall": 0.6408096725988317,
+        "f1": 0.7367003104074341,
+        "precision": 0.8663391340281923
+    },
+    "anomaly_detection_SMD_CnDiff_attndropout0.2_hiddendim256_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-16 16:50:59",
+        "accuracy": 0.9811853458011474,
+        "recall": 0.6460059774487162,
+        "f1": 0.7405489585361106,
+        "precision": 0.8675088935510353
     }
 }
