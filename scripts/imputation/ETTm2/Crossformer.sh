@@ -1,29 +1,30 @@
 
-model_name=TiDE
+model_name=Crossformer
 
+# d_model=64
+# top_k=3
 python -u run.py \
   --task_name imputation \
   --is_training 1 \
-  --root_path ./dataset/electricity/ \
-  --data_path electricity.csv \
-  --model_id ECL_mask_0.125 \
+  --root_path ./dataset/ETT-small/ \
+  --data_path ETTm2.csv \
+  --model_id ETTm2_mask_0.125 \
   --mask_rate 0.125 \
   --model $model_name \
-  --data custom \
+  --data ETTm2 \
   --features M \
   --seq_len 96 \
   --label_len 0 \
   --pred_len 0 \
   --e_layers 2 \
-  --d_layers 2 \
+  --d_layers 1 \
   --factor 3 \
-  --enc_in 321 \
-  --dec_in 321 \
-  --c_out 321 \
+  --enc_in 7 \
+  --dec_in 7 \
+  --c_out 7 \
   --batch_size 16 \
-  --d_model 256 \
-  --d_ff 256 \
-  --dropout 0.3 \
+  --d_model 64 \
+  --d_ff 64 \
   --des 'Exp' \
   --itr 1 \
   --top_k 3 \
@@ -32,12 +33,12 @@ python -u run.py \
 python -u run.py \
   --task_name imputation \
   --is_training 1 \
-  --root_path ./dataset/electricity/ \
-  --data_path electricity.csv \
-  --model_id ECL_mask_0.25 \
+  --root_path ./dataset/ETT-small/ \
+  --data_path ETTm2.csv \
+  --model_id ETTm2_mask_0.25 \
   --mask_rate 0.25 \
   --model $model_name \
-  --data custom \
+  --data ETTm2 \
   --features M \
   --seq_len 96 \
   --label_len 0 \
@@ -45,12 +46,12 @@ python -u run.py \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
-  --enc_in 321 \
-  --dec_in 321 \
-  --c_out 321 \
+  --enc_in 7 \
+  --dec_in 7 \
+  --c_out 7 \
   --batch_size 16 \
-  --d_model 16 \
-  --d_ff 32 \
+  --d_model 64 \
+  --d_ff 64 \
   --des 'Exp' \
   --itr 1 \
   --top_k 3 \
@@ -59,12 +60,12 @@ python -u run.py \
 python -u run.py \
   --task_name imputation \
   --is_training 1 \
-  --root_path ./dataset/electricity/ \
-  --data_path electricity.csv \
-  --model_id ECL_mask_0.375 \
+  --root_path ./dataset/ETT-small/ \
+  --data_path ETTm2.csv \
+  --model_id ETTm2_mask_0.375 \
   --mask_rate 0.375 \
   --model $model_name \
-  --data custom \
+  --data ETTm2 \
   --features M \
   --seq_len 96 \
   --label_len 0 \
@@ -72,12 +73,12 @@ python -u run.py \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
-  --enc_in 321 \
-  --dec_in 321 \
-  --c_out 321 \
+  --enc_in 7 \
+  --dec_in 7 \
+  --c_out 7 \
   --batch_size 16 \
-  --d_model 16 \
-  --d_ff 32 \
+  --d_model 64 \
+  --d_ff 64 \
   --des 'Exp' \
   --itr 1 \
   --top_k 3 \
@@ -86,12 +87,12 @@ python -u run.py \
 python -u run.py \
   --task_name imputation \
   --is_training 1 \
-  --root_path ./dataset/electricity/ \
-  --data_path electricity.csv \
-  --model_id ECL_mask_0.5 \
+  --root_path ./dataset/ETT-small/ \
+  --data_path ETTm2.csv \
+  --model_id ETTm2_mask_0.5 \
   --mask_rate 0.5 \
   --model $model_name \
-  --data custom \
+  --data ETTm2 \
   --features M \
   --seq_len 96 \
   --label_len 0 \
@@ -99,12 +100,12 @@ python -u run.py \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
-  --enc_in 321 \
-  --dec_in 321 \
-  --c_out 321 \
+  --enc_in 7 \
+  --dec_in 7 \
+  --c_out 7 \
   --batch_size 16 \
-  --d_model 16 \
-  --d_ff 32 \
+  --d_model 64 \
+  --d_ff 64 \
   --des 'Exp' \
   --itr 1 \
   --top_k 3 \
