@@ -1,6 +1,7 @@
 
 model_name=Nonstationary_Transformer
 
+
 python -u run.py \
   --task_name imputation \
   --is_training 1 \

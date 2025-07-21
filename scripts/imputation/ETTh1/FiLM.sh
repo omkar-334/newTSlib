@@ -1,6 +1,5 @@
 
 model_name=FiLM
-
 python -u run.py \
   --task_name imputation \
   --is_training 1 \
@@ -13,7 +12,7 @@ python -u run.py \
   --features M \
   --seq_len 96 \
   --label_len 0 \
-  --pred_len 96 \
+  --pred_len 0 \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
@@ -40,7 +39,7 @@ python -u run.py \
   --features M \
   --seq_len 96 \
   --label_len 0 \
-  --pred_len 96 \
+  --pred_len 0 \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
@@ -67,7 +66,7 @@ python -u run.py \
   --features M \
   --seq_len 96 \
   --label_len 0 \
-  --pred_len 96 \
+  --pred_len 0 \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
@@ -94,7 +93,7 @@ python -u run.py \
   --features M \
   --seq_len 96 \
   --label_len 0 \
-  --pred_len 96 \
+  --pred_len 0 \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \

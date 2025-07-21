@@ -1,6 +1,8 @@
 
 model_name=Crossformer
 
+# d_model=64
+# top_k=3
 python -u run.py \
   --task_name imputation \
   --is_training 1 \

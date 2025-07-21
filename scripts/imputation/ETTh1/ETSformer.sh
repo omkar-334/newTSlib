@@ -1,5 +1,5 @@
 
-model_name=TimesNet
+model_name=ETSformer
 
 python -u run.py \
   --task_name imputation \
@@ -15,17 +15,17 @@ python -u run.py \
   --label_len 0 \
   --pred_len 0 \
   --e_layers 2 \
-  --d_layers 1 \
+  --d_layers 2 \
   --factor 3 \
   --enc_in 7 \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -42,17 +42,17 @@ python -u run.py \
   --label_len 0 \
   --pred_len 0 \
   --e_layers 2 \
-  --d_layers 1 \
+  --d_layers 2 \
   --factor 3 \
   --enc_in 7 \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -69,17 +69,17 @@ python -u run.py \
   --label_len 0 \
   --pred_len 0 \
   --e_layers 2 \
-  --d_layers 1 \
+  --d_layers 2 \
   --factor 3 \
   --enc_in 7 \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -96,15 +96,15 @@ python -u run.py \
   --label_len 0 \
   --pred_len 0 \
   --e_layers 2 \
-  --d_layers 1 \
+  --d_layers 2 \
   --factor 3 \
   --enc_in 7 \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001

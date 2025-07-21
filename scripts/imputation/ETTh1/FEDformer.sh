@@ -1,5 +1,5 @@
 
-model_name=TimesNet
+model_name=FEDformer
 
 python -u run.py \
   --task_name imputation \
@@ -21,11 +21,11 @@ python -u run.py \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -48,11 +48,11 @@ python -u run.py \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -75,11 +75,11 @@ python -u run.py \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
 
 python -u run.py \
@@ -102,9 +102,9 @@ python -u run.py \
   --dec_in 7 \
   --c_out 7 \
   --batch_size 16 \
-  --d_model 32 \
-  --d_ff 32 \
+  --d_model 128 \
+  --d_ff 128 \
   --des 'Exp' \
   --itr 1 \
-  --top_k 3 \
+  --top_k 5 \
   --learning_rate 0.001
