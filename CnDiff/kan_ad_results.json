@@ -272,6 +272,13 @@
         "f1": 0.8728640479270202,
         "precision": 0.87482942139738
     },
+    "anomaly_detection_SMD_CnDiff_attndropout0.4_hiddendim256_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_test_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-14 22:10:14",
+        "accuracy": 0.9892417107105751,
+        "recall": 0.8840171172395055,
+        "f1": 0.8723001390773975,
+        "precision": 0.860889697370597
+    },
     "anomaly_detection_SMAP_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps100_test_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue_QS": {
         "time": "2025-07-16 16:46:25",
         "accuracy": 0.9869850134710373,

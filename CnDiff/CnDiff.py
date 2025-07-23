@@ -168,7 +168,8 @@ class Model(nn.Module):
         else:
             self.condition_info = None
 
-        # y_t_batch, _ = self.q_sample(y, t)
+        # if self.config.task_name == "imputation":
+        #     y, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y, t, self.condition_info)
         return dec_out
 

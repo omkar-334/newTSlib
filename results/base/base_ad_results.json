@@ -376,5 +376,40 @@
         "recall": 0.6572563665989272,
         "f1": 0.7923982739402501,
         "precision": 0.9974993053626007
+    },
+        "anomaly_detection_MSL_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-23 10:36:29",
+        "accuracy": 0.9717610677083334,
+        "recall": 0.7934586659799124,
+        "f1": 0.8554768846314036,
+        "precision": 0.928012048192771
+    },
+    "anomaly_detection_PSM_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-23 10:43:32",
+        "accuracy": 0.9633993624772313,
+        "recall": 0.871416266765104,
+        "f1": 0.9296606646684316,
+        "precision": 0.9962487104942324
+    },
+    "anomaly_detection_SMAP_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-23 11:07:18",
+        "accuracy": 0.937577177817692,
+        "recall": 0.5823277753400614,
+        "f1": 0.7047227108293784,
+        "precision": 0.8922598537692243
+    },
+    "anomaly_detection_SMD_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-23 11:45:31",
+        "accuracy": 0.9911926299859963,
+        "recall": 0.8466240999864149,
+        "f1": 0.8887779659506195,
+        "precision": 0.935349517841732
+    },
+    "anomaly_detection_SWaT_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-23 12:10:23",
+        "accuracy": 0.9735470906245555,
+        "recall": 0.8029146299042493,
+        "f1": 0.8805364815484078,
+        "precision": 0.9747727323242427
     }
 }

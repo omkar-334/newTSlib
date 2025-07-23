@@ -57,3 +57,47 @@
    - In the anomaly detection task, how sensitive are the results against the choice of 99th percentile threshold shown, did you experiment with others?
    - Which part of the architecture is most responsible for the performance improvement over baselines?
    - Channel Adaptation: Does the model accommodate varying channel counts via padding or another method?
+
+## TimesNet Abstract
+
+Time series analysis is of immense importance in extensive applications, such as
+weather forecasting, anomaly detection, and action recognition. This paper focuses
+on temporal variation modeling, which is the common key problem of extensive
+analysis tasks. Previous methods attempt to accomplish this directly from the 1D
+time series, which is extremely challenging due to the intricate temporal patterns.
+Based on the observation of multi-periodicity in time series, we ravel out the com-
+plex temporal variations into the multiple intraperiod- and interperiod-variations.
+To tackle the limitations of 1D time series in representation capability, we extend
+the analysis of temporal variations into the 2D space by transforming the 1D time
+series into a set of 2D tensors based on multiple periods. This transformation can
+embed the intraperiod- and interperiod-variations into the columns and rows of
+the 2D tensors respectively, making the 2D-variations to be easily modeled by 2D
+kernels. Technically, we propose the TimesNet with TimesBlock as a task-general
+backbone for time series analysis. TimesBlock can discover the multi-periodicity
+adaptively and extract the complex temporal variations from transformed 2D ten-
+sors by a parameter-efficient inception block. Our proposed TimesNet achieves
+consistent state-of-the-art in five mainstream time series analysis tasks, including
+short- and long-term forecasting, imputation, classification, and anomaly detection.
+
+## CnDiff Abstract
+
+Time-series forecasting finds application across
+domains such as finance, climate science, and
+energy systems. We introduce the Conditional
+Diffusion with Nonlinear Data Transformation
+Model (CN-Diff), a generative framework that em-
+ploys novel nonlinear transformations and learn-
+able conditions in the forward process for time
+series forecasting. A new loss formulation for
+training is proposed, along with a detailed deriva-
+tion of both forward and reverse process. The
+new additions improve the diffusion model’s ca-
+pacity to capture complex time series patterns,
+thus simplifying the reverse process. Our novel
+condition facilitates learning an efficient prior dis-
+tribution. This also reduces the gap between the
+true negative log-likelihood and its variational ap-
+proximation. CN-Diff is shown to perform better
+than other leading time series models on nine real-
+world datasets. Ablation studies are conducted to
+elucidate the role of each component of CN-Diff.

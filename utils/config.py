@@ -344,6 +344,8 @@ def get_args():
     )
     parser.add_argument("--beta_schedule", type=str, default="quad")
     parser.add_argument("--beta_start", type=float, default=0.0001)
+    # min  - end - 0.1, start - 0.000001
+    # end - 0.5, start - 0.1
     parser.add_argument("--beta_end", type=float, default=0.1)
     parser.add_argument("--timesteps", type=int, default=100)
     parser.add_argument(
