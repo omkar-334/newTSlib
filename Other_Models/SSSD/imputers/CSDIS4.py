@@ -11,13 +11,14 @@ import opt_einsum as oe
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 from einops import rearrange, repeat
 from pytorch_lightning.utilities import rank_zero_only
 from scipy import special as ss
 from torch.optim import Adam
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
+
+import wandb
 
 contract = oe.contract
 contract_expression = oe.contract_expression
@@ -32,7 +33,7 @@ def get_logger(name=__name__, level=logging.INFO) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    # this ensures all logging levels get marked with the rank zero decorator
+    # this ensures all logging levels get marked w ith the rank zero decorator
     # otherwise logs would get multiplied for each GPU process in multi-GPU setup
     for level in (
         "debug",
@@ -714,12 +715,7 @@ class SSKernelNPLR(nn.Module):
         # z = z[None, None, None, ...]  # (1, 1, 1, L)
 
         # Calculate resolvent at omega
-        if has_cauchy_extension and z.dtype == torch.cfloat:
-            r = cauchy_mult(v, z, w, symmetric=True)
-        elif has_pykeops:
-            r = cauchy_conj(v, z, w)
-        else:
-            r = cauchy_slow(v, z, w)
+        r = cauchy_conj(v, z, w) if has_pykeops else cauchy_slow(v, z, w)
         r = r * dt[None, None, :, None]  # (S+1+R, C+R, H, L)
 
         # Low-rank Woodbury correction

@@ -13,7 +13,7 @@ def swish(x):
 
 class Conv(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=3, dilation=1):
-        super(Conv, self).__init__()
+        super().__init__()
         self.padding = dilation * (kernel_size - 1) // 2
         self.conv = nn.Conv1d(
             in_channels,
@@ -32,7 +32,7 @@ class Conv(nn.Module):
 
 class ZeroConv1d(nn.Module):
     def __init__(self, in_channel, out_channel):
-        super(ZeroConv1d, self).__init__()
+        super().__init__()
         self.conv = nn.Conv1d(in_channel, out_channel, kernel_size=1, padding=0)
         self.conv.weight.data.zero_()
         self.conv.bias.data.zero_()
@@ -55,7 +55,7 @@ class Residual_block(nn.Module):
         s4_bidirectional,
         s4_layernorm,
     ):
-        super(Residual_block, self).__init__()
+        super().__init__()
         self.res_channels = res_channels
 
         self.fc_t = nn.Linear(diffusion_step_embed_dim_out, self.res_channels)
@@ -136,7 +136,7 @@ class Residual_group(nn.Module):
         s4_bidirectional,
         s4_layernorm,
     ):
-        super(Residual_group, self).__init__()
+        super().__init__()
         self.num_res_layers = num_res_layers
         self.diffusion_step_embed_dim_in = diffusion_step_embed_dim_in
 
@@ -198,7 +198,7 @@ class SSSDS4Imputer(nn.Module):
         s4_bidirectional,
         s4_layernorm,
     ):
-        super(SSSDS4Imputer, self).__init__()
+        super().__init__()
 
         self.init_conv = nn.Sequential(
             Conv(in_channels, res_channels, kernel_size=1), nn.ReLU()
@@ -227,9 +227,11 @@ class SSSDS4Imputer(nn.Module):
 
     def forward(self, input_data):
         noise, conditional, mask, diffusion_steps = input_data
-
-        conditional = conditional * mask
-        conditional = torch.cat([conditional, mask.float()], dim=1)
+        if mask is not None:
+            conditional = conditional * mask
+            conditional = torch.cat([conditional, mask.float()], dim=1)
+        else:
+            conditional = torch.cat([conditional, torch.ones_like(conditional)], dim=1)
 
         x = noise
         x = self.init_conv(x)

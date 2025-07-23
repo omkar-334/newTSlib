@@ -101,3 +101,22 @@ proximation. CN-Diff is shown to perform better
 than other leading time series models on nine real-
 world datasets. Ablation studies are conducted to
 elucidate the role of each component of CN-Diff.
+
+```excel
+=ROUND(AVERAGE(
+  RANK.EQ(B4, B$4:B$19, 1),
+  RANK.EQ(C4, C$4:C$19, 1),
+  RANK.EQ(D4, D$4:D$19, 1),
+  RANK.EQ(E4, E$4:E$19, 1),
+  RANK.EQ(F4, F$4:F$19, 1),
+  RANK.EQ(G4, G$4:G$19, 1)
+),2)
+
+=AVERAGE(
+  RANK.EQ(B4, B$4:B$21, 0),
+  RANK.EQ(C4, C$4:C$21, 0),
+  RANK.EQ(D4, D$4:D$21, 0),
+  RANK.EQ(E4, E$4:E$21, 0),
+  RANK.EQ(F4, F$4:F$21, 0)
+)
+```

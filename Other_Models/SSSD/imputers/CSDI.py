@@ -8,10 +8,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 from torch.optim import Adam
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
+
+import wandb
 
 """ Standalone CSDI imputer. The imputer class is located in the last part of the notebook, please see more documentation there"""
 
@@ -356,7 +357,7 @@ class ResidualBlock(nn.Module):
 
 
 class CSDI_base(nn.Module):
-    def __init__(self, target_dim, config, device):
+    def __init__(self, config, device, target_dim=35):
         super().__init__()
         self.device = device
         self.target_dim = target_dim
@@ -552,9 +553,7 @@ class CSDI_base(nn.Module):
         return imputed_samples
 
     def forward(self, batch, is_train=1):
-        (observed_data, observed_mask, observed_tp, gt_mask, for_pattern_mask, _) = (
-            self.process_data(batch)
-        )
+        (observed_data, observed_mask, observed_tp, gt_mask, for_pattern_mask, _,) = self.process_data(batch)
         if is_train == 0:
             cond_mask = gt_mask
         elif self.target_strategy != "random":
@@ -569,9 +568,7 @@ class CSDI_base(nn.Module):
         return loss_func(observed_data, cond_mask, observed_mask, side_info, is_train)
 
     def evaluate(self, batch, n_samples):
-        (observed_data, observed_mask, observed_tp, gt_mask, _, cut_length) = (
-            self.process_data(batch)
-        )
+        (observed_data, observed_mask, observed_tp, gt_mask, _, cut_length,) = self.process_data(batch)
         with torch.no_grad():
             cond_mask = gt_mask
             target_mask = observed_mask - cond_mask
@@ -581,11 +578,6 @@ class CSDI_base(nn.Module):
                 target_mask[i, ..., 0 : cut_length[i].item()] = 0
 
         return samples, observed_data, target_mask, observed_mask, observed_tp
-
-
-class CSDI_Custom(CSDI_base):
-    def __init__(self, config, device, target_dim=35):
-        super(CSDI_Custom, self).__init__(target_dim, config, device)
 
     def process_data(self, batch):
         observed_data = batch["observed_data"].to(self.device).float()
@@ -967,7 +959,7 @@ class CSDIImputer:
             path_save=config["train"]["path_save"],
         )
 
-        model = CSDI_Custom(config, self.device, target_dim=series.shape[2]).to(
+        model = CSDI_base(config, self.device, target_dim=series.shape[2]).to(
             self.device
         )
 
@@ -1028,7 +1020,7 @@ class CSDIImputer:
             batch_size=config["train"]["batch_size"],
         )
 
-        model = CSDI_Custom(
+        model = CSDI_base(
             config, self.device, target_dim=self.series_impute.shape[2]
         ).to(self.device)
 

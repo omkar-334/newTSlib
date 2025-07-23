@@ -91,7 +91,7 @@ class KanTphi(nn.Module):
         param1 = (
             config.c_out if config.task_name != "classification" else config.feature_dim
         )
-        self.model = KAN(config.c_out, config.pred_len)
+        self.model = KAN(param1, config.pred_len)
         self.time_emb = StepEmbedding(param1, freq_dim=256)
 
     def forward(self, batch_y, t):
