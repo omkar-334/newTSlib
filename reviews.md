@@ -104,12 +104,12 @@ elucidate the role of each component of CN-Diff.
 
 ```excel
 =ROUND(AVERAGE(
-  RANK.EQ(B4, B$4:B$19, 1),
-  RANK.EQ(C4, C$4:C$19, 1),
-  RANK.EQ(D4, D$4:D$19, 1),
-  RANK.EQ(E4, E$4:E$19, 1),
-  RANK.EQ(F4, F$4:F$19, 1),
-  RANK.EQ(G4, G$4:G$19, 1)
+  RANK.EQ(B4, B$4:B$20, 1),
+  RANK.EQ(C4, C$4:C$20, 1),
+  RANK.EQ(D4, D$4:D$20, 1),
+  RANK.EQ(E4, E$4:E$20, 1),
+  RANK.EQ(F4, F$4:F$20, 1),
+  RANK.EQ(G4, G$4:G$20, 1)
 ),2)
 
 =AVERAGE(
