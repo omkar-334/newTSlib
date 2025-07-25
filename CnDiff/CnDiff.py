@@ -97,6 +97,15 @@ class Model(nn.Module):
         return None
 
     def imputation(self, original_x, t):
+        # print model parameters
+        # print(
+        #     f"diffusion model parameters: {sum(p.numel() for p in self.diffusion_model.parameters())}"
+        # )
+        # print(
+        #     f"condition model parameters: {sum(p.numel() for p in self.condition_model.parameters())}"
+        # )
+        # print(f"t_phi parameters: {sum(p.numel() for p in self.t_phi.parameters())}")
+        # exit()
         x_t, _ = self.q_sample(original_x, t)
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise

@@ -1,0 +1,37 @@
+{
+    "anomaly_detection_PSM_CnDiff_attndropout0.0_hiddendim768_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_newNorm_qsample_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-25 17:14:32",
+        "accuracy": 0.9907673041894354,
+        "recall": 0.9873672121734137,
+        "f1": 0.9834344424699226,
+        "precision": 0.9795328776041666
+    },
+    "anomaly_detection_SMAP_CnDiff_attndropout0.3_hiddendim256_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps100_newNorm_qsample_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-25 17:14:54",
+        "accuracy": 0.9860752507109715,
+        "recall": 0.9512578616352201,
+        "f1": 0.9458796153216863,
+        "precision": 0.940561842438266
+    },
+    "anomaly_detection_MSL_CnDiff_attndropout0.3_hiddendim768_mlp-ratio1_n-depth2_n-emb4_n-heads16_timesteps200_newNorm_qsample_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-25 17:14:11",
+        "accuracy": 0.9718967013888888,
+        "recall": 0.7952613958279681,
+        "f1": 0.8563505268996118,
+        "precision": 0.9276058876539501
+    },
+    "anomaly_detection_SMD_CnDiff_attndropout0.2_hiddendim768_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_newNorm_qsample_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-25 17:21:36",
+        "accuracy": 0.9794038261733748,
+        "recall": 0.6017185165059096,
+        "f1": 0.7083399968015353,
+        "precision": 0.8608843537414966
+    },
+    "anomaly_detection_SWaT_CnDiff_attndropout0.3_hiddendim768_mlp-ratio2_n-depth1_n-emb4_n-heads8_timesteps200_newNorm_qsample_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
+        "time": "2025-07-25 17:22:46",
+        "accuracy": 0.9898700917626974,
+        "recall": 0.9763094780395818,
+        "f1": 0.9590238375700245,
+        "precision": 0.942339635978088
+    }
+}

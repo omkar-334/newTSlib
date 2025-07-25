@@ -1551,6 +1551,14 @@
         "mape": 2.791125774383545,
         "mspe": 100391.53125
     },
+        "imputation_weather_mask_0.125_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
+        "time": "2025-07-24 21:19:18",
+        "mse": 0.027702132239937782,
+        "mae": 0.060774464160203934,
+        "rmse": 0.16643957793712616,
+        "mape": 1.9651004076004028,
+        "mspe": 252731.796875
+    },
     "imputation_weather_mask_0.25_SSSD_attndropout0.1_hiddendim64_mlp-ratio1_n-depth1_n-emb2_n-heads8": {
         "time": "2025-07-23 21:27:44",
         "mse": 0.029320018365979195,
