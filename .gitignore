@@ -161,3 +161,4 @@ wandb/
 results/
 sweeps/
 *.ipynb
+ADplots/
