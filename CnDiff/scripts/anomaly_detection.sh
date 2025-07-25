@@ -123,7 +123,7 @@ python -u run.py \
 
 
 attn_dropout=0.2
-hidden_dim=768
+hidden_dim=256
 mlp_ratio=1
 n_depth=4
 n_emb=8

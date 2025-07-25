@@ -20,12 +20,12 @@
         "f1": 0.8563505268996118,
         "precision": 0.9276058876539501
     },
-    "anomaly_detection_SMD_CnDiff_attndropout0.2_hiddendim768_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_newNorm_qsample_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
-        "time": "2025-07-25 17:21:36",
-        "accuracy": 0.9794038261733748,
-        "recall": 0.6017185165059096,
-        "f1": 0.7083399968015353,
-        "precision": 0.8608843537414966
+    "anomaly_detection_SMD_CnDiff_attndropout0.2_hiddendim256_mlp-ratio1_n-depth4_n-emb8_n-heads8_timesteps100_newNorm_qsample_use_cond1_use_tphi2_normalizeFalse_tphi-lossTrue": {
+        "time": "2025-07-25 18:25:13",
+        "accuracy": 0.9809566562768216,
+        "recall": 0.6408096725988317,
+        "f1": 0.736657166282747,
+        "precision": 0.8662198145257552
     },
     "anomaly_detection_SWaT_CnDiff_attndropout0.3_hiddendim768_mlp-ratio2_n-depth1_n-emb4_n-heads8_timesteps200_newNorm_qsample_use_cond1_use_tphi2_normalizeTrue_tphi-lossTrue": {
         "time": "2025-07-25 17:22:46",
