@@ -8,6 +8,7 @@ from CnDiff.utils import (
     Denoiser,
     KanTphi,
     Tphi,
+    TransformerCondition,
     extract,
     get_gammas,
     make_beta_schedule,
@@ -47,8 +48,10 @@ class Model(nn.Module):
 
         # model initialisation for condition network
         self.diffusion_model = Denoiser(config)
-        if self.config.use_cond:
+        if self.config.use_cond == 1:
             self.condition_model = Condition(config)
+        elif self.config.use_cond == 2:
+            self.condition_model = TransformerCondition(config)
 
     def q_sample(self, batch_y, t):
         """

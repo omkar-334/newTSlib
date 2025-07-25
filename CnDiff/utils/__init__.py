@@ -6,7 +6,7 @@ from .layers import (
     StepEmbedding,
     make_beta_schedule,
 )
-from .modules import Condition, Decoder, Denoiser, DiTBlock
+from .modules import Condition, Decoder, Denoiser, DiTBlock, TransformerCondition
 from .tphi import KanTphi, Tphi
 from .utils import denormalize, extract, get_gammas, modify_gammas, modulate, normalize
 
@@ -22,6 +22,7 @@ __all__ = [
     "MLPResidual",
     "StepEmbedding",
     "Tphi",
+    "TransformerCondition",
     "denormalize",
     "extract",
     "get_gammas",

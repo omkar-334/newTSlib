@@ -2,10 +2,9 @@ import os
 
 import torch
 
-from CnDiff import CnDiff
+from CnDiff import CnDiff, classCnDiff
 from models import (
     MICN,
-    SSSD,
     Autoformer,
     Crossformer,
     DLinear,
@@ -36,7 +35,9 @@ from models import (
     iTransformer,
 )
 from Other_Models.AnomalyTransformer import AnomalyTransformer
+from Other_Models.CSDI import CSDI
 from Other_Models.KAN_AD import KANAD
+from Other_Models.SSSD import SSSD
 
 # from SSSD.imputers import SSSDSAImputer
 
@@ -46,7 +47,8 @@ class Exp_Basic:
         self.args = args
         self.model_dict = {
             "CnDiff": CnDiff,
-            # "class_cndiff": class_cndiff,
+            "CSDI": CSDI,
+            # "classCnDiff": classCnDiff,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,

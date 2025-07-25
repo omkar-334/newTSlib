@@ -335,7 +335,12 @@ def get_args():
     parser.add_argument("--mlp_ratio", type=int, default=1)
     parser.add_argument("--n_depth", type=int, default=1)
 
-    parser.add_argument("--use_cond", type=int, default=1)
+    parser.add_argument(
+        "--use_cond",
+        type=int,
+        default=1,
+        help="0 for No condition, 1 for Linear, 2 for Transformer",
+    )
     parser.add_argument(
         "--use_tphi",
         type=int,

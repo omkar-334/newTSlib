@@ -3,6 +3,7 @@ model_name=TiDE
 
 python -u run.py \
   --task_name imputation \
+  --is_training 1 \
   --root_path ./dataset/ETT-small/ \
   --data_path ETTm2.csv \
   --model_id ETTm2_mask_0.125 \

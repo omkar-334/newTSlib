@@ -78,8 +78,16 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 pred = outputs.detach().cpu()
                 true = batch_x.detach().cpu()
 
-                loss = criterion(pred, true)
-                total_loss.append(loss)
+                # loss = criterion(pred, true)
+                if self.args.tphi_loss:
+                    # print("Using t_phi loss")
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs, batch_x, self.model.t, self.model.condition_info
+                    )
+                else:
+                    loss = criterion(outputs, batch_x)
+
+                total_loss.append(loss.item())
         total_loss = np.average(total_loss)
         self.model.train()
         return total_loss
@@ -167,7 +175,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             print("loading model")
             self.model.load_state_dict(torch.load(PATH))
 
-        attens_energy = []
+        train_energy = []
 
         self.model.eval()
         self.anomaly_criterion = nn.MSELoss(reduce=False)
@@ -195,13 +203,12 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 # criterion
                 score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)
                 score = score.detach().cpu().numpy()
-                attens_energy.append(score)
+                train_energy.append(score)
 
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        train_energy = np.array(attens_energy)
+        train_energy = np.array(np.concatenate(train_energy, axis=0).reshape(-1))
 
         # (2) find the threshold
-        attens_energy = []
+        test_energy = []
         test_labels = []
         for i, (batch_x, batch_y) in enumerate(self.test_loader):
             batch_x = batch_x.float().to(self.device)
@@ -221,11 +228,11 @@ class Exp_Anomaly_Detection(Exp_Basic):
             # criterion
             score = torch.mean(self.anomaly_criterion(batch_x, outputs), dim=-1)
             score = score.detach().cpu().numpy()
-            attens_energy.append(score)
+            test_energy.append(score)
             test_labels.append(batch_y)
 
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        test_energy = np.array(attens_energy)
+        test_energy = np.array(np.concatenate(test_energy, axis=0).reshape(-1))
+
         combined_energy = np.concatenate([train_energy, test_energy], axis=0)
         threshold = np.percentile(combined_energy, 100 - self.args.anomaly_ratio)
         print("Threshold :", threshold)
