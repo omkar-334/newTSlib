@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model="class_cndiff"
+model="classCnDiff"
 use_cond=1
 classifier=1
 
@@ -9,15 +9,15 @@ description="base"
 
 datasets=(
   "EthanolConcentration"
-  "FaceDetection"
-  "Handwriting"
-  "Heartbeat"
-  "JapaneseVowels"
-  "PEMS-SF"
-  "SelfRegulationSCP1"
-  "SelfRegulationSCP2"
-  "SpokenArabicDigits"
-  "UWaveGestureLibrary"
+  # "FaceDetection"
+  # "Handwriting"
+  # "Heartbeat"
+  # "JapaneseVowels"
+  # "PEMS-SF"
+  # "SelfRegulationSCP1"
+  # "SelfRegulationSCP2"
+  # "SpokenArabicDigits"
+  # "UWaveGestureLibrary"
 )
 
 attn_dropout=0.1
@@ -52,9 +52,9 @@ for dataset in "${datasets[@]}"; do
     --n_heads $n_heads \
     --attn_dropout $attn_dropout \
     --mlp_ratio $mlp_ratio \
-    --n_depth $mlp_ratio \
-    --use_tphi True \
-    --classifier $classifier \
+    --n_depth $n_depth \
+    --hidden_dim $hidden_dim \
+    --use_tphi 2 \
     --wandb False \
     --use_cond $use_cond
 done

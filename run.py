@@ -54,11 +54,10 @@ def get_setting(args):
 
 
 if __name__ == "__main__":
-    import json
-
     args = get_args()
     setting = get_setting(args)
 
+    # import json
     # filename = f"results/{args.filename or args.task_name}_results.json"
     # # and if args.task_name != 'classification':
     # if os.path.exists(filename) and args.task_name != "classification":
@@ -87,5 +86,5 @@ if __name__ == "__main__":
         clean(ckpt)
 
         print("-------------------------------------------------")
-    except KeyboardInterrupt:
-        pass
+    except torch.cuda.OutOfMemoryError:
+        print(">>>>>>>>>>> OOM Error <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
