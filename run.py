@@ -57,14 +57,14 @@ if __name__ == "__main__":
     args = get_args()
     setting = get_setting(args)
 
-    # import json
-    # filename = f"results/{args.filename or args.task_name}_results.json"
-    # # and if args.task_name != 'classification':
-    # if os.path.exists(filename) and args.task_name != "classification":
-    #     resultdict = json.load(open(filename))
-    #     if setting in resultdict:
-    #         print(f"{args.task_name} Experiment {setting} already exists. Exiting.")
-    #         exit(0)
+    import json
+
+    filename = f"results/{args.filename or args.task_name}_results.json"
+    if os.path.exists(filename) and args.task_name != "classification":
+        resultdict = json.load(open(filename))
+        if setting in resultdict:
+            print(f"{args.task_name} Experiment {setting} already exists. Exiting.")
+            exit(0)
 
     if args.wandb:
         wandb.init(
@@ -78,10 +78,10 @@ if __name__ == "__main__":
 
     try:
         if args.is_training:
-            print(f">>>>>>>TRAINING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            print(f">>>>>>>TRAINING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             exp.train(setting)
 
-        print(f">>>>>>>TESTING : {setting}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        print(f">>>>>>>TESTING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         ckpt = exp.test(setting)
         clean(ckpt)
 

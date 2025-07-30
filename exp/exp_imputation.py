@@ -95,8 +95,6 @@ class Exp_Imputation(Exp_Basic):
                         outputs = dec_out.add(
                             means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
                         )
-                elif "sssd" in self.args.model.lower():
-                    outputs = self.model(inp, batch_x_mark, None, None, mask)
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
@@ -107,12 +105,18 @@ class Exp_Imputation(Exp_Basic):
                 batch_x = batch_x[:, :, f_dim:]
                 mask = mask[:, :, f_dim:]
 
-                pred = outputs.detach().cpu()
-                true = batch_x.detach().cpu()
-                mask = mask.detach().cpu()
+                if self.args.tphi_loss:
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs,
+                        batch_x,
+                        self.model.t,
+                        self.model.condition_info,
+                        mask,
+                    )
+                else:
+                    loss = criterion(outputs[mask == 0], batch_x[mask == 0])
 
-                loss = criterion(pred[mask == 0], true[mask == 0])
-                total_loss.append(loss)
+                total_loss.append(loss.item())
         total_loss = np.average(total_loss)
         self.model.train()
         return total_loss
@@ -136,7 +140,8 @@ class Exp_Imputation(Exp_Basic):
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
                 self.train_loader
             ):
-                model_optim.zero_grad()
+                # model_optim.zero_grad()
+                model_optim.zero_grad(set_to_none=True)
 
                 batch_x = batch_x.float().to(self.device)
                 batch_x_mark = batch_x_mark.float().to(self.device)
@@ -150,7 +155,7 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        #     inp, _, x_mean, x_std = normalize(self.device, inp)
+                        # inp, _, x_mean, x_std = normalize(self.device, inp)
                         means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
                         means = means.unsqueeze(1).detach()
                         x_enc = inp.sub(means)
@@ -175,9 +180,6 @@ class Exp_Imputation(Exp_Basic):
                         outputs = dec_out.add(
                             means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
                         )
-                elif "sssd" in self.args.model.lower():
-                    outputs = self.model(inp, batch_x_mark, None, None, mask)
-
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
@@ -189,12 +191,12 @@ class Exp_Imputation(Exp_Basic):
                 mask = mask[:, :, f_dim:]
 
                 if self.args.tphi_loss:
-                    # print("Using t_phi loss")
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs.masked_fill(mask != 0, 0),
-                        batch_x.masked_fill(mask != 0, 0),
+                        outputs,
+                        batch_x,
                         self.model.t,
                         self.model.condition_info,
+                        mask,
                     )
                 else:
                     loss = criterion(outputs[mask == 0], batch_x[mask == 0])

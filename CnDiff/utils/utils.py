@@ -81,3 +81,16 @@ def denormalize(y0, mean, std, pred_len):
     mean = torch.repeat_interleave(mean, n_samples, dim=0).repeat(1, pred_len, 1)
     y0 = y0 * std + mean
     return y0
+
+
+def invalid(name, tensor):
+    if torch.isnan(tensor).any():
+        print(f"{name} is NaN")
+        print(tensor)
+        return True
+    if torch.isinf(tensor).any():
+        print(f"{name} is Inf")
+        print(tensor)
+        return True
+
+    return False

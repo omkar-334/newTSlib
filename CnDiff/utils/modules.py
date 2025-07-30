@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+from .kan import KAN
 from .layers import (
     AttnMLP,
     DataEmbedding,
@@ -98,6 +99,15 @@ class TransformerCondition(nn.Module):
         )  # -> (B, pred_len, num_feat)
 
         return out
+
+
+class KanCondition(nn.Module):
+    def __init__(self, config) -> None:
+        super().__init__()
+        self.model = KAN(config.c_out, config.pred_len)
+
+    def forward(self, x):
+        return self.model(x)
 
 
 # Encoder

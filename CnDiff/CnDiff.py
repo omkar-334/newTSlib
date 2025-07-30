@@ -11,6 +11,7 @@ from CnDiff.utils import (
     TransformerCondition,
     extract,
     get_gammas,
+    invalid,
     make_beta_schedule,
 )
 
@@ -205,7 +206,7 @@ class Model(nn.Module):
 
         return (1 / 2) * (torch.mean((u) ** 2, dim=(1, 2)))
 
-    def get_mu_t_phi_loss(self, pred_noise, batch_y, t, condition_info=None):
+    def get_mu_t_phi_loss(self, pred_noise, batch_y, t, condition_info=None, mask=None):
         gamma_0, gamma_1, gamma_2, sqrt_alpha_bar_t, beta_t_hat = get_gammas(
             self.alphas,
             self.one_minus_alphas_bar_sqrt,
@@ -221,11 +222,22 @@ class Model(nn.Module):
             - self.t_phi(batch_y=pred_noise, t=t - 1)
         )
 
-        diff_term = (torch.mean((term_1 + term_2) ** 2, dim=(1, 2), keepdim=True)) * (
-            1 / (2 * beta_t_hat)
+        diff_term = (torch.mean((term_1 + term_2) ** 2, dim=(1, 2), keepdim=True)) / (
+            2 * beta_t_hat + 1e-6
         )
 
         prior_term = self.get_prior(batch_y=batch_y, cond_info=condition_info)
-        recon_term = torch.mean((pred_noise - batch_y) ** 2, dim=(1, 2), keepdim=True)
 
-        return torch.mean(diff_term + prior_term + recon_term)
+        outputs = torch.where(mask.bool(), batch_y, pred_noise)
+        recon_term = torch.mean((outputs - batch_y) ** 2, dim=(1, 2), keepdim=True)
+
+        for term_name, term in [
+            ("diff_term", diff_term),
+            ("prior_term", prior_term),
+            ("recon_term", recon_term),
+        ]:
+            if invalid(term_name, term):
+                print("pred_noise:", pred_noise)
+                exit()
+
+        return torch.mean((diff_term) + (prior_term) + recon_term)

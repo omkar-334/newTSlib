@@ -6,9 +6,23 @@ from .layers import (
     StepEmbedding,
     make_beta_schedule,
 )
-from .modules import Condition, Decoder, Denoiser, DiTBlock, TransformerCondition
+from .modules import (
+    Condition,
+    Decoder,
+    Denoiser,
+    DiTBlock,
+    TransformerCondition,
+)
 from .tphi import KanTphi, Tphi
-from .utils import denormalize, extract, get_gammas, modify_gammas, modulate, normalize
+from .utils import (
+    denormalize,
+    extract,
+    get_gammas,
+    invalid,
+    modify_gammas,
+    modulate,
+    normalize,
+)
 
 __all__ = [
     "AttnMLP",
@@ -18,6 +32,7 @@ __all__ = [
     "Denoiser",
     "DiTBlock",
     "FullAttention",
+    "KanCondition",
     "KanTphi",
     "MLPResidual",
     "StepEmbedding",
@@ -26,6 +41,7 @@ __all__ = [
     "denormalize",
     "extract",
     "get_gammas",
+    "invalid",
     "make_beta_schedule",
     "modify_gammas",
     "modulate",

@@ -3,8 +3,8 @@ import math
 import torch
 import torch.nn as nn
 
-from CnDiff.utils import StepEmbedding
-from rational_kat_cu.kat_rational import KAT_Group
+from . import StepEmbedding
+from .kan import KAN
 
 
 class Tphi(nn.Module):
@@ -49,37 +49,6 @@ class Tphi(nn.Module):
         return out
 
 
-class KAN(nn.Module):
-    """MLP as used in Vision Transformer, MLP-Mixer and related networks."""
-
-    def __init__(
-        self,
-        feature_dim,
-        pred_len,
-        act_cfg=dict(type="KAT", act_init=["identity", "gelu"]),
-        bias=True,
-        drop=0.0,
-    ):
-        super().__init__()
-
-        self.fc1 = nn.Linear(feature_dim, feature_dim, bias=bias)
-        self.act1 = KAT_Group(mode=act_cfg["act_init"][0])
-        self.drop1 = nn.Dropout(drop)
-        self.act2 = KAT_Group(mode=act_cfg["act_init"][1])
-        self.fc2 = nn.Linear(pred_len, pred_len, bias=bias)
-        self.drop2 = nn.Dropout(drop)
-
-    def forward(self, x):
-        # x = x.permute(0, 2, 1)
-        x = self.act1(x)
-        x = self.drop1(x)
-        x = self.fc1(x).permute(0, 2, 1)
-        x = self.act2(x)
-        x = self.drop2(x)
-        x = self.fc2(x)
-        return x.permute(0, 2, 1)
-
-
 class KanTphi(nn.Module):
     """
     T_Phi network for Time dependent non linear transformation
@@ -91,7 +60,7 @@ class KanTphi(nn.Module):
         param1 = (
             config.c_out if config.task_name != "classification" else config.feature_dim
         )
-        self.model = KAN(param1, config.pred_len)
+        self.model = KAN(param1, config.hidden_dim, config.pred_len)
         self.time_emb = StepEmbedding(param1, freq_dim=256)
 
     def forward(self, batch_y, t):
