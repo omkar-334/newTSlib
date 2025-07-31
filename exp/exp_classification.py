@@ -244,7 +244,7 @@ class Exp_Classification(Exp_Basic):
 
         metrics = {
             "accuracy": accuracy,
-            "parameters": self.model.parameters,
+            "parameters": self.model.parameter_dict,
         }
         # save_preds(setting, preds, trues)
         save_results(

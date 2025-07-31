@@ -265,7 +265,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             "recall": float(recall),
             "f1": float(f_score),
             "precision": float(precision),
-            "parameters": self.model.parameters,
+            "parameters": self.model.parameter_dict,
         }
         if self.args.wandb:
             wandb.log(metrics)

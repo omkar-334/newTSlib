@@ -324,7 +324,7 @@ class Exp_Imputation(Exp_Basic):
             "rmse": float(rmse),
             "mape": float(mape),
             "mspe": float(mspe),
-            "parameters": self.model.parameters,
+            "parameters": self.model.parameter_dict,
         }
 
         filename = self.args.filename or "imputation"
