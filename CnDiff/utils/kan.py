@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from rational_kat_cu.kat_rational import KAT_Group
 
 
-class KAN(nn.Module):
+class NewKAN(nn.Module):
     """
     A Kolmogorov-Arnold Network (KAN) implementation structured as a two-layer MLP.
 
@@ -38,7 +38,7 @@ class KAN(nn.Module):
         grid_range=[-1, 1],
         drop=0.0,
     ):
-        super(KAN, self).__init__()
+        super().__init__()
 
         # Define the layer structure. For shape-preserving networks like t_phi,
         # the output dimension must match the input dimension.

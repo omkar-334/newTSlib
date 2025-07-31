@@ -3,8 +3,9 @@ import math
 import torch
 import torch.nn as nn
 
-from . import StepEmbedding
-from .kan import KAN
+from CnDiff.utils import StepEmbedding
+
+from .kan import NewKAN as KAN
 
 
 class Tphi(nn.Module):
@@ -25,6 +26,7 @@ class Tphi(nn.Module):
 
         self.w2 = nn.Parameter(torch.empty(param2, param2))
         self.b2 = nn.Parameter(torch.empty(param2))
+        self.kan = KAN(param1, config.hidden_dim, param2)
         self.act = nn.Tanh()
         self.time_emb = StepEmbedding(param1, freq_dim=256)
 
@@ -44,7 +46,8 @@ class Tphi(nn.Module):
         out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
         out = out.permute(0, 2, 1)
 
-        out = (out @ self.w1.T) + self.b1
+        # out = (out @ self.w1.T) + self.b1
+        out = self.kan(out)
         out = self.act(out)
         return out
 

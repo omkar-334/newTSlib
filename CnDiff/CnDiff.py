@@ -81,6 +81,16 @@ class Model(nn.Module):
         return dec_out
 
     def forward(self, x, original_x=None, padding_mask=None):
+        self.parameters = {
+            "diffusion_model": sum(
+                p.numel() for p in self.diffusion_model.parameters()
+            ),
+            "condition_model": sum(
+                p.numel() for p in self.condition_model.parameters()
+            ),
+            "t_phi": sum(p.numel() for p in self.t_phi.parameters()),
+        }
+        print(self.parameters)
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
 
         n = x.size(0)
@@ -98,15 +108,6 @@ class Model(nn.Module):
         return None
 
     def imputation(self, original_x, t):
-        # print model parameters
-        # print(
-        #     f"diffusion model parameters: {sum(p.numel() for p in self.diffusion_model.parameters())}"
-        # )
-        # print(
-        #     f"condition model parameters: {sum(p.numel() for p in self.condition_model.parameters())}"
-        # )
-        # print(f"t_phi parameters: {sum(p.numel() for p in self.t_phi.parameters())}")
-        # exit()
         x_t, _ = self.q_sample(original_x, t)
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise

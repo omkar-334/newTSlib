@@ -5,9 +5,9 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
+import wandb
 from torch.optim.adam import Adam
 
-import wandb
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -324,6 +324,7 @@ class Exp_Imputation(Exp_Basic):
             "rmse": float(rmse),
             "mape": float(mape),
             "mspe": float(mspe),
+            "parameters": self.model.parameters,
         }
 
         filename = self.args.filename or "imputation"

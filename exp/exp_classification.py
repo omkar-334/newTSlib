@@ -242,8 +242,15 @@ class Exp_Classification(Exp_Basic):
         trues = trues.flatten().cpu().numpy()
         accuracy = cal_accuracy(predictions, trues)
 
+        metrics = {
+            "accuracy": accuracy,
+            "parameters": self.model.parameters,
+        }
         # save_preds(setting, preds, trues)
         save_results(
-            "classification_diffusion", setting, {"accuracy": accuracy}, self.args.sweep
+            "classification_diffusion",
+            setting,
+            metrics,
+            self.args.sweep,
         )
         return PATH

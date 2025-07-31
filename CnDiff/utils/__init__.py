@@ -1,3 +1,4 @@
+from .condition import Condition, TransformerCondition
 from .layers import (
     AttnMLP,
     DataEmbedding,
@@ -7,11 +8,9 @@ from .layers import (
     make_beta_schedule,
 )
 from .modules import (
-    Condition,
     Decoder,
     Denoiser,
     DiTBlock,
-    TransformerCondition,
 )
 from .tphi import KanTphi, Tphi
 from .utils import (
@@ -32,7 +31,6 @@ __all__ = [
     "Denoiser",
     "DiTBlock",
     "FullAttention",
-    "KanCondition",
     "KanTphi",
     "MLPResidual",
     "StepEmbedding",
