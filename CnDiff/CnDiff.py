@@ -63,7 +63,6 @@ class Model(nn.Module):
             ),
             "t_phi": sum(p.numel() for p in self.t_phi.parameters()),
         }
-        print(self.parameter_dict)
 
     def q_sample(self, batch_y, t):
         """
@@ -127,9 +126,6 @@ class Model(nn.Module):
             self.condition_info = None
 
         for t in reversed(range(1, self.num_timesteps)):
-            # for t in tqdm(
-            #     range(self.num_timesteps - 1, 0, -1), desc="Reverse diffusion sampling"
-            # ):
             y_t = self.p_sample(x, y_t, t)
 
         z = self.p_sample_t_1to0(x, y_t)
@@ -183,8 +179,6 @@ class Model(nn.Module):
         else:
             self.condition_info = None
 
-        # if self.config.task_name == "imputation":
-        #     y, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y, t, self.condition_info)
         return dec_out
 

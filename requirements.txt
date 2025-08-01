@@ -11,6 +11,7 @@ sktime
 sympy
 torch
 tqdm
+pytorch-lightning
 PyWavelets
 wandb
 
@@ -26,3 +27,6 @@ wandb
 ### CSDI ###
 # pyyaml
 # linear_attention_transformer
+
+### KAT ###
+# triton
