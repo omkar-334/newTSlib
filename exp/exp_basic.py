@@ -2,7 +2,7 @@ import os
 
 import torch
 
-from CnDiff import CnDiff
+from CnDiff import CnDiff, classCnDiff
 from models import (
     MICN,
     Autoformer,
@@ -48,7 +48,7 @@ class Exp_Basic:
         self.model_dict = {
             "CnDiff": CnDiff,
             "CSDI": CSDI,
-            # "classCnDiff": classCnDiff,
+            "classCnDiff": classCnDiff,
             "TimesNet": TimesNet,
             "Autoformer": Autoformer,
             "Transformer": Transformer,

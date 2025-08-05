@@ -42,28 +42,27 @@ class Exp_Classification(Exp_Basic):
         return model_optim
 
     def _select_criterion(self):
-        # MODIFICATION: The training task is now reconstruction of the added noise.
-        # We use Mean Squared Error to measure the difference between predicted and true noise.
         return nn.MSELoss()
 
     def vali(self, data_loader):
-        # MODIFICATION: This entire function is rewritten for the new evaluation logic.
+        """Improved validation with consistent evaluation logic"""
         total_loss = []
         preds = []
         trues = []
         self.model.eval()
+
         with torch.no_grad():
             for i, (batch_x, label, padding_mask) in enumerate(data_loader):
                 batch_x = batch_x.float().to(self.device)
                 label = label.to(self.device)
 
-                # 1. Use the new classification method which returns reconstruction errors for each class.
+                # Get reconstruction errors for all classes
                 reconstruction_errors = self.model.classify_by_reconstruction(batch_x)
 
-                # 2. The predicted class is the one with the minimum reconstruction error.
+                # Predicted class is the one with minimum reconstruction error
                 predicted_labels = torch.argmin(reconstruction_errors, dim=1)
 
-                # 3. The validation loss is the average of the minimum reconstruction errors.
+                # Validation loss is average of minimum reconstruction errors
                 min_errors, _ = torch.min(reconstruction_errors, dim=1)
                 loss = min_errors.mean()
                 total_loss.append(loss.item())
@@ -102,12 +101,6 @@ class Exp_Classification(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
                 padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
-
-                # MODIFICATION: The training logic is completely changed.
-                # We no longer one-hot encode labels or expect class logits as output.
-
-                # 1. The model's forward pass now takes the raw integer label to select the correct decoder.
-                # It returns the predicted noise and the actual noise that was added.
                 pred_noise, true_noise = self.model(
                     x=batch_x,
                     original_x=batch_x,
@@ -126,7 +119,6 @@ class Exp_Classification(Exp_Basic):
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
             train_loss = np.average(train_loss)
 
-            # MODIFICATION: Call the updated validation logic.
             vali_loss, val_accuracy = self.vali(self.vali_loader)
             test_loss, test_accuracy = self.vali(self.test_loader)
 
@@ -154,22 +146,15 @@ class Exp_Classification(Exp_Basic):
         return self.model
 
     def test(self, setting, test=0):
-        # MODIFICATION: The test logic is simplified to reuse the new validation function.
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
             print("loading model")
             self.model.load_state_dict(torch.load(PATH))
 
-        # Use the same evaluation logic for the test set.
         test_loss, test_accuracy = self.vali(self.test_loader)
         print(f"Test Loss: {test_loss:.7f}, Test Accuracy: {test_accuracy:.3f}")
 
-        # MODIFICATION: Correctly access parameter_dict when using DataParallel
-        params = (
-            self.model.module.parameter_dict
-            if self.args.use_multi_gpu
-            else self.model.parameter_dict
-        )
+        params = self.model.parameter_dict
         metrics = {
             "accuracy": test_accuracy,
             "parameters": params,

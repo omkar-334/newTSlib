@@ -50,7 +50,6 @@ class Model(nn.Module):
         elif self.config.use_tphi == 2:
             self.t_phi = KanTphi(config)
 
-        # model initialisation for condition network
         self.diffusion_model = CDenoiser(config)
         if self.config.use_cond == 1:
             self.condition_model = Condition(config)
@@ -80,21 +79,20 @@ class Model(nn.Module):
         y_0 = original_x if original_x is not None else x
         y_t, noise = self.q_sample(y_0, t)
 
-        # Pass the label to the diffusion model to select the correct decoder for each sample
         pred_noise = self.diffusion_model(y_t, t, self.condition_info, class_idx=label)
 
         return pred_noise, noise
 
     @torch.no_grad()
     def classify_by_reconstruction(self, x):
-        # This is the inference/validation method
         batch_size = x.shape[0]
         errors = torch.zeros(batch_size, self.num_class, device=self.device)
 
-        for i in range(self.num_class):
-            pred, noise = self.forward(x, label=i)
-            error = F.mse_loss(pred, x, reduction="none").mean(dim=[1, 2])
-            errors[:, i] = error
+        for class_idx in range(self.num_class):
+            reconstructed = self.p_sample_loop(x, class_idx)
+
+            error = F.mse_loss(reconstructed, x, reduction="none").mean(dim=[1, 2])
+            errors[:, class_idx] = error
 
         return errors
 
@@ -106,7 +104,7 @@ class Model(nn.Module):
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
         if self.config.use_tphi:
-            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)  # type: ignore
+            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
 
@@ -118,33 +116,6 @@ class Model(nn.Module):
             y_t = y_t + (1 - sqrt_alpha_bar_t) * self.condition_info
 
         return y_t, noise
-
-    def anomaly_detection(self, x, t):
-        y_t_batch, _ = self.q_sample(x, t)
-        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
-        return dec_out
-
-    def forward(self, x, original_x=None, padding_mask=None):
-        self.condition_info = self.condition_model(x) if self.config.use_cond else None
-
-        n = x.size(0)
-        t = torch.randint(
-            low=1,
-            high=self.config.timesteps,
-            size=(n // 2 + 1,),
-        ).to(self.device)
-        self.t = t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
-
-        if self.config.task_name == "imputation":
-            return self.imputation(original_x, t)
-        if self.config.task_name == "anomaly_detection":
-            return self.anomaly_detection(x, t)
-        return None
-
-    # def imputation(self, original_x, t):
-    #     x_t, _ = self.q_sample(original_x, t)
-    #     pred_noise = self.diffusion_model(x_t, t, self.condition_info)
-    #     return pred_noise
 
     def p_sample_loop(self, x, class_idx):
         """
