@@ -90,7 +90,7 @@ class Model(nn.Module):
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
-    def forward(self, x, original_x=None, padding_mask=None):
+    def forward(self, x, original_x=None, padding_mask=None, y=None):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
 
         n = x.size(0)
@@ -101,6 +101,8 @@ class Model(nn.Module):
         ).to(self.device)
         self.t = t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
 
+        if "forecast" in self.config.task_name:
+            return self.forecast(x, y, t)
         if self.config.task_name == "imputation":
             return self.imputation(original_x, t)
         if self.config.task_name == "anomaly_detection":

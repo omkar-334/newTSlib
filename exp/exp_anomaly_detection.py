@@ -71,8 +71,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
                         )
-                elif "sssd" in self.args.model.lower():
-                    outputs = self.model(batch_x, None, None, None)
                 else:
                     outputs = self.model(batch_x, None, None, None)
 
@@ -198,8 +196,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
                         )
-                elif "sssd" in self.args.model.lower():
-                    outputs = self.model(batch_x, None, None, None)
                 else:
                     outputs = self.model(batch_x, None, None, None)
 
@@ -230,8 +226,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 if self.args.normalize:
                     outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
-            elif "sssd" in self.args.model.lower():
-                outputs = self.model(batch_x, None, None, None)
             else:
                 outputs = self.model(batch_x, None, None, None)
 

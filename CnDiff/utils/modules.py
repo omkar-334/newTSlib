@@ -125,7 +125,6 @@ class Denoiser(nn.Module):
         return out
 
 
-# This is the original Decoder class, which will now serve as our class-specific head.
 class CDecoder(nn.Module):
     def __init__(self, config) -> None:
         super().__init__()
@@ -157,12 +156,13 @@ class CDenoiser(nn.Module):
         self.config = config
         self.num_class = config.num_class
 
-        # --- Shared Backbone ---
+        # Shared Backbone
         self.input_embedder = DataEmbedding(
             config.pred_len, config.hidden_dim, config.n_emb
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
-        self.blocks = nn.ModuleList()
+
+        self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
 
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
@@ -175,28 +175,25 @@ class CDenoiser(nn.Module):
             deepcopy(CDecoder(config)) for _ in range(self.num_class)
         ])
 
-        # --- End Class-Specific Heads ---
-
         self.initialize_weights()
 
     def initialize_weights(self) -> None:
-        # Initialize weights for DiTBlock modulations
+        """Initialize weights for DiTBlock modulations"""
         for block in self.blocks:
             nn.init.constant_(block.adaLN_modulation[-1].weight, 0)
             nn.init.constant_(block.adaLN_modulation[-1].bias, 0)
 
     def forward(self, y, k, cond_info, class_idx):
         """
-        y: (B, prediction_length, num_feat) - Noisy input
+        y: (B, T, F) - Noisy input
         k: (B,) - Timestep
-        cond_info: (B, context_length, num_feat) - Condition info
-        class_idx: (B, 1) or (B,) - Class label for each sample in the batch
+        cond_info: (B, T, F) - Condition info
+        class_idx: int or (B,) - Class label(s)
         """
-        # --- 1. Shared Backbone Forward Pass ---
+        # Shared Backbone Forward Pass
         h = self.input_embedder(y.permute(0, 2, 1))
 
         if self.config.use_cond:
-            # Embed condition and concatenate
             cond_emb = self.cond_embedder(cond_info.permute(0, 2, 1))
             h = torch.cat([h, cond_emb], dim=-1)
 
@@ -209,11 +206,8 @@ class CDenoiser(nn.Module):
         # --- 2. Class-Specific Decoder Forward Pass ---
         # During training, we need to route each sample to its correct decoder
         if self.training:
-            output = torch.zeros_like(y)  # Initialize output tensor
-
-            # Iterate through each class present in the batch
+            output = torch.zeros_like(y)
             for i in range(self.num_class):
-                # Create a mask for samples belonging to the current class
                 mask = class_idx.squeeze() == i
                 if mask.any():
                     # Select the specific decoder for this class
