@@ -2,7 +2,7 @@ import os
 
 import torch
 
-from CnDiff import CnDiff, classCnDiff
+from CnDiff import CnDiff
 from models import (
     MICN,
     Autoformer,

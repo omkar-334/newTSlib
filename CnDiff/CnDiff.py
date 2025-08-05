@@ -224,7 +224,10 @@ class Model(nn.Module):
 
         prior_term = self.get_prior(batch_y=batch_y, cond_info=condition_info)
 
-        outputs = torch.where(mask.bool(), batch_y, pred_noise)
+        if mask is not None:
+            outputs = torch.where(mask.bool(), batch_y, pred_noise)
+        else:
+            outputs = pred_noise
         recon_term = torch.mean((outputs - batch_y) ** 2, dim=(1, 2), keepdim=True)
 
         for term_name, term in [

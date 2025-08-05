@@ -2,12 +2,13 @@ import gc
 import os
 
 import torch
-import wandb
 
 from exp.exp_anomaly_detection import Exp_Anomaly_Detection
-from exp.exp_classification import Exp_Classification
+
+# from exp.exp_classification import Exp_Classification
 from exp.exp_imputation import Exp_Imputation
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
+from exp.exp_newclassification import Exp_Classification
 from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
 from utils.config import get_args
 
@@ -67,6 +68,8 @@ if __name__ == "__main__":
             exit(0)
 
     if args.wandb:
+        import wandb
+
         wandb.init(
             project="CnDiff",
             name=setting,

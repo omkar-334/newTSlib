@@ -6,7 +6,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 from torch.optim.radam import RAdam
 
 from CnDiff.utils import denormalize, normalize
@@ -167,6 +166,8 @@ class Exp_Classification(Exp_Basic):
             )
 
             if self.args.wandb:
+                import wandb
+
                 wandb.log({
                     "train_loss": train_loss,
                     "vali_loss": vali_loss,

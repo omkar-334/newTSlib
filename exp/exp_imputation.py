@@ -5,13 +5,12 @@ import warnings
 import numpy as np
 import torch
 import torch.nn as nn
-import wandb
 from torch.optim.adam import Adam
 
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims, visual
+from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims
 
 warnings.filterwarnings("ignore")
 
@@ -214,6 +213,8 @@ class Exp_Imputation(Exp_Basic):
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
             )
             if self.args.wandb:
+                import wandb
+
                 wandb.log({
                     "train_loss": train_loss,
                     "vali_loss": vali_loss,
@@ -303,12 +304,12 @@ class Exp_Imputation(Exp_Basic):
                 trues.append(true)
                 masks.append(mask.detach().cpu())
 
-                if i % 20 == 0:
-                    filled = true[0, :, -1].copy()
-                    filled = filled * mask[0, :, -1].detach().cpu().numpy() + pred[
-                        0, :, -1
-                    ] * (1 - mask[0, :, -1].detach().cpu().numpy())
-                    visual(true[0, :, -1], filled, setting, i)
+                # if i % 20 == 0:
+                #     filled = true[0, :, -1].copy()
+                #     filled = filled * mask[0, :, -1].detach().cpu().numpy() + pred[
+                #         0, :, -1
+                #     ] * (1 - mask[0, :, -1].detach().cpu().numpy())
+                #     visual(true[0, :, -1], filled, setting, i)
 
         preds = np.concatenate(preds, 0)
         trues = np.concatenate(trues, 0)

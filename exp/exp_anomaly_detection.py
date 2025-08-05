@@ -1,7 +1,6 @@
 import torch.multiprocessing
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
-import wandb
 from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
@@ -153,6 +152,8 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
             )
             if self.args.wandb:
+                import wandb
+
                 wandb.log({
                     "train_loss": train_loss,
                     "vali_loss": vali_loss,
@@ -268,6 +269,8 @@ class Exp_Anomaly_Detection(Exp_Basic):
             "parameters": self.model.parameter_dict,
         }
         if self.args.wandb:
+            import wandb
+
             wandb.log(metrics)
 
         filename = self.args.filename or "AD_viZ"
