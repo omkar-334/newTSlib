@@ -79,14 +79,12 @@ class Denoiser(nn.Module):
         self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
         self.decoder = Decoder(config)
         self.act = nn.Identity()
+        self.initialize_weights()
         self.config = config
-
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
                 config.pred_len, config.hidden_dim, config.n_emb
             )
-
-        self.initialize_weights()
 
     def initialize_weights(self) -> None:
         for block in self.blocks:

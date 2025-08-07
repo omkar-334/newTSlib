@@ -46,8 +46,7 @@ class Tphi(nn.Module):
         out = (out.permute(0, 2, 1) @ self.w2.T) + self.b2
         out = out.permute(0, 2, 1)
 
-        # out = (out @ self.w1.T) + self.b1
-        out = self.kan(out)
+        out = (out @ self.w1.T) + self.b1
         out = self.act(out)
         return out
 

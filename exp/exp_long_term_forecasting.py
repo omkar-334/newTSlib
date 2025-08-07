@@ -7,11 +7,15 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
+from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from utils.dtw_metric import accelerated_dtw
 from utils.metrics import metric, save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, visual
+from utils.tools import (
+    EarlyStopping,
+    adjust_learning_rate,
+    get_loader_dims,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -21,52 +25,40 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         super().__init__(args)
 
     def _build_model(self):
+        self.train_data, self.train_loader = self._get_data(flag="train")
+        self.test_data, self.test_loader = self._get_data(flag="test")
+        self.vali_data, self.vali_loader = self._get_data(flag="val")
+        _, self.args.feature_dim = get_loader_dims(self.train_loader)
         model = self.model_dict[self.args.model].Model(self.args).float()
-
-        if self.args.use_multi_gpu and self.args.use_gpu:
-            model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
     def _get_data(self, flag):
-        data_set, data_loader = data_provider(self.args, flag)
-        return data_set, data_loader
+        return data_provider(self.args, flag)
 
     def _select_optimizer(self):
-        model_optim = Adam(self.model.parameters(), lr=self.args.learning_rate)
-        return model_optim
+        return Adam(self.model.parameters(), lr=self.args.learning_rate)
 
     def _select_criterion(self):
-        criterion = nn.MSELoss()
-        return criterion
+        return nn.MSELoss()
 
     def train(self, setting):
-        train_data, train_loader = self._get_data(flag="train")
-        vali_data, vali_loader = self._get_data(flag="val")
-        test_data, test_loader = self._get_data(flag="test")
-
         path = os.path.join(self.args.checkpoints, setting)
-        if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
 
-        train_steps = len(train_loader)
+        train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
         model_optim = self._select_optimizer()
         criterion = self._select_criterion()
 
-        if self.args.use_amp:
-            scaler = torch.cuda.amp.GradScaler()
-
         for epoch in range(self.args.train_epochs):
-            iter_count = 0
             train_loss = []
 
             self.model.train()
             epoch_time = time.time()
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                train_loader
+                self.train_loader
             ):
-                iter_count += 1
                 model_optim.zero_grad()
                 batch_x = batch_x.float().to(self.device)
                 batch_y = batch_y.float().to(self.device)
@@ -82,48 +74,38 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 )
 
                 # encoder - decoder
-                if self.args.use_amp:
-                    with torch.cuda.amp.autocast():
-                        outputs = self.model(
-                            batch_x, batch_x_mark, dec_inp, batch_y_mark
+                if "cndiff" in self.args.model.lower():
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                    outputs = self.model(x=batch_x, y=batch_y)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
                         )
-
-                        f_dim = -1 if self.args.features == "MS" else 0
-                        outputs = outputs[:, -self.args.pred_len :, f_dim:]
-                        batch_y = batch_y[:, -self.args.pred_len :, f_dim:].to(
-                            self.device
-                        )
-                        loss = criterion(outputs, batch_y)
-                        train_loss.append(loss.item())
                 else:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
-                    f_dim = -1 if self.args.features == "MS" else 0
-                    outputs = outputs[:, -self.args.pred_len :, f_dim:]
-                    batch_y = batch_y[:, -self.args.pred_len :, f_dim:].to(self.device)
-                    loss = criterion(outputs, batch_y)
-                    train_loss.append(loss.item())
+                f_dim = -1 if self.args.features == "MS" else 0
+                outputs = outputs[:, -self.args.pred_len :, f_dim:]
+                batch_y = batch_y[:, -self.args.pred_len :, f_dim:].to(self.device)
 
-                # if (i + 1) % 100 == 0:
-                #     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
-                #     speed = (time.time() - time_now) / iter_count
-                #     left_time = speed * ((self.args.train_epochs - epoch) * train_steps - i)
-                #     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
-                #     iter_count = 0
-                #     time_now = time.time()
-
-                if self.args.use_amp:
-                    scaler.scale(loss).backward()
-                    scaler.step(model_optim)
-                    scaler.update()
+                if self.args.tphi_loss:
+                    # print("Using t_phi loss")
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs, batch_y, self.model.t, self.model.condition_info
+                    )
                 else:
-                    loss.backward()
-                    model_optim.step()
+                    loss = criterion(outputs, batch_y)
+
+                train_loss.append(loss.item())
+
+                loss.backward()
+                model_optim.step()
 
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
             train_loss = np.average(train_loss)
-            vali_loss = self.vali(vali_data, vali_loader, criterion)
-            test_loss = self.vali(test_data, test_loader, criterion)
+            vali_loss = self.vali(criterion)
+            test_loss = self.vali(criterion)
 
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
@@ -140,15 +122,15 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
         return self.model
 
-    def vali(self, vali_data, vali_loader, criterion):
+    def vali(self, criterion):
         total_loss = []
         self.model.eval()
         with torch.no_grad():
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                vali_loader
+                self.vali_loader
             ):
                 batch_x = batch_x.float().to(self.device)
-                batch_y = batch_y.float()
+                batch_y = batch_y.float().to(self.device)
 
                 batch_x_mark = batch_x_mark.float().to(self.device)
                 batch_y_mark = batch_y_mark.float().to(self.device)
@@ -161,13 +143,18 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                     .to(self.device)
                 )
                 # encoder - decoder
-                if self.args.use_amp:
-                    with torch.cuda.amp.autocast():
-                        outputs = self.model(
-                            batch_x, batch_x_mark, dec_inp, batch_y_mark
+                if "cndiff" in self.args.model.lower():
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
+                    outputs = self.model(x=batch_x, y=batch_y)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, -self.args.pred_len :, f_dim:]
                 batch_y = batch_y[:, -self.args.pred_len :, f_dim:].to(self.device)
@@ -175,9 +162,15 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 pred = outputs.detach().cpu()
                 true = batch_y.detach().cpu()
 
-                loss = criterion(pred, true)
+                if self.args.tphi_loss:
+                    # print("Using t_phi loss")
+                    loss = self.model.get_mu_t_phi_loss(
+                        outputs, batch_y, self.model.t, self.model.condition_info
+                    )
+                else:
+                    loss = criterion(pred, true)
 
-                total_loss.append(loss)
+                total_loss.append(loss.item())
         total_loss = np.average(total_loss)
         self.model.train()
         return total_loss
@@ -212,10 +205,14 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                     .to(self.device)
                 )
                 # encoder - decoder
-                if self.args.use_amp:
-                    with torch.cuda.amp.autocast():
-                        outputs = self.model(
-                            batch_x, batch_x_mark, dec_inp, batch_y_mark
+                if "cndiff" in self.args.model.lower():
+                    if self.args.normalize:
+                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+
+                    outputs = self.model.p_sample_loop(batch_x, batch_y)
+                    if self.args.normalize:
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
@@ -246,16 +243,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
                 preds.append(pred)
                 trues.append(true)
-                if i % 20 == 0:
-                    input = batch_x.detach().cpu().numpy()
-                    if test_data.scale and self.args.inverse:
-                        shape = input.shape
-                        input = test_data.inverse_transform(
-                            input.reshape(shape[0] * shape[1], -1)
-                        ).reshape(shape)
-                    gt = np.concatenate((input[0, :, -1], true[0, :, -1]), axis=0)
-                    pd = np.concatenate((input[0, :, -1], pred[0, :, -1]), axis=0)
-                    visual(gt, pd, setting, i)
 
         preds = np.concatenate(preds, axis=0)
         trues = np.concatenate(trues, axis=0)
@@ -264,30 +251,30 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
 
         # dtw calculation
-        if self.args.use_dtw:
-            dtw_list = []
-            manhattan_distance = lambda x, y: np.abs(x - y)
-            for i in range(preds.shape[0]):
-                x = preds[i].reshape(-1, 1)
-                y = trues[i].reshape(-1, 1)
+        # if self.args.use_dtw:
+        #     dtw_list = []
+        #     manhattan_distance = lambda x, y: np.abs(x - y)
+        #     for i in range(preds.shape[0]):
+        #         x = preds[i].reshape(-1, 1)
+        #         y = trues[i].reshape(-1, 1)
 
-                d, _, _, _ = accelerated_dtw(x, y, dist=manhattan_distance)
-                dtw_list.append(d)
-            dtw = np.array(dtw_list).mean()
-        else:
-            dtw = np.nan
+        #         d, _, _, _ = accelerated_dtw(x, y, dist=manhattan_distance)
+        #         dtw_list.append(d)
+        #     dtw = np.array(dtw_list).mean()
+        # else:
+        #     dtw = np.nan
 
         mae, mse, rmse, mape, mspe = metric(preds, trues)
 
         argsdict = {
             "mse": float(mse),
             "mae": float(mae),
-            "dtw": float(dtw),
+            # "dtw": float(dtw),
             "rmse": float(rmse),
             "mape": float(mape),
             "mspe": float(mspe),
         }
 
         # save_preds(setting, preds, trues)
-        save_results("LTF", setting, argsdict)
+        save_results("LTFcndiff", setting, argsdict)
         return PATH

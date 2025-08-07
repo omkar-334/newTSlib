@@ -63,6 +63,8 @@ def save_results(task, setting: str, metrics: dict, sweep=False):
     else:
         results_dict = {}
 
+    if setting in results_dict:
+        setting += "_new"
     results_dict[setting] = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         **metrics,

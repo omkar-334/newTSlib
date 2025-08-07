@@ -72,7 +72,7 @@ class Model(nn.Module):
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
         if self.config.use_tphi:
-            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)  # type: ignore
+            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
             noise = torch.randn_like(batch_y)
             y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
 
@@ -102,7 +102,7 @@ class Model(nn.Module):
         self.t = t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
 
         if "forecast" in self.config.task_name:
-            return self.forecast(x, y, t)
+            return self.forecast(x, y, t, forward=True)
         if self.config.task_name == "imputation":
             return self.imputation(original_x, t)
         if self.config.task_name == "anomaly_detection":
@@ -114,12 +114,18 @@ class Model(nn.Module):
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise
 
-    def p_sample_loop(self, x):
+    def p_sample_loop(self, x, batch_y=None):
         """
         Inference for diffusion model
         """
-        t = torch.tensor([self.num_timesteps - 1]).repeat(x.shape[0]).to(self.device)
-        y_t = torch.randn_like(x)
+        time_param = batch_y if "forecast" in self.config.task_name else x
+
+        t = (
+            torch.tensor([self.num_timesteps - 1])
+            .repeat(time_param.shape[0])
+            .to(self.device)
+        )
+        y_t = torch.randn_like(time_param)
 
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
@@ -175,12 +181,14 @@ class Model(nn.Module):
 
         return y_t_m_1
 
-    def forecast(self, x, y, t):
+    def forecast(self, x, y, t, forward=False):
         if self.config.use_cond:
             self.condition_info = self.condition_model(x)
         else:
             self.condition_info = None
 
+        if forward:
+            y, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y, t, self.condition_info)
         return dec_out
 
