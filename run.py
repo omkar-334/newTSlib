@@ -82,15 +82,12 @@ if __name__ == "__main__":
     exp = get_exp(args)
     # print(exp.args)
 
-    try:
-        if args.is_training:
-            print(f">>>>>>>TRAINING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            exp.train(setting)
+    if args.is_training:
+        print(f">>>>>>>TRAINING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        exp.train(setting)
 
-        print(f">>>>>>>TESTING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        ckpt = exp.test(setting)
-        clean(ckpt)
+    print(f">>>>>>>TESTING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    ckpt = exp.test(setting)
+    clean(ckpt)
 
-        print("-------------------------------------------------")
-    except torch.cuda.OutOfMemoryError:
-        print(">>>>>>>>>>> OOM Error <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    print("-------------------------------------------------")

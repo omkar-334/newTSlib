@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import torch.multiprocessing
 
 torch.multiprocessing.set_sharing_strategy("file_system")
+import os
 import warnings
 
 import numpy as np
@@ -380,3 +381,102 @@ def plot_anomaly_trace(
         plt.savefig(save_path, dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
+
+
+def plot(test_data_for_viz, pred, gt, test_energy, setting, model, threshold):
+    test_data_combined = np.concatenate(test_data_for_viz, axis=0)
+
+    # Reshape if needed - handle different data shapes
+    if test_data_combined.ndim == 3:
+        # If shape is (batch, seq_len, features), flatten batch dimension
+        original_shape = test_data_combined.shape
+        test_data_combined = test_data_combined.reshape(-1, original_shape[-1])
+
+    # Take a sample for visualization if data is too large
+    max_viz_points = 2000
+    if len(test_data_combined) > max_viz_points:
+        step = len(test_data_combined) // max_viz_points
+        sample_indices = np.arange(0, len(test_data_combined), step)
+        viz_data = test_data_combined[sample_indices]
+        viz_pred = (
+            pred[sample_indices] if len(pred) == len(test_data_combined) else pred
+        )
+        viz_gt = gt[sample_indices] if len(gt) == len(test_data_combined) else gt
+        viz_scores = (
+            test_energy[sample_indices]
+            if len(test_energy) == len(test_data_combined)
+            else test_energy
+        )
+    else:
+        viz_data = test_data_combined
+        viz_pred = pred
+        viz_gt = gt
+        viz_scores = test_energy
+
+    # Create visualizations directory
+    viz_dir = f"./ADplots/{setting}/visualizations"
+    os.makedirs(viz_dir, exist_ok=True)
+
+    # 1. Plot anomaly scores with threshold
+    plot_anomaly_scores_with_threshold(
+        anomaly_scores=viz_scores,
+        threshold=threshold,
+        anomaly_mask=viz_pred,
+        title=f"{model} - Anomaly Scores - {setting}",
+        save_path=f"{viz_dir}/anomaly_scores.png",
+    )
+
+    # 2. Plot multivariate time series with predicted anomalies
+    feature_names = [f"Feature {i + 1}" for i in range(viz_data.shape[1])]
+
+    plot_multivariate_anomalies(
+        time_series_data=viz_data,
+        anomaly_mask=viz_pred,
+        feature_names=feature_names,
+        title=f"{model} - Predicted Anomalies - {setting}",
+        save_path=f"{viz_dir}/predicted_anomalies.png",
+    )
+
+    # 3. Plot multivariate time series with ground truth anomalies
+    plot_multivariate_anomalies(
+        time_series_data=viz_data,
+        anomaly_mask=viz_gt,
+        feature_names=feature_names,
+        title=f"{model} - Ground Truth Anomalies - {setting}",
+        save_path=f"{viz_dir}/ground_truth_anomalies.png",
+        anomaly_color="orange",
+    )
+
+    # 4. Create comparison plot
+    create_comparison_plot(
+        viz_data,
+        viz_gt,
+        viz_pred,
+        feature_names,
+        f"{viz_dir}/comparison.png",
+        setting,
+    )
+
+    # 5. Keep the original simple plot for compatibility
+    test_energy_norm = (test_energy - np.min(test_energy)) / (
+        np.max(test_energy) - np.min(test_energy)
+    )
+
+    plot_anomaly_trace(
+        signal=test_energy_norm,
+        anomaly_mask=pred,
+        title=f"{model} - {setting}",
+        save_path=f"./ADplots/{setting}/anomaly_plot.png",
+    )
+    plot_combined_anomaly_view(
+        time_series_data=viz_data,
+        anomaly_scores=viz_scores,
+        threshold=threshold,
+        pred_mask=viz_pred,
+        true_mask=viz_gt,
+        title=f"{model} - Combined Anomaly View - {setting}",
+        save_path=f"{viz_dir}/combined_anomaly_view.png",
+        feature_index=0,  # or None for mean signal
+    )
+
+    print(f"Enhanced visualizations saved to: {viz_dir}")

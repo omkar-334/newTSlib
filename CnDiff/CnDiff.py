@@ -63,6 +63,7 @@ class Model(nn.Module):
             ),
             "t_phi": sum(p.numel() for p in self.t_phi.parameters()),
         }
+        print(self.parameter_dict)
 
     def q_sample(self, batch_y, t):
         """
@@ -102,7 +103,7 @@ class Model(nn.Module):
         self.t = t = torch.cat([t, self.config.timesteps - t], dim=0)[:n]
 
         if "forecast" in self.config.task_name:
-            return self.forecast(x, y, t, forward=True)
+            return self.forecast(y, t, forward=True)
         if self.config.task_name == "imputation":
             return self.imputation(original_x, t)
         if self.config.task_name == "anomaly_detection":
@@ -134,12 +135,12 @@ class Model(nn.Module):
             self.condition_info = None
 
         for t in reversed(range(1, self.num_timesteps)):
-            y_t = self.p_sample(x, y_t, t)
+            y_t = self.p_sample(y_t, t)
 
-        z = self.p_sample_t_1to0(x, y_t)
+        z = self.p_sample_t_1to0(y_t)
         return z
 
-    def p_sample(self, x, y_t, t):
+    def p_sample(self, y_t, t):
         t = torch.tensor([t]).to(self.device)
 
         sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat = get_gammas(
@@ -148,7 +149,7 @@ class Model(nn.Module):
             t,
             y_t,
         )
-        y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        y_0_reparam = self.forecast(y_t, t).to(self.device).detach()
 
         if self.config.use_tphi:
             z = torch.randn_like(y_0_reparam)
@@ -172,21 +173,16 @@ class Model(nn.Module):
 
         return y_t_m_1
 
-    def p_sample_t_1to0(self, x, y_t):
+    def p_sample_t_1to0(self, y_t):
         t = torch.tensor([0]).to(self.device)
 
-        y_0_reparam = self.forecast(x, y_t, t).to(self.device).detach()
+        y_0_reparam = self.forecast(y_t, t).to(self.device).detach()
 
         y_t_m_1 = y_0_reparam.to(self.device)
 
         return y_t_m_1
 
-    def forecast(self, x, y, t, forward=False):
-        if self.config.use_cond:
-            self.condition_info = self.condition_model(x)
-        else:
-            self.condition_info = None
-
+    def forecast(self, y, t, forward=False):
         if forward:
             y, _ = self.q_sample(y, t)
         dec_out = self.diffusion_model(y, t, self.condition_info)
