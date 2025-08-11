@@ -88,18 +88,21 @@ class StandardScaler:
         return (data * self.std) + self.mean
 
 
-def visual(true, preds=None, setting: str = None, iter: int = None):
+def visual(true, mask=None, pred=None, setting: str = None, iter: int = None):
     """
     Results visualization
     """
+    filled = true.copy() * mask[0, :, -1].detach().cpu().numpy() + pred[0, :, -1] * (
+        1 - mask[0, :, -1].detach().cpu().numpy()
+    )
     dir_path = os.path.join("plots", setting)
     os.makedirs(dir_path, exist_ok=True)  # Create directory if not exists
 
     path = os.path.join(dir_path, f"{iter!s}.png")
 
     plt.figure()
-    if preds is not None:
-        plt.plot(preds, label="Prediction", linewidth=2)
+    if filled is not None:
+        plt.plot(filled, label="Prediction", linewidth=2)
     plt.plot(true, label="GroundTruth", linewidth=2)
     plt.legend()
     plt.savefig(path, bbox_inches="tight")

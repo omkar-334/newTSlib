@@ -7,10 +7,12 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
+from CnDiff.utils import NST_denormalize as denormalize
+from CnDiff.utils import NST_normalize as normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims
+from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims, visual
 
 warnings.filterwarnings("ignore")
 
@@ -28,9 +30,6 @@ class Exp_Imputation(Exp_Basic):
 
         self.args.seq_len, self.args.feature_dim = get_loader_dims(self.train_loader)
         model = self.model_dict[self.args.model].Model(self.args).float()
-
-        if self.args.use_multi_gpu and self.args.use_gpu:
-            model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
     def _get_data(self, flag):
@@ -69,30 +68,13 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        # inp, _, x_mean, x_std = normalize(self.device, inp)
-                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
-                        means = means.unsqueeze(1).detach()
-                        x_enc = inp.sub(means)
-                        x_enc = x_enc.masked_fill(mask == 0, 0)
-                        stdev = torch.sqrt(
-                            torch.sum(x_enc * x_enc, dim=1)
-                            / torch.sum(mask == 1, dim=1)
-                            + 1e-5
-                        )
-                        stdev = stdev.unsqueeze(1).detach()
-                        inp = x_enc.div(stdev)
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
 
                     outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
-                        # outputs = denormalize(
-                        #     outputs, x_mean, x_std, self.args.pred_len
-                        # )
-                        dec_out = outputs.mul(
-                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
-                        )
-                        outputs = dec_out.add(
-                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
+                        outputs = denormalize(
+                            outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
@@ -154,31 +136,12 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        # inp, _, x_mean, x_std = normalize(self.device, inp)
-                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
-                        means = means.unsqueeze(1).detach()
-                        x_enc = inp.sub(means)
-                        x_enc = x_enc.masked_fill(mask == 0, 0)
-                        stdev = torch.sqrt(
-                            torch.sum(x_enc * x_enc, dim=1)
-                            / torch.sum(mask == 1, dim=1)
-                            + 1e-5
-                        )
-                        stdev = stdev.unsqueeze(1).detach()
-                        inp = x_enc.div(stdev)
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
 
                     outputs = self.model(inp, original_x=batch_x)
 
                     if self.args.normalize:
-                        # outputs = denormalize(
-                        #     outputs, x_mean, x_std, self.args.pred_len
-                        # )
-                        dec_out = outputs.mul(
-                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
-                        )
-                        outputs = dec_out.add(
-                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
-                        )
+                        outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
@@ -218,9 +181,7 @@ class Exp_Imputation(Exp_Basic):
                 wandb.log({
                     "train_loss": train_loss,
                     "vali_loss": vali_loss,
-                    # "vali_accuracy": val_accuracy,
                     "test_loss": test_loss,
-                    # "test_accuracy": test_accuracy,
                 })
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
@@ -233,6 +194,7 @@ class Exp_Imputation(Exp_Basic):
 
         return self.model
 
+    @torch.inference_mode()
     def test(self, setting, test=0):
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
@@ -261,31 +223,15 @@ class Exp_Imputation(Exp_Basic):
                 # imputation
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        # inp, _, x_mean, x_std = normalize(self.device, inp)
-                        means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
-                        means = means.unsqueeze(1).detach()
-                        x_enc = inp.sub(means)
-                        x_enc = x_enc.masked_fill(mask == 0, 0)
-                        stdev = torch.sqrt(
-                            torch.sum(x_enc * x_enc, dim=1)
-                            / torch.sum(mask == 1, dim=1)
-                            + 1e-5
-                        )
-                        stdev = stdev.unsqueeze(1).detach()
-                        inp = x_enc.div(stdev)
+                        inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model.p_sample_loop(inp)
+                    with torch.autocast(
+                        device_type=self.device.type, dtype=torch.float16
+                    ):
+                        outputs = self.model.p_sample_loop(inp)
 
                     if self.args.normalize:
-                        # outputs = denormalize(
-                        #     outputs, x_mean, x_std, self.args.pred_len
-                        # )
-                        dec_out = outputs.mul(
-                            stdev[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
-                        )
-                        outputs = dec_out.add(
-                            means[:, 0, :].unsqueeze(1).repeat(1, self.pred_len, 1)
-                        )
+                        outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
 
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
@@ -304,12 +250,8 @@ class Exp_Imputation(Exp_Basic):
                 trues.append(true)
                 masks.append(mask.detach().cpu())
 
-                # if i % 20 == 0:
-                #     filled = true[0, :, -1].copy()
-                #     filled = filled * mask[0, :, -1].detach().cpu().numpy() + pred[
-                #         0, :, -1
-                #     ] * (1 - mask[0, :, -1].detach().cpu().numpy())
-                #     visual(true[0, :, -1], filled, setting, i)
+                if i % 20 == 0 and self.args.viz:
+                    visual(true[0, :, -1], mask, pred, setting, i)
 
         preds = np.concatenate(preds, 0)
         trues = np.concatenate(trues, 0)

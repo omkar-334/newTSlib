@@ -58,7 +58,7 @@ def modify_gammas(sqrt_alpha_bar_t, gamma_0, gamma_1, gamma_2, beta_t_hat):
 
 
 # preprocessing in dlinear
-def normalize(device, x, y0=None):
+def NST_normalize(device, x, y0=None):
     x = x.to(device)
     # x_mean = x[:, -1:, :].to(device)
     x_mean = x.mean(dim=1, keepdim=True)
@@ -74,13 +74,31 @@ def normalize(device, x, y0=None):
     return x_norm, y0_norm, x_mean, x_std
 
 
-def denormalize(y0, mean, std, pred_len):
+def NST_denormalize(y0, mean, std, pred_len):
     B = mean.shape[0]
     n_samples = y0.shape[0] // B
     std = torch.repeat_interleave(std, n_samples, dim=0).repeat(1, pred_len, 1)
     mean = torch.repeat_interleave(mean, n_samples, dim=0).repeat(1, pred_len, 1)
     y0 = y0 * std + mean
     return y0
+
+
+def CND_normalize(device, inp, y0=None, mask=None):
+    inp = inp.to(device)
+    means = torch.sum(inp, dim=1) / torch.sum(mask == 1, dim=1)
+    means = means.unsqueeze(1).detach()
+    x_enc = inp.sub(means)
+    x_enc = x_enc.masked_fill(mask == 0, 0)
+    stdev = torch.sqrt(
+        torch.sum(x_enc * x_enc, dim=1) / torch.sum(mask == 1, dim=1) + 1e-5
+    )
+    stdev = stdev.unsqueeze(1).detach()
+    inp = x_enc.div(stdev)
+
+
+def CND_denormalize(outputs, means, stdev, pred_len):
+    dec_out = outputs.mul(stdev[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
+    outputs = dec_out.add(means[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
 
 
 def invalid(name, tensor):

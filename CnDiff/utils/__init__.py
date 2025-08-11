@@ -14,17 +14,21 @@ from .modules import (
 )
 from .tphi import KanTphi, Tphi
 from .utils import (
-    denormalize,
+    CND_denormalize,
+    CND_normalize,
+    NST_denormalize,
+    NST_normalize,
     extract,
     get_gammas,
     invalid,
     modify_gammas,
     modulate,
-    normalize,
 )
 
 __all__ = [
     "AttnMLP",
+    "CND_denormalize",
+    "CND_normalize",
     "Condition",
     "DataEmbedding",
     "Decoder",
@@ -33,15 +37,15 @@ __all__ = [
     "FullAttention",
     "KanTphi",
     "MLPResidual",
+    "NST_denormalize",
+    "NST_normalize",
     "StepEmbedding",
     "Tphi",
     "TransformerCondition",
-    "denormalize",
     "extract",
     "get_gammas",
     "invalid",
     "make_beta_schedule",
     "modify_gammas",
     "modulate",
-    "normalize",
 ]

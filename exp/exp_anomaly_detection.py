@@ -8,7 +8,8 @@ import torch.nn as nn
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from torch.optim.adam import Adam
 
-from CnDiff.utils import denormalize, normalize
+from CnDiff.utils import NST_denormalize as denormalize
+from CnDiff.utils import NST_normalize as normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.ad_plot import plot

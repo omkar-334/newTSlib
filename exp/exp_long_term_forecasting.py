@@ -7,7 +7,8 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
-from CnDiff.utils import denormalize, normalize
+from CnDiff.utils import NST_denormalize as denormalize
+from CnDiff.utils import NST_normalize as normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -175,6 +176,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         self.model.train()
         return total_loss
 
+    @torch.inference_mode()
     def test(self, setting, test=0):
         test_data, test_loader = self._get_data(flag="test")
 
@@ -208,8 +210,10 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
-
-                    outputs = self.model.p_sample_loop(batch_x, batch_y)
+                    with torch.autocast(
+                        device_type=self.device.type, dtype=torch.float16
+                    ):
+                        outputs = self.model.p_sample_loop(batch_x, batch_y)
                     if self.args.normalize:
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
@@ -250,26 +254,11 @@ class Exp_Long_Term_Forecast(Exp_Basic):
         preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
         trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
 
-        # dtw calculation
-        # if self.args.use_dtw:
-        #     dtw_list = []
-        #     manhattan_distance = lambda x, y: np.abs(x - y)
-        #     for i in range(preds.shape[0]):
-        #         x = preds[i].reshape(-1, 1)
-        #         y = trues[i].reshape(-1, 1)
-
-        #         d, _, _, _ = accelerated_dtw(x, y, dist=manhattan_distance)
-        #         dtw_list.append(d)
-        #     dtw = np.array(dtw_list).mean()
-        # else:
-        #     dtw = np.nan
-
         mae, mse, rmse, mape, mspe = metric(preds, trues)
 
         argsdict = {
             "mse": float(mse),
             "mae": float(mae),
-            # "dtw": float(dtw),
             "rmse": float(rmse),
             "mape": float(mape),
             "mspe": float(mspe),
