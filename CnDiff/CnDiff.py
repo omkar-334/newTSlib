@@ -72,14 +72,13 @@ class Model(nn.Module):
         sqrt_alpha_bar_t = extract(self.alphas_bar_sqrt, t, batch_y)
         sqrt_one_minus_alpha_bar_t = extract(self.one_minus_alphas_bar_sqrt, t, batch_y)
 
-        if self.config.use_tphi:
-            batch_y_trans = self.t_phi(t=t, batch_y=batch_y)
-            noise = torch.randn_like(batch_y)
-            y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
+        noise = torch.randn_like(batch_y)
 
-        else:
-            noise = torch.randn_like(batch_y)
-            y_t = sqrt_alpha_bar_t * batch_y + sqrt_one_minus_alpha_bar_t * noise
+        batch_y_trans = (
+            self.t_phi(t=t, batch_y=batch_y) if self.config.use_tphi else batch_y
+        )
+
+        y_t = sqrt_alpha_bar_t * batch_y_trans + sqrt_one_minus_alpha_bar_t * noise
 
         if self.config.use_cond:
             y_t = y_t + (1 - sqrt_alpha_bar_t) * self.condition_info

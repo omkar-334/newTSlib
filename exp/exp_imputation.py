@@ -68,7 +68,8 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        inp, x_mean, x_std = normalize(self.device, inp, mask)
+                        # batch_x_normalized = normalize(self.device, batch_x, mask)[0]
 
                     outputs = self.model(inp, original_x=batch_x, mask=mask)
 
@@ -121,7 +122,6 @@ class Exp_Imputation(Exp_Basic):
             for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
                 self.train_loader
             ):
-                # model_optim.zero_grad()
                 model_optim.zero_grad(set_to_none=True)
 
                 batch_x = batch_x.float().to(self.device)
@@ -136,7 +136,8 @@ class Exp_Imputation(Exp_Basic):
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        inp, x_mean, x_std = normalize(self.device, inp, mask)
+                        # batch_x_normalized = normalize(self.device, batch_x, mask)[0]
 
                     outputs = self.model(inp, original_x=batch_x, mask=mask)
 
@@ -175,6 +176,7 @@ class Exp_Imputation(Exp_Basic):
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
             )
+
             if self.args.wandb:
                 import wandb
 
@@ -183,6 +185,7 @@ class Exp_Imputation(Exp_Basic):
                     "vali_loss": vali_loss,
                     "test_loss": test_loss,
                 })
+
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
@@ -223,7 +226,7 @@ class Exp_Imputation(Exp_Basic):
                 # imputation
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        inp, _, x_mean, x_std = normalize(self.device, inp)
+                        inp, x_mean, x_std = normalize(self.device, inp, mask)
 
                     with torch.autocast(
                         device_type=self.device.type, dtype=torch.float16

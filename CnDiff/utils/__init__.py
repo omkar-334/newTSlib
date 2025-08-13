@@ -14,8 +14,8 @@ from .modules import (
 )
 from .tphi import KanTphi, Tphi
 from .utils import (
-    CND_denormalize,
-    CND_normalize,
+    DL_denormalize,
+    DL_normalize,
     NST_denormalize,
     NST_normalize,
     extract,
@@ -27,9 +27,9 @@ from .utils import (
 
 __all__ = [
     "AttnMLP",
-    "CND_denormalize",
-    "CND_normalize",
     "Condition",
+    "DL_denormalize",
+    "DL_normalize",
     "DataEmbedding",
     "Decoder",
     "Denoiser",

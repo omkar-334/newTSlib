@@ -26,10 +26,10 @@ class Tphi(nn.Module):
 
         self.w2 = nn.Parameter(torch.empty(param2, param2))
         self.b2 = nn.Parameter(torch.empty(param2))
-        self.kan = KAN(param1, config.hidden_dim, param2)
         self.act = nn.Tanh()
         self.time_emb = StepEmbedding(param1, freq_dim=256)
 
+        self.init_weights(self.w2, self.b2)
         self.init_weights(self.w1, self.b1)
 
     @staticmethod
