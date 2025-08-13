@@ -83,7 +83,6 @@ class Model(nn.Module):
 
         if self.config.use_cond:
             y_t = y_t + (1 - sqrt_alpha_bar_t) * self.condition_info
-
         return y_t, noise
 
     def anomaly_detection(self, x, t):
@@ -91,7 +90,7 @@ class Model(nn.Module):
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
         return dec_out
 
-    def forward(self, x, original_x=None, padding_mask=None, y=None):
+    def forward(self, x, original_x=None, y=None, mask=None):
         self.condition_info = self.condition_model(x) if self.config.use_cond else None
 
         n = x.size(0)
@@ -105,13 +104,19 @@ class Model(nn.Module):
         if "forecast" in self.config.task_name:
             return self.forecast(y, t, forward=True)
         if self.config.task_name == "imputation":
-            return self.imputation(original_x, t)
+            return self.imputation(original_x, mask, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
         return None
 
-    def imputation(self, original_x, t):
-        x_t, _ = self.q_sample(original_x, t)
+    def imputation(self, original_x, mask, t):
+        x_t_noisy, _ = self.q_sample(original_x, t)
+        # Start from clean ground truth
+        x_t = original_x.clone()
+
+        # Replace missing positions with their noised version
+        x_t[mask == 0] = x_t_noisy[mask == 0]
+
         pred_noise = self.diffusion_model(x_t, t, self.condition_info)
         return pred_noise
 

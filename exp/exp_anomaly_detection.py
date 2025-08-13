@@ -97,6 +97,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             epoch_time = time.time()
             for i, (batch_x, batch_y) in enumerate(self.train_loader):
                 model_optim.zero_grad()
+                batch_x = batch_x.float().to(self.device)
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
@@ -108,7 +109,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    batch_x = batch_x.float().to(self.device)
                     outputs = self.model(batch_x, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
@@ -167,7 +167,10 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
         # (1) stastic on the train set
         with torch.no_grad():
-            for i, (batch_x, _) in enumerate(self.vali_loader):
+            print("Calculating train energy")
+            for i, (batch_x, _) in enumerate(self.train_loader):
+                batch_x = batch_x.float().to(self.device)
+
                 # reconstruction
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
@@ -181,7 +184,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    batch_x = batch_x.float().to(self.device)
                     outputs = self.model(batch_x, None, None, None)
 
                 # criterion
@@ -196,8 +198,9 @@ class Exp_Anomaly_Detection(Exp_Basic):
         test_energy = []
         test_labels = []
         test_data_for_viz = []
-
+        print("Calculating test energy")
         for i, (batch_x, batch_y) in enumerate(self.test_loader):
+            batch_x = batch_x.float().to(self.device)
             if self.args.viz:
                 test_data_for_viz.append(batch_x.detach().cpu().numpy())
 
@@ -211,7 +214,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
                     outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
 
             else:
-                batch_x = batch_x.float().to(self.device)
                 outputs = self.model(batch_x, None, None, None)
 
             # criterion
@@ -252,7 +254,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
             wandb.log(metrics)
 
-        filename = self.args.filename or "AD_viZ"
+        filename = self.args.filename or "enhanced"
         save_results(filename, setting, metrics)
 
         if self.args.viz:

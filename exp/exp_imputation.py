@@ -70,7 +70,7 @@ class Exp_Imputation(Exp_Basic):
                     if self.args.normalize:
                         inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model(inp, original_x=batch_x)
+                    outputs = self.model(inp, original_x=batch_x, mask=mask)
 
                     if self.args.normalize:
                         outputs = denormalize(
@@ -138,7 +138,7 @@ class Exp_Imputation(Exp_Basic):
                     if self.args.normalize:
                         inp, _, x_mean, x_std = normalize(self.device, inp)
 
-                    outputs = self.model(inp, original_x=batch_x)
+                    outputs = self.model(inp, original_x=batch_x, mask=mask)
 
                     if self.args.normalize:
                         outputs = denormalize(outputs, x_mean, x_std, self.pred_len)

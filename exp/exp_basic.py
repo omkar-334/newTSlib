@@ -37,7 +37,8 @@ from models import (
 from Other_Models.AnomalyTransformer import AnomalyTransformer
 from Other_Models.CSDI import CSDI
 from Other_Models.KAN_AD import KANAD
-from Other_Models.SSSD import SSSD
+
+# from Other_Models.SSSD import SSSD
 
 # from SSSD.imputers import SSSDSAImputer
 
@@ -72,7 +73,7 @@ class Exp_Basic:
             "TimeMixer": TimeMixer,
             "TSMixer": TSMixer,
             "SegRNN": SegRNN,
-            "SSSD": SSSD,
+            # "SSSD": SSSD,
             "TemporalFusionTransformer": TemporalFusionTransformer,
             "SCINet": SCINet,
             "PAttn": PAttn,
