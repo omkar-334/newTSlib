@@ -153,11 +153,10 @@ class Exp_Anomaly_Detection(Exp_Basic):
             train_loss = np.average(train_loss)
 
             vali_loss = self.vali(criterion)
-            test_loss = self.vali(criterion)
 
             print(
                 f"Epoch: {epoch + 1}, Steps: {train_steps} | "
-                f"Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
+                f"Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} "
             )
 
             if self.args.wandb:
@@ -166,7 +165,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 wandb.log({
                     "train_loss": train_loss,
                     "vali_loss": vali_loss,
-                    "test_loss": test_loss,
+                    # "test_loss": test_loss,
                 })
 
             early_stopping(vali_loss, self.model, path)
@@ -192,7 +191,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
         # (1) Compute train energy
         print("Calculating train energy")
-        for i, (batch_x, _) in enumerate(self.vali_loader):
+        for i, (batch_x, _) in enumerate(self.train_loader):
             batch_x = batch_x.float().to(self.device)
 
             if "cndiff" in self.args.model.lower():
@@ -261,7 +260,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
             wandb.log(metrics)
 
-        filename = self.args.filename or "enhanced"
+        filename = self.args.filename or "100epoch"
         save_results(filename, setting, metrics)
 
         if self.args.viz:

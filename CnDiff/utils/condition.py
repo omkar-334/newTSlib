@@ -24,7 +24,7 @@ class TransformerCondition(nn.Module):
 
         # This assumes d_model is set correctly in your config
         # e.g., config.d_model = config.hidden_dim * 2
-        d_model = config.d_model // 2
+        d_model = config.d_model
 
         # --- 1. Input Embedding ---
         self.input_projection = nn.Linear(config.feature_dim, d_model)

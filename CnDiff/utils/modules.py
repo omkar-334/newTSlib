@@ -1,8 +1,7 @@
-from copy import deepcopy
-
 import torch
 import torch.nn as nn
 
+from .katransformer import KanBlock
 from .layers import (
     AttnMLP,
     DataEmbedding,
@@ -76,23 +75,24 @@ class Denoiser(nn.Module):
             config.pred_len, config.hidden_dim, config.n_emb
         )
         self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
-        self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
+        # self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
+        self.blocks = nn.ModuleList([
+            KanBlock(
+                dim=config.d_model,
+                num_heads=config.n_heads,
+                mlp_ratio=config.mlp_ratio,
+                config=config,
+            )
+            for _ in range(config.n_depth)
+        ])
         self.decoder = Decoder(config)
         self.act = nn.Identity()
-        self.initialize_weights()
+
         self.config = config
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
                 config.pred_len, config.hidden_dim, config.n_emb
             )
-
-    def initialize_weights(self) -> None:
-        for block in self.blocks:
-            nn.init.constant_(block.adaLN_modulation[-1].weight, 0)
-            nn.init.constant_(block.adaLN_modulation[-1].bias, 0)
-
-        nn.init.constant_(self.decoder.adaLN_modulation[-1].weight, 0)
-        nn.init.constant_(self.decoder.adaLN_modulation[-1].bias, 0)
 
     def forward(self, y, k, cond_info):
         """
@@ -100,125 +100,20 @@ class Denoiser(nn.Module):
         k: (B,)
         cond_info: (B, context_length, num_feat)
         """
-        h = self.input_embedder(y.permute(0, 2, 1))
+        y = self.input_embedder(y.permute(0, 2, 1))
 
         if self.config.use_cond:
             cond_info = self.cond_embedder(cond_info.permute(0, 2, 1))
-            h = torch.cat([h, cond_info], dim=-1)
+            # cond_info = F.layer_norm(cond_info, cond_info.shape[-1:])
+            y = torch.cat([y, cond_info], dim=-1)
 
         c = self.k_embedder(k)
 
         for block in self.blocks:
-            h = block(h, c)
+            y = block(y, c)
 
-        out = self.decoder(h, c).permute(0, 2, 1)
+        out = self.decoder(y, c).permute(0, 2, 1)
 
         if self.config.task_name != "classification":
             out = self.act(out)
-            # if self.config.task_name != "anomaly_detection":
-            #     out = out.permute(0, 2, 1)
-        # elif hasattr(self.config, "classifier") and self.config.classifier == 1:
-        #     out = out.permute(0, 2, 1)
-
-        return out
-
-
-class CDecoder(nn.Module):
-    def __init__(self, config) -> None:
-        super().__init__()
-        self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
-        self.mlp = nn.Sequential(
-            DataEmbedding(config.d_model, config.d_model, config.n_emb - 1),
-            nn.Linear(config.d_model, config.pred_len),
-        )
-        self.adaLN_modulation = nn.Sequential(
-            nn.SiLU(),
-            nn.Linear(config.hidden_dim, 2 * config.d_model, bias=True),
-        )
-
-        # Initialize weights
-        nn.init.constant_(self.adaLN_modulation[-1].weight, 0)
-        nn.init.constant_(self.adaLN_modulation[-1].bias, 0)
-
-    def forward(self, x, c):
-        shift, scale = self.adaLN_modulation(c).chunk(2, dim=1)
-        x = modulate(self.norm(x), shift, scale)
-        x = self.mlp(x)
-        return x
-
-
-# NEW CLASS: This is the main architectural change for hard parameter sharing.
-class CDenoiser(nn.Module):
-    def __init__(self, config) -> None:
-        super().__init__()
-        self.config = config
-        self.num_class = config.num_class
-
-        # Shared Backbone
-        self.input_embedder = DataEmbedding(
-            config.pred_len, config.hidden_dim, config.n_emb
-        )
-        self.k_embedder = StepEmbedding(config.hidden_dim, freq_dim=256)
-
-        self.blocks = nn.ModuleList([DiTBlock(config) for _ in range(config.n_depth)])
-
-        if config.use_cond:
-            self.cond_embedder = DataEmbedding(
-                config.pred_len, config.hidden_dim, config.n_emb
-            )
-        # --- End Shared Backbone ---
-
-        # --- Class-Specific Heads ---
-        self.class_decoders = nn.ModuleList([
-            deepcopy(CDecoder(config)) for _ in range(self.num_class)
-        ])
-
-        self.initialize_weights()
-
-    def initialize_weights(self) -> None:
-        """Initialize weights for DiTBlock modulations"""
-        for block in self.blocks:
-            nn.init.constant_(block.adaLN_modulation[-1].weight, 0)
-            nn.init.constant_(block.adaLN_modulation[-1].bias, 0)
-
-    def forward(self, y, k, cond_info, class_idx):
-        """
-        y: (B, T, F) - Noisy input
-        k: (B,) - Timestep
-        cond_info: (B, T, F) - Condition info
-        class_idx: int or (B,) - Class label(s)
-        """
-        # Shared Backbone Forward Pass
-        h = self.input_embedder(y.permute(0, 2, 1))
-
-        if self.config.use_cond:
-            cond_emb = self.cond_embedder(cond_info.permute(0, 2, 1))
-            h = torch.cat([h, cond_emb], dim=-1)
-
-        c = self.k_embedder(k)
-
-        for block in self.blocks:
-            h = block(h, c)
-        # `h` is now the shared latent representation
-
-        # --- 2. Class-Specific Decoder Forward Pass ---
-        # During training, we need to route each sample to its correct decoder
-        if self.training:
-            output = torch.zeros_like(y)
-            for i in range(self.num_class):
-                mask = class_idx.squeeze() == i
-                if mask.any():
-                    # Select the specific decoder for this class
-                    decoder = self.class_decoders[i]
-
-                    # Apply the decoder to the relevant samples' latent representations
-                    decoded_h = decoder(h[mask], c[mask])
-
-                    # Place the results back into the correct positions in the output tensor
-                    output[mask] = decoded_h.permute(0, 2, 1)
-            return output
-
-        # During inference, class_idx is a single integer, so we use one decoder
-        decoder = self.class_decoders[class_idx]
-        out = decoder(h, c).permute(0, 2, 1)
         return out

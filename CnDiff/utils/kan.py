@@ -178,25 +178,31 @@ class OldKAN(nn.Module):
 
     def __init__(
         self,
-        feature_dim,
-        pred_len,
+        in_features,
+        hidden_features=None,
+        out_features=None,
+        act_cfg=dict(type="KAT", act_init=["identity", "gelu"]),
         bias=True,
         drop=0.0,
     ):
         super().__init__()
+        out_features = out_features or in_features
+        hidden_features = hidden_features or in_features
 
-        self.fc1 = nn.Linear(feature_dim, feature_dim, bias=bias)
-        self.act1 = KAT_Group(mode="identity")
+        self.fc1 = nn.Linear(in_features, hidden_features, bias=bias)
+        self.act1 = KAT_Group(mode=act_cfg["act_init"][0])
         self.drop1 = nn.Dropout(drop)
-        self.act2 = KAT_Group(mode="gelu")
-        self.fc2 = nn.Linear(pred_len, pred_len, bias=bias)
+        self.act2 = KAT_Group(mode=act_cfg["act_init"][1])
+        self.fc2 = nn.Linear(hidden_features, out_features, bias=bias)
         self.drop2 = nn.Dropout(drop)
 
     def forward(self, x):
         x = self.act1(x)
         x = self.drop1(x)
-        x = self.fc1(x).permute(0, 2, 1)
+        # x = self.fc1(x).permute(0, 2, 1)
+        x = self.fc1(x)
         x = self.act2(x)
         x = self.drop2(x)
         x = self.fc2(x)
-        return x.permute(0, 2, 1)
+        # x = x.permute(0, 2, 1)
+        return x

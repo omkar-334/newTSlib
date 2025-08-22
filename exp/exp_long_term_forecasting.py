@@ -7,8 +7,6 @@ import torch
 import torch.nn as nn
 from torch.optim.adam import Adam
 
-from CnDiff.utils import NST_denormalize as denormalize
-from CnDiff.utils import NST_normalize as normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
@@ -19,6 +17,23 @@ from utils.tools import (
 )
 
 warnings.filterwarnings("ignore")
+
+
+def normalize(device, x_enc):
+    """Batch-wise normalization: zero mean, unit variance."""
+    x_enc = x_enc.to(device)
+    means = x_enc.mean(1, keepdim=True).detach()
+    x_enc = x_enc.sub(means)
+    stdev = torch.sqrt(torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5)
+    x_enc = x_enc.div(stdev)
+    return x_enc, means, stdev
+
+
+def denormalize(dec_out, means, stdev, pred_len):
+    """Inverse normalization using stored means & std."""
+    dec_out = dec_out.mul(stdev[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
+    dec_out = dec_out.add(means[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
+    return dec_out
 
 
 class Exp_Long_Term_Forecast(Exp_Basic):
@@ -77,7 +92,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                        batch_x, x_mean, x_std = normalize(self.device, batch_x)
                     outputs = self.model(x=batch_x, y=batch_y)
                     if self.args.normalize:
                         outputs = denormalize(
@@ -146,7 +161,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                        batch_x, x_mean, x_std = normalize(self.device, batch_x)
 
                     outputs = self.model(x=batch_x, y=batch_y)
                     if self.args.normalize:
@@ -209,7 +224,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
+                        batch_x, x_mean, x_std = normalize(self.device, batch_x)
                     with torch.autocast(
                         device_type=self.device.type, dtype=torch.float16
                     ):
@@ -262,8 +277,9 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             "rmse": float(rmse),
             "mape": float(mape),
             "mspe": float(mspe),
+            "parameters": getattr(self.model, "parameter_dict", None),
         }
 
-        # save_preds(setting, preds, trues)
-        save_results("LTFcndiff", setting, argsdict)
+        filename = self.args.filename or "LTF"
+        save_results(filename, setting, argsdict)
         return PATH

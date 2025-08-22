@@ -178,7 +178,7 @@ def get_args():
         "--patience", type=int, default=10, help="early stopping patience"
     )
     parser.add_argument(
-        "--learning_rate", type=float, default=0.0001, help="optimizer learning rate"
+        "--learning_rate", type=float, default=0.001, help="optimizer learning rate"
     )
     parser.add_argument("--des", type=str, default="test", help="exp description")
     parser.add_argument("--loss", type=str, default="MSE", help="loss function")

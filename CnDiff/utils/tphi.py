@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from CnDiff.utils import StepEmbedding
 
-from .kan import NewKAN as KAN
+from .kan import OldKAN as KAN
 
 
 class Tphi(nn.Module):
@@ -62,8 +62,8 @@ class KanTphi(nn.Module):
         param1 = (
             config.c_out if config.task_name != "classification" else config.feature_dim
         )
-        self.model = KAN(param1, config.hidden_dim // 2, config.pred_len)
         self.time_emb = StepEmbedding(param1, freq_dim=256)
+        self.model = KAN(param1, config.hidden_dim, param1)
 
     def forward(self, batch_y, t):
         t_emb = self.time_emb(t).unsqueeze(1)

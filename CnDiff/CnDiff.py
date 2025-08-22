@@ -11,7 +11,7 @@ from CnDiff.utils import (
     TransformerCondition,
     extract,
     get_gammas,
-    invalid,
+    # invalid,
     make_beta_schedule,
 )
 
@@ -58,10 +58,12 @@ class Model(nn.Module):
             "diffusion_model": sum(
                 p.numel() for p in self.diffusion_model.parameters()
             ),
-            "condition_model": sum(
-                p.numel() for p in self.condition_model.parameters()
-            ),
-            "t_phi": sum(p.numel() for p in self.t_phi.parameters()),
+            "condition_model": sum(p.numel() for p in self.condition_model.parameters())
+            if self.config.use_cond
+            else 0,
+            "t_phi": sum(p.numel() for p in self.t_phi.parameters())
+            if hasattr(self, "t_phi")
+            else 0,
         }
         print(self.parameter_dict)
 
@@ -238,15 +240,17 @@ class Model(nn.Module):
             outputs = torch.where(mask.bool(), batch_y, pred_noise)
         else:
             outputs = pred_noise
-        recon_term = torch.mean((outputs - batch_y) ** 2, dim=(1, 2), keepdim=True)
+        recon_term = torch.mean(
+            (outputs.float() - batch_y.float()) ** 2, dim=(1, 2), keepdim=True
+        )
 
-        for term_name, term in [
-            ("diff_term", diff_term),
-            ("prior_term", prior_term),
-            ("recon_term", recon_term),
-        ]:
-            if invalid(term_name, term):
-                print("pred_noise:", pred_noise)
-                exit()
+        # for term_name, term in [
+        #     ("diff_term", diff_term),
+        #     ("prior_term", prior_term),
+        #     ("recon_term", recon_term),
+        # ]:
+        #     if invalid(term_name, term):
+        #         print("pred_noise:", pred_noise)
+        #         exit()
 
         return torch.mean((diff_term) + (prior_term) + recon_term)

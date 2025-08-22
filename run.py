@@ -1,6 +1,8 @@
 import gc
 import os
+import random
 
+import numpy as np
 import torch
 
 from exp.exp_anomaly_detection import Exp_Anomaly_Detection
@@ -8,6 +10,31 @@ from exp.exp_imputation import Exp_Imputation
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
 from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
 from utils.config import get_args
+
+
+def set_seed(seed: int = 42):
+    """
+    Set random seeds for reproducibility across random, numpy, and torch.
+
+    Args:
+        seed (int): The seed value to set.
+        deterministic (bool): Whether to enforce deterministic behavior in PyTorch.
+    """
+    # Python & NumPy
+    random.seed(seed)
+    np.random.seed(seed)
+
+    # PyTorch
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+    torch.autograd.set_detect_anomaly(True)
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+    torch.backends.cudnn.benchmark = False
+
+    os.environ["PYTHONHASHSEED"] = str(seed)
 
 
 def get_exp(args):
@@ -58,6 +85,7 @@ def get_setting(args):
 
 
 if __name__ == "__main__":
+    set_seed(42)
     args = get_args()
     setting = get_setting(args)
 

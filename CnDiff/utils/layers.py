@@ -3,6 +3,7 @@ from math import sqrt
 
 import torch
 import torch.nn as nn
+from fasterkan import FasterKANLayer
 
 
 class FullAttention(nn.Module):
@@ -73,6 +74,35 @@ class AttnMLP(nn.Module):
         x = self.fc2(x)
         x = self.drop2(x)
         return x
+
+
+class AttnKAN(nn.Module):
+    def __init__(
+        self,
+        in_dim,
+        hidden_dim=None,
+        out_dim=None,
+        drop=0.0,
+        num_grids=8,
+        exponent=2,
+    ):
+        super().__init__()
+        out_dim = out_dim or in_dim
+        hidden_dim = hidden_dim or in_dim
+        self.norm = nn.LayerNorm(in_dim)
+        self.kan1 = FasterKANLayer(
+            in_dim, hidden_dim, num_grids=num_grids, exponent=exponent
+        )
+        self.kan2 = FasterKANLayer(
+            hidden_dim, out_dim, num_grids=num_grids, exponent=exponent
+        )
+        self.drop = nn.Dropout(drop)
+
+    def forward(self, x):
+        b, s, d = x.shape
+        h = self.norm(x).view(b * s, d)
+        h = self.kan2(self.kan1(h)).view(b, s, -1)
+        return self.drop(h)
 
 
 class StepEmbedding(nn.Module):
