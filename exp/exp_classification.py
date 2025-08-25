@@ -8,7 +8,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.optim.radam import RAdam
 
-from CnDiff.utils import denormalize, normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import save_results
@@ -28,34 +27,27 @@ class Exp_Classification(Exp_Basic):
         self.args.seq_len, self.args.feature_dim = get_loader_dims(self.train_loader)
         self.args.enc_in = self.train_data.feature_df.shape[1]
         self.args.num_class = len(self.train_data.class_names)
-        # model init
+
         model = self.model_dict[self.args.model].Model(self.args).float()
-        if self.args.use_multi_gpu and self.args.use_gpu:
-            model = nn.DataParallel(model, device_ids=self.args.device_ids)
         return model
 
     def _get_data(self, flag):
-        data_set, data_loader = data_provider(self.args, flag)
-        return data_set, data_loader
+        return data_provider(self.args, flag)
 
     def _select_optimizer(self):
-        # model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
-        model_optim = RAdam(self.model.parameters(), lr=self.args.learning_rate)
-        return model_optim
+        return RAdam(self.model.parameters(), lr=self.args.learning_rate)
 
-    def _select_criterion(self):
-        criterion = nn.CrossEntropyLoss()
-        return criterion
+    @staticmethod
+    def _select_criterion():
+        return nn.CrossEntropyLoss()
 
     def vali(self, criterion):
-        total_loss = []
-        preds = []
-        trues = []
         self.model.eval()
+        total_loss, preds, trues = [], [], []
+
         with torch.no_grad():
-            for i, (batch_x, label, padding_mask) in enumerate(self.vali_loader):
+            for batch_x, label, padding_mask in self.vali_loader:
                 batch_x = batch_x.float().to(self.device)
-                padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
                 #########################################################################################
@@ -66,15 +58,7 @@ class Exp_Classification(Exp_Basic):
                 #########################################################################################
 
                 if "cndiff" in self.args.model.lower():
-                    if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
-
                     outputs = self.model(batch_x, labels_inp, padding_mask)
-
-                    if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
-                        )
 
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
@@ -87,15 +71,10 @@ class Exp_Classification(Exp_Basic):
                 trues.append(label)
 
         total_loss = np.average(total_loss)
-
         preds = torch.cat(preds, 0)
         trues = torch.cat(trues, 0)
-        probs = torch.nn.functional.softmax(
-            preds
-        )  # (total_samples, num_classes) est. prob. for each class and sample
-        predictions = (
-            torch.argmax(probs, dim=1).cpu().numpy()
-        )  # (total_samples,) int class index for each sample
+        probs = F.softmax(preds, dim=1)
+        predictions = torch.argmax(probs, dim=1).cpu().numpy()
         trues = trues.flatten().cpu().numpy()
         accuracy = cal_accuracy(predictions, trues)
 
@@ -104,28 +83,21 @@ class Exp_Classification(Exp_Basic):
 
     def train(self, setting):
         path = os.path.join(self.args.checkpoints, setting)
-        if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
 
-        train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
         model_optim = self._select_optimizer()
         criterion = self._select_criterion()
 
         for epoch in range(self.args.train_epochs):
-            train_loss = []
-
             self.model.train()
+            train_loss = []
             epoch_time = time.time()
 
-            for i, (batch_x, label, padding_mask) in enumerate(self.train_loader):
-                # print(batch_x.shape, label.shape, padding_mask.shape)
-                # exit()
+            for batch_x, label, padding_mask in self.train_loader:
                 model_optim.zero_grad()
-
                 batch_x = batch_x.float().to(self.device)
-                padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
                 #########################################################################################
@@ -136,16 +108,7 @@ class Exp_Classification(Exp_Basic):
                 #########################################################################################
 
                 if "cndiff" in self.args.model.lower():
-                    if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
-
                     outputs = self.model(batch_x, labels_inp, padding_mask)
-
-                    if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
-                        )
-
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
 
@@ -156,51 +119,51 @@ class Exp_Classification(Exp_Basic):
                 nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=4.0)
                 model_optim.step()
 
-            print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
-            train_loss = np.average(train_loss)
-            vali_loss, val_accuracy = self.vali(criterion)
-            test_loss, test_accuracy = self.vali(criterion)
+                train_loss.append(loss.item())
+
+            print(f"Epoch {epoch + 1} | Time: {time.time() - epoch_time:.1f}s")
+            train_loss_avg = np.average(train_loss)
+            vali_loss, vali_acc = self.vali(criterion)
+            test_loss, test_acc = self.vali(criterion)
 
             print(
-                f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.3f} Vali Loss: {vali_loss:.3f} Vali Acc: {val_accuracy:.3f} Test Loss: {test_loss:.3f} Test Acc: {test_accuracy:.3f}"
+                f"Epoch {epoch + 1} | Train Loss: {train_loss_avg:.4f} | "
+                f"Vali Loss: {vali_loss:.4f} | Vali Acc: {vali_acc:.4f} | "
+                f"Test Loss: {test_loss:.4f} | Test Acc: {test_acc:.4f}"
             )
 
             if self.args.wandb:
                 import wandb
 
                 wandb.log({
-                    "train_loss": train_loss,
+                    "train_loss": train_loss_avg,
                     "vali_loss": vali_loss,
-                    "vali_accuracy": val_accuracy,
+                    "vali_accuracy": vali_acc,
                     "test_loss": test_loss,
-                    "test_accuracy": test_accuracy,
+                    "test_accuracy": test_acc,
                 })
-            early_stopping(-val_accuracy, self.model, path)
+
+            early_stopping(-vali_acc, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
 
-        best_model_path = path + "/" + "checkpoint.pth"
+        best_model_path = os.path.join(path, "checkpoint.pth")
         self.model.load_state_dict(torch.load(best_model_path))
-
         return self.model
 
     def test(self, setting, test=0):
-        test_data, test_loader = self._get_data(flag="TEST")
-
+        _, test_loader = self._get_data(flag="TEST")
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
             print("loading model")
             self.model.load_state_dict(torch.load(PATH))
 
-        preds = []
-        trues = []
-
+        preds, trues = [], []
         self.model.eval()
         with torch.no_grad():
-            for i, (batch_x, label, padding_mask) in enumerate(test_loader):
+            for batch_x, label, padding_mask in test_loader:
                 batch_x = batch_x.float().to(self.device)
-                padding_mask = padding_mask.float().to(self.device)
                 label = label.to(self.device)
 
                 #########################################################################################
@@ -211,20 +174,9 @@ class Exp_Classification(Exp_Basic):
                 #########################################################################################
 
                 if "cndiff" in self.args.model.lower():
-                    if self.args.normalize:
-                        batch_x, _, x_mean, x_std = normalize(self.device, batch_x)
-
                     outputs = self.model.p_sample_loop(
                         batch_x, labels_inp.shape
                     ).squeeze(2)
-                    # print(outputs.shape)
-                    # exit()
-
-                    if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
-                        )
-
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
 
@@ -233,23 +185,18 @@ class Exp_Classification(Exp_Basic):
 
         preds = torch.cat(preds, 0)
         trues = torch.cat(trues, 0)
-
-        probs = torch.nn.functional.softmax(
-            preds
-        )  # (total_samples, num_classes) est. prob. for each class and sample
-        predictions = (
-            torch.argmax(probs, dim=1).cpu().numpy()
-        )  # (total_samples,) int class index for each sample
+        probs = F.softmax(preds, dim=1)
+        predictions = torch.argmax(probs, dim=1).cpu().numpy()
         trues = trues.flatten().cpu().numpy()
         accuracy = cal_accuracy(predictions, trues)
 
         metrics = {
             "accuracy": accuracy,
-            "parameters": self.model.parameter_dict,
+            "parameters": getattr(self.model, "parameter_dict", None),
         }
-        # save_preds(setting, preds, trues)
+
         save_results(
-            "classification_diffusion",
+            "classification",
             setting,
             metrics,
             self.args.sweep,

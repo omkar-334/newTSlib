@@ -54,6 +54,12 @@ class Model(nn.Module):
         elif self.config.use_cond == 2:
             self.condition_model = TransformerCondition(config)
 
+        if self.config.task_name == "classification":
+            self.classifier = nn.Sequential(
+                nn.AdaptiveAvgPool1d(1),
+                nn.Flatten(),
+                nn.Linear(config.pred_len, config.num_class),
+            )
         self.parameter_dict = {
             "diffusion_model": sum(
                 p.numel() for p in self.diffusion_model.parameters()
@@ -64,7 +70,13 @@ class Model(nn.Module):
             "t_phi": sum(p.numel() for p in self.t_phi.parameters())
             if hasattr(self, "t_phi")
             else 0,
+            "total": sum(p.numel() for p in self.parameters()),
         }
+        if hasattr(self, "classifier"):
+            self.parameter_dict["classifier"] = sum(
+                p.numel() for p in self.classifier.parameters()
+            )
+
         print(self.parameter_dict)
 
     def q_sample(self, batch_y, t):
@@ -85,6 +97,12 @@ class Model(nn.Module):
         if self.config.use_cond:
             y_t = y_t + (1 - sqrt_alpha_bar_t) * self.condition_info
         return y_t, noise
+
+    def classification(self, x, t):
+        y_t_batch, _ = self.q_sample(x, t)
+        dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
+        dec_out = self.classifier(dec_out)
+        return dec_out
 
     def anomaly_detection(self, x, t):
         y_t_batch, _ = self.q_sample(x, t)
@@ -108,6 +126,8 @@ class Model(nn.Module):
             return self.imputation(original_x, mask, t)
         if self.config.task_name == "anomaly_detection":
             return self.anomaly_detection(x, t)
+        if self.config.task_name == "classification":
+            return self.classification(x, t)
         return None
 
     def imputation(self, original_x, mask, t):
