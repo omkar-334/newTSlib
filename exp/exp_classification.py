@@ -16,6 +16,23 @@ from utils.tools import EarlyStopping, cal_accuracy, get_loader_dims
 warnings.filterwarnings("ignore")
 
 
+def normalize(device, x_enc):
+    """Batch-wise normalization: zero mean, unit variance."""
+    x_enc = x_enc.to(device)
+    means = x_enc.mean(1, keepdim=True).detach()
+    x_enc = x_enc.sub(means)
+    stdev = torch.sqrt(torch.var(x_enc, dim=1, keepdim=True, unbiased=False) + 1e-5)
+    x_enc = x_enc.div(stdev)
+    return x_enc, means, stdev
+
+
+def denormalize(dec_out, means, stdev, pred_len):
+    """Inverse normalization using stored means & std."""
+    dec_out = dec_out.mul(stdev[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
+    dec_out = dec_out.add(means[:, 0, :].unsqueeze(1).repeat(1, pred_len, 1))
+    return dec_out
+
+
 class Exp_Classification(Exp_Basic):
     def __init__(self, args):
         super().__init__(args)
@@ -50,15 +67,10 @@ class Exp_Classification(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
                 label = label.to(self.device)
 
-                #########################################################################################
-                labels_inp = label.squeeze(1).long()
-                labels_inp = F.one_hot(
-                    labels_inp, num_classes=self.model.config.num_class
-                ).float()
-                #########################################################################################
-
                 if "cndiff" in self.args.model.lower():
-                    outputs = self.model(batch_x, labels_inp, padding_mask)
+                    if self.args.normalize:
+                        batch_x, _, _ = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x)
 
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
@@ -100,19 +112,17 @@ class Exp_Classification(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
                 label = label.to(self.device)
 
-                #########################################################################################
-                labels_inp = label.squeeze(1).long()
-                labels_inp = F.one_hot(
-                    labels_inp, num_classes=self.model.config.num_class
-                ).float()
-                #########################################################################################
-
                 if "cndiff" in self.args.model.lower():
-                    outputs = self.model(batch_x, labels_inp, padding_mask)
+                    if self.args.normalize:
+                        batch_x, _, _ = normalize(self.device, batch_x)
+                    outputs = self.model(batch_x)
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
 
-                loss = criterion(outputs, label.long().squeeze(-1))
+                # print(outputs.shape)
+                # print(label.shape)
+                # print(outputs)
+                loss = criterion(outputs, label.long().squeeze())
                 train_loss.append(loss.item())
 
                 loss.backward()
@@ -166,17 +176,11 @@ class Exp_Classification(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
                 label = label.to(self.device)
 
-                #########################################################################################
-                labels_inp = label.squeeze(1).long()
-                labels_inp = F.one_hot(
-                    labels_inp, num_classes=self.model.config.num_class
-                ).float()
-                #########################################################################################
-
                 if "cndiff" in self.args.model.lower():
-                    outputs = self.model.p_sample_loop(
-                        batch_x, labels_inp.shape
-                    ).squeeze(2)
+                    if self.args.normalize:
+                        batch_x, _, _ = normalize(self.device, batch_x)
+                    outputs = self.model.p_sample_loop(batch_x)
+                    outputs = self.model.classifier(outputs.permute(0, 2, 1))
                 else:
                     outputs = self.model(batch_x, padding_mask, None, None, None)
 

@@ -56,9 +56,9 @@ class Model(nn.Module):
 
         if self.config.task_name == "classification":
             self.classifier = nn.Sequential(
-                nn.AdaptiveAvgPool1d(1),
-                nn.Flatten(),
-                nn.Linear(config.pred_len, config.num_class),
+                nn.AdaptiveAvgPool1d(1),  # reduces sequence dimension
+                nn.Flatten(),  # (batch, hidden_dim)
+                nn.Linear(config.feature_dim, config.num_class),
             )
         self.parameter_dict = {
             "diffusion_model": sum(
@@ -101,7 +101,11 @@ class Model(nn.Module):
     def classification(self, x, t):
         y_t_batch, _ = self.q_sample(x, t)
         dec_out = self.diffusion_model(y_t_batch, t, self.condition_info)
-        dec_out = self.classifier(dec_out)
+        dec_out = self.classifier(dec_out.permute(0, 2, 1))
+        # print(dec_out)
+        # print(dec_out.shape)
+
+        # print("classification over")
         return dec_out
 
     def anomaly_detection(self, x, t):

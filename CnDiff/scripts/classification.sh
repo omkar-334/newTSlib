@@ -1,38 +1,38 @@
 #!/bin/bash
 
-model="classCnDiff"
+model="CnDiff"
 use_cond=1
-classifier=1
+use_tphi=2
 
 description="base"
 
 
 datasets=(
   "EthanolConcentration"
-  # "FaceDetection"
-  # "Handwriting"
-  # "Heartbeat"
-  # "JapaneseVowels"
-  # "PEMS-SF"
-  # "SelfRegulationSCP1"
-  # "SelfRegulationSCP2"
-  # "SpokenArabicDigits"
-  # "UWaveGestureLibrary"
+  "FaceDetection"
+  "Handwriting"
+  "Heartbeat"
+  "JapaneseVowels"
+  "PEMS-SF"
+  "SelfRegulationSCP1"
+  "SelfRegulationSCP2"
+  "SpokenArabicDigits"
+  "UWaveGestureLibrary"
 )
 
 attn_dropout=0.1
 # 0.1
-hidden_dim=512
+hidden_dim=32
 # 512
-mlp_ratio=1
+mlp_ratio=2
 # 1
-n_depth=2
+n_depth=4
 # 2
 n_emb=2
 # 2
-n_heads=8
+n_heads=4
 # 8
-timesteps=100
+timesteps=200
 # 100
 
 
@@ -54,30 +54,8 @@ for dataset in "${datasets[@]}"; do
     --mlp_ratio $mlp_ratio \
     --n_depth $n_depth \
     --hidden_dim $hidden_dim \
-    --use_tphi 2 \
+    --use_tphi $use_tphi \
     --wandb False \
-    --use_cond $use_cond
+    --normalize True \
+    --use_cond $use_cond --gpu 1 --tphi_loss True
 done
-
-
-    # echo "Running dataset: $dataset"
-    # python -u run.py \
-    #   --task_name classification \
-    #   --is_training 1 \
-    #   --root_path ./dataset/"$dataset"/ \
-    #   --model_id "$dataset" \
-    #   --model "$model" \
-    #   --data UEA \
-    #   --gpu "$device" \
-    #   --batch_size 16 \
-    #   --train_epochs 100 \
-    #   --des "$description" \
-    #   --learning_rate 0.001 \
-    #   --n_emb 4 \
-    #   --n_heads 16 \
-    #   --attn_dropout 0.2 \
-    #   --mlp_ratio 2 \
-    #   --n_depth 4 \
-    #   --use_cond True \
-    #   --use_tphi True \
-    #   --wandb False

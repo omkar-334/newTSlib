@@ -84,10 +84,14 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
                 if self.args.tphi_loss:
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs, batch_x, self.model.t, self.model.condition_info
+                        outputs,
+                        batch_x.to(outputs.dtype),
+                        self.model.t,
+                        self.model.condition_info,
                     )
+                    # print(loss)
                 else:
-                    loss = criterion(outputs, batch_x)
+                    loss = criterion(outputs, batch_x.to(outputs.dtype))
 
                 total_loss.append(loss.item())
         total_loss = np.average(total_loss)
@@ -102,8 +106,6 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
         model_optim = self._select_optimizer()
         criterion = self._select_criterion()
-        # Enable AMP
-        scaler = torch.amp.GradScaler()
 
         for epoch in range(self.args.train_epochs):
             train_loss = []
@@ -114,40 +116,72 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 model_optim.zero_grad()
                 batch_x = batch_x.float().to(self.device)
 
+                if torch.isnan(batch_x).any() or torch.isinf(batch_x).any():
+                    print("❌ NaN/Inf in input batch, skipping…")
+                    continue
+
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         batch_x, x_mean, x_std = normalize(self.device, batch_x)
 
-                    with torch.autocast(
-                        device_type=self.device.type, dtype=torch.float16
-                    ):
-                        outputs = self.model(batch_x)
+                    outputs = self.model(batch_x)
                     if self.args.normalize:
                         outputs = denormalize(
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    with torch.autocast(
-                        device_type=self.device.type, dtype=torch.float16
-                    ):
-                        outputs = self.model(batch_x, None, None, None)
+                    outputs = self.model(batch_x, None, None, None)
 
                 f_dim = -1 if self.args.features == "MS" else 0
                 outputs = outputs[:, :, f_dim:]
 
                 if self.args.tphi_loss:
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs, batch_x, self.model.t, self.model.condition_info
+                        outputs,
+                        batch_x.to(outputs.dtype),
+                        self.model.t,
+                        self.model.condition_info,
                     )
                 else:
-                    loss = criterion(outputs, batch_x)
+                    loss = criterion(outputs, batch_x.to(outputs.dtype))
 
-                # AMP backward
-                scaler.scale(loss).backward()
-                scaler.step(model_optim)
-                scaler.update()
+                if not torch.isfinite(loss):
+                    print(f"❌ Non-finite loss detected: {loss.item()}")
+                    # Optional diagnostics
+                    print(
+                        "outputs stats:",
+                        outputs.detach().mean().item(),
+                        outputs.detach().std().item(),
+                    )
+                    print(
+                        "targets stats:",
+                        batch_x.detach().mean().item(),
+                        batch_x.detach().std().item(),
+                    )
+                    # Skip this batch
+                    continue
+
+                loss.backward()
+                grad_norm = torch.nn.utils.clip_grad_norm_(
+                    self.model.parameters(), max_norm=1.0
+                )
+
+                # (Optional) check grad norm after clipping
+                if not torch.isfinite(torch.tensor(grad_norm)):
+                    print(f"❌ Non-finite grad norm: {grad_norm}, skipping step")
+                    model_optim.zero_grad(set_to_none=True)
+                    continue
+
+                model_optim.step()
 
                 train_loss.append(loss.item())
+
+                for name, param in self.model.named_parameters():
+                    if param.grad is not None:
+                        grad_norm = param.grad.norm().item()
+                        if not torch.isfinite(torch.tensor(grad_norm)):
+                            print(f"🔥 Non-finite grad in {name}, norm = {grad_norm}")
+                            raise SystemExit
 
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time:.2f}s")
             train_loss = np.average(train_loss)
@@ -172,7 +206,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
-            adjust_learning_rate(model_optim, epoch + 1, self.args)
+            # adjust_learning_rate(model_optim, epoch + 1, self.args)
 
         best_model_path = os.path.join(path, "checkpoint.pth")
         self.model.load_state_dict(torch.load(best_model_path))
@@ -197,8 +231,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             if "cndiff" in self.args.model.lower():
                 if self.args.normalize:
                     batch_x, x_mean, x_std = normalize(self.device, batch_x)
-                with torch.autocast(device_type=self.device.type, dtype=torch.float16):
-                    outputs = self.model.p_sample_loop(batch_x)
+                outputs = self.model.p_sample_loop(batch_x)
                 if self.args.normalize:
                     outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
             else:
@@ -221,8 +254,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
             if "cndiff" in self.args.model.lower():
                 if self.args.normalize:
                     batch_x, x_mean, x_std = normalize(self.device, batch_x)
-                with torch.autocast(device_type=self.device.type, dtype=torch.float16):
-                    outputs = self.model.p_sample_loop(batch_x)
+                outputs = self.model.p_sample_loop(batch_x)
                 if self.args.normalize:
                     outputs = denormalize(outputs, x_mean, x_std, self.args.pred_len)
             else:
@@ -260,7 +292,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
 
             wandb.log(metrics)
 
-        filename = self.args.filename or "100epoch"
+        filename = self.args.filename or "tryd"
         save_results(filename, setting, metrics)
 
         if self.args.viz:
