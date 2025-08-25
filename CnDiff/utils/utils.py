@@ -1,3 +1,5 @@
+import math
+
 import torch
 
 
@@ -114,3 +116,51 @@ def invalid(name, tensor):
         return True
 
     return False
+
+
+def make_beta_schedule(schedule="linear", num_timesteps=1000, start=1e-5, end=1e-2):
+    if schedule == "linear":
+        betas = torch.linspace(start, end, num_timesteps)
+    elif schedule == "const":
+        betas = end * torch.ones(num_timesteps)
+    elif schedule == "quad":
+        betas = torch.linspace(start**0.5, end**0.5, num_timesteps) ** 2
+    elif schedule == "jsd":
+        betas = 1.0 / torch.linspace(num_timesteps, 1, num_timesteps)
+    elif schedule == "sigmoid":
+        betas = torch.linspace(-6, 6, num_timesteps)
+        betas = torch.sigmoid(betas) * (end - start) + start
+    elif schedule in {"cosine", "cosine_reverse"}:
+        max_beta = 0.999
+        cosine_s = 0.008
+        betas = torch.tensor([
+            min(
+                1
+                - (
+                    math.cos(
+                        ((i + 1) / num_timesteps + cosine_s)
+                        / (1 + cosine_s)
+                        * math.pi
+                        / 2
+                    )
+                    ** 2
+                )
+                / (
+                    math.cos(
+                        (i / num_timesteps + cosine_s) / (1 + cosine_s) * math.pi / 2
+                    )
+                    ** 2
+                ),
+                max_beta,
+            )
+            for i in range(num_timesteps)
+        ])
+        if schedule == "cosine_reverse":
+            betas = betas.flip(0)
+    elif schedule == "cosine_anneal":
+        betas = torch.tensor([
+            start
+            + 0.5 * (end - start) * (1 - math.cos(t / (num_timesteps - 1) * math.pi))
+            for t in range(num_timesteps)
+        ])
+    return betas

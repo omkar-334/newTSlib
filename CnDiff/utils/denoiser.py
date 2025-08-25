@@ -1,49 +1,82 @@
+import math
+
 import torch
 import torch.nn as nn
 
 from .katransformer import KanBlock
-from .layers import (
-    AttnMLP,
-    DataEmbedding,
-    FullAttention,
-    StepEmbedding,
-)
 from .utils import modulate
 
 
-# Encoder
-class DiTBlock(nn.Module):
-    """
-    A DiT block with adaptive layer norm zero (adaLN-Zero) conditioning.
-    """
-
-    def __init__(self, config) -> None:
+class StepEmbedding(nn.Module):
+    def __init__(self, hidden_dim, freq_dim=256):
         super().__init__()
-        d_model = config.d_model
-        self.norm1 = nn.LayerNorm(d_model, elementwise_affine=False, eps=1e-6)
-        self.attn = FullAttention(
-            d_model=d_model, n_heads=config.n_heads, attn_dropout=config.attn_dropout
-        )
-        self.norm2 = nn.LayerNorm(d_model, elementwise_affine=False, eps=1e-6)
-        mlp_hidden_dim = int(d_model * config.mlp_ratio)
-        self.mlp = AttnMLP(in_dim=d_model, hidden_dim=mlp_hidden_dim, drop=0.1)
-        self.adaLN_modulation = nn.Sequential(
-            nn.SiLU(), nn.Linear(config.hidden_dim, 6 * d_model, bias=True)
-        )
 
-    def forward(self, x, c):
         """
-        x: (B, num_feat, d_model), d_model=hidden_dim*2
-        c: (B, hidden_dim)
+        Time embedding used in T_phi, and for time embedding
         """
-        shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = (
-            self.adaLN_modulation(c).chunk(6, dim=1)
+
+        self.mlp = nn.Sequential(
+            nn.Linear(freq_dim, hidden_dim, bias=True),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim, bias=True),
         )
-        x_mod = modulate(self.norm1(x), shift_msa, scale_msa)
-        x = x + gate_msa.unsqueeze(1) * self.attn(x_mod, x_mod, x_mod)
-        x_mod = modulate(self.norm2(x), shift_mlp, scale_mlp)
-        x = x + gate_mlp.unsqueeze(1) * self.mlp(x_mod)
-        return x
+        self.freq_dim = freq_dim
+
+    @staticmethod
+    def sinusoidal_embedding(k, freq_dim, max_period=1000):
+        half_dim = freq_dim // 2
+        freqs = torch.exp(
+            -math.log(max_period)
+            * torch.arange(start=0, end=half_dim, dtype=torch.float32)
+            / half_dim
+        ).to(device=k.device)
+        k_freqs = k[:, None].float() * freqs[None]
+        k_emb = torch.cat([torch.cos(k_freqs), torch.sin(k_freqs)], dim=-1)
+        return k_emb
+
+    def forward(self, k):
+        k_emb = self.sinusoidal_embedding(k, self.freq_dim)
+        k_emb = self.mlp(k_emb)
+        return k_emb
+
+
+class MLPResidual(nn.Module):
+    """
+    Simple MLP residual network with one hidden state.
+    """
+
+    def __init__(self, in_dim, out_dim, dropout=0.0):
+        super().__init__()
+        self.lin_emb = nn.Sequential(
+            nn.Linear(in_dim, out_dim),
+            nn.Sigmoid(),
+            nn.Linear(out_dim, out_dim),
+            nn.Dropout(dropout),
+        )
+        self.lin_res = nn.Linear(in_dim, out_dim)
+        self.norm = nn.LayerNorm(out_dim)
+
+    def forward(self, x):
+        x_emb = self.lin_emb(x)
+        x_res = self.lin_res(x)
+        x_out = self.norm(x_emb + x_res)
+        return x_out
+
+
+class DataEmbedding(nn.Module):
+    """
+    embed for x and y
+    """
+
+    def __init__(self, in_dim, out_dim, n_emb):
+        super().__init__()
+        layers = [MLPResidual(in_dim, out_dim)]
+        if n_emb > 1:
+            layers.extend(MLPResidual(out_dim, out_dim) for _ in range(n_emb - 1))
+        self.feat_embedding = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.feat_embedding(x)
 
 
 # Decoder module with conditioning support

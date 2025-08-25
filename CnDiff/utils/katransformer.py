@@ -192,13 +192,3 @@ class KanBlock(nn.Module):
         x = x + gate_mlp.unsqueeze(1) * self.mlp(x_mod)
 
         return x
-
-
-if __name__ == "__main__":
-    # Example usage
-    model = KAN(in_features=128, hidden_features=256, out_features=64).to("cuda:0")
-    x = torch.randn(10, 32, 128).to(
-        "cuda:0"
-    )  # Batch size of 10, sequence length of 32, feature dimension of 128
-    output = model(x)
-    print(output.shape)  # Should be (10, 32, 64)

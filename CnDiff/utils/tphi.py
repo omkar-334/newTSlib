@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from CnDiff.utils import StepEmbedding
 
-from .kan import OldKAN as KAN
+from .kan import KAN
 
 
 class Tphi(nn.Module):
