@@ -12,7 +12,7 @@ from CnDiff.utils import NST_normalize as normalize
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, get_loader_dims, visual
+from utils.tools import EarlyStopping, get_loader_dims
 
 warnings.filterwarnings("ignore")
 
@@ -22,6 +22,7 @@ class Exp_Imputation(Exp_Basic):
         super().__init__(args)
         self.pred_len = args.pred_len
         self.seq_len = args.seq_len
+        self.f_dim = -1 if self.args.features == "MS" else 0
 
     def _build_model(self):
         self.train_data, self.train_loader = self._get_data(flag="train")
@@ -30,170 +31,127 @@ class Exp_Imputation(Exp_Basic):
 
         self.args.seq_len, self.args.feature_dim = get_loader_dims(self.train_loader)
         model = self.model_dict[self.args.model].Model(self.args).float()
+        model = model.to(self.device)
         return model
 
     def _get_data(self, flag):
-        data_set, data_loader = data_provider(self.args, flag)
-        return data_set, data_loader
+        return data_provider(self.args, flag)
 
     def _select_optimizer(self):
-        model_optim = Adam(self.model.parameters(), lr=self.args.learning_rate)
-        return model_optim
+        return Adam(self.model.parameters(), lr=self.args.learning_rate)
 
     def _select_criterion(self):
-        criterion = nn.MSELoss()
-        return criterion
+        return nn.MSELoss()
+
+    def _prepare_batch(self, batch_x):
+        B, T, N = batch_x.shape
+        mask = (torch.rand((B, T, N), device=self.device) > self.args.mask_rate).float()
+        inp = batch_x * mask
+        return inp, mask
 
     def vali(self, criterion):
-        total_loss = []
         self.model.eval()
-        with torch.no_grad():
-            for i, (batch_x, _, batch_x_mark, batch_y_mark) in enumerate(
-                self.vali_loader
-            ):
-                batch_x = batch_x.float().to(self.device)
-                batch_x_mark = batch_x_mark.float().to(self.device)
+        total_loss = []
 
-                # random mask
-                B, T, N = batch_x.shape
-                """
-                B = batch size
-                T = seq len
-                N = number of features
-                """
-                mask = torch.rand((B, T, N)).to(self.device)
-                mask[mask <= self.args.mask_rate] = 0  # masked
-                mask[mask > self.args.mask_rate] = 1  # remained
-                inp = batch_x.masked_fill(mask == 0, 0)
+        for batch_x, _, batch_x_mark, _ in self.vali_loader:
+            batch_x = batch_x.float().to(self.device, non_blocking=True)
+            batch_x_mark = batch_x_mark.float().to(self.device, non_blocking=True)
 
-                if "cndiff" in self.args.model.lower():
-                    if self.args.normalize:
-                        inp, x_mean, x_std = normalize(self.device, inp, mask)
-                        # batch_x_normalized = normalize(self.device, batch_x, mask)[0]
+            inp, mask = self._prepare_batch(batch_x)
 
-                    outputs = self.model(inp, original_x=batch_x, mask=mask)
+            if "cndiff" in self.args.model.lower():
+                if self.args.normalize:
+                    inp, x_mean, x_std = normalize(self.device, inp, mask)
 
-                    if self.args.normalize:
-                        outputs = denormalize(
-                            outputs, x_mean, x_std, self.args.pred_len
-                        )
-                else:
-                    outputs = self.model(inp, batch_x_mark, None, None, mask)
+                outputs = self.model(inp, original_x=batch_x, mask=mask)
 
-                f_dim = -1 if self.args.features == "MS" else 0
-                outputs = outputs[:, :, f_dim:]
+                if self.args.normalize:
+                    outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
+            else:
+                outputs = self.model(inp, batch_x_mark, None, None, mask)
 
-                # add support for MS
-                batch_x = batch_x[:, :, f_dim:]
-                mask = mask[:, :, f_dim:]
+            outputs = outputs[:, :, self.f_dim :]
+            batch_x = batch_x[:, :, self.f_dim :]
+            mask = mask[:, :, self.f_dim :]
 
-                if self.args.tphi_loss:
-                    loss = self.model.get_mu_t_phi_loss(
-                        outputs,
-                        batch_x,
-                        self.model.t,
-                        self.model.condition_info,
-                        mask,
-                    )
-                else:
-                    loss = criterion(outputs[mask == 0], batch_x[mask == 0])
+            if self.args.tphi_loss:
+                loss = self.model.get_mu_t_phi_loss(
+                    outputs, batch_x, self.model.t, self.model.condition_info, mask
+                )
+            else:
+                loss = criterion(outputs[mask == 0], batch_x[mask == 0])
 
-                total_loss.append(loss.item())
-        total_loss = np.average(total_loss)
+            total_loss.append(loss.item())
         self.model.train()
-        return total_loss
+        return np.mean(total_loss)
 
     def train(self, setting):
         path = os.path.join(self.args.checkpoints, setting)
-        if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
 
-        train_steps = len(self.train_loader)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
 
-        model_optim = self._select_optimizer()
+        optimizer = self._select_optimizer()
         criterion = self._select_criterion()
 
         for epoch in range(self.args.train_epochs):
-            train_loss = []
-
+            epoch_loss = []
             self.model.train()
-            epoch_time = time.time()
-            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                self.train_loader
-            ):
-                model_optim.zero_grad(set_to_none=True)
+            start_time = time.time()
+            for batch_x, _, batch_x_mark, _ in self.train_loader:
+                optimizer.zero_grad(set_to_none=True)
 
-                batch_x = batch_x.float().to(self.device)
-                batch_x_mark = batch_x_mark.float().to(self.device)
+                batch_x = batch_x.float().to(self.device, non_blocking=True)
+                batch_x_mark = batch_x_mark.float().to(self.device, non_blocking=True)
 
-                # random mask
-                B, T, N = batch_x.shape
-                mask = torch.rand((B, T, N)).to(self.device)
-                mask[mask <= self.args.mask_rate] = 0  # masked
-                mask[mask > self.args.mask_rate] = 1  # remained
-                inp = batch_x.masked_fill(mask == 0, 0)
+                inp, mask = self._prepare_batch(batch_x)
 
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
                         inp, x_mean, x_std = normalize(self.device, inp, mask)
-                        # batch_x_normalized = normalize(self.device, batch_x, mask)[0]
-
                     outputs = self.model(inp, original_x=batch_x, mask=mask)
-
                     if self.args.normalize:
                         outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
                 else:
                     outputs = self.model(inp, batch_x_mark, None, None, mask)
 
-                f_dim = -1 if self.args.features == "MS" else 0
-                outputs = outputs[:, :, f_dim:]
-
-                # add support for MS
-                batch_x = batch_x[:, :, f_dim:]
-                mask = mask[:, :, f_dim:]
+                outputs = outputs[:, :, self.f_dim :]
+                batch_x = batch_x[:, :, self.f_dim :]
+                mask = mask[:, :, self.f_dim :]
 
                 if self.args.tphi_loss:
                     loss = self.model.get_mu_t_phi_loss(
-                        outputs,
-                        batch_x,
-                        self.model.t,
-                        self.model.condition_info,
-                        mask,
+                        outputs, batch_x, self.model.t, self.model.condition_info, mask
                     )
                 else:
                     loss = criterion(outputs[mask == 0], batch_x[mask == 0])
-                train_loss.append(loss.item())
 
                 loss.backward()
-                model_optim.step()
+                optimizer.step()
+                epoch_loss.append(loss.item())
 
-            print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
-            train_loss = np.average(train_loss)
+            train_loss = np.mean(epoch_loss)
             vali_loss = self.vali(criterion)
-            test_loss = self.vali(criterion)
-
             print(
-                f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
+                f"Epoch {epoch + 1}/{self.args.train_epochs} | "
+                f"Train Loss: {train_loss:.6f} | Vali Loss: {vali_loss:.6f} | "
+                f"Time: {time.time() - start_time:.1f}s"
             )
 
             if self.args.wandb:
                 import wandb
 
-                wandb.log({
-                    "train_loss": train_loss,
-                    "vali_loss": vali_loss,
-                    "test_loss": test_loss,
-                })
+                wandb.log({"train_loss": train_loss, "vali_loss": vali_loss})
 
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")
                 break
-            adjust_learning_rate(model_optim, epoch + 1, self.args)
 
-        best_model_path = path + "/" + "checkpoint.pth"
-        self.model.load_state_dict(torch.load(best_model_path))
+        best_model_path = os.path.join(path, "checkpoint.pth")
+        self.model.load_state_dict(
+            torch.load(best_model_path, map_location=self.device)
+        )
 
         return self.model
 
@@ -201,79 +159,57 @@ class Exp_Imputation(Exp_Basic):
     def test(self, setting, test=0):
         PATH = os.path.join("./checkpoints/" + setting, "checkpoint.pth")
         if test:
-            print("loading model")
-            self.model.load_state_dict(torch.load(PATH))
+            print("Loading model")
+        self._load_checkpoint(PATH)
 
-        preds = []
-        trues = []
-        masks = []
-
+        preds, trues, masks = [], [], []
         self.model.eval()
-        with torch.no_grad():
-            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
-                self.test_loader
-            ):
-                batch_x = batch_x.float().to(self.device)
-                batch_x_mark = batch_x_mark.float().to(self.device)
 
-                # random mask
-                B, T, N = batch_x.shape
-                mask = torch.rand((B, T, N)).to(self.device)
-                mask[mask <= self.args.mask_rate] = 0  # masked
-                mask[mask > self.args.mask_rate] = 1  # remained
-                inp = batch_x.masked_fill(mask == 0, 0)
+        for batch_x, _, batch_x_mark, _ in self.test_loader:
+            batch_x = batch_x.float().to(self.device, non_blocking=True)
+            batch_x_mark = batch_x_mark.float().to(self.device, non_blocking=True)
 
-                # imputation
-                if "cndiff" in self.args.model.lower():
-                    if self.args.normalize:
-                        inp, x_mean, x_std = normalize(self.device, inp, mask)
+            inp, mask = self._prepare_batch(batch_x)
 
-                    with torch.autocast(
-                        device_type=self.device.type, dtype=torch.float16
-                    ):
-                        outputs = self.model.p_sample_loop(inp)
+            if "cndiff" in self.args.model.lower():
+                if self.args.normalize:
+                    inp, x_mean, x_std = normalize(self.device, inp, mask)
+                outputs = self.model.p_sample_loop(inp)
+                if self.args.normalize:
+                    outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
+            else:
+                outputs = self.model(inp, batch_x_mark, None, None, mask)
 
-                    if self.args.normalize:
-                        outputs = denormalize(outputs, x_mean, x_std, self.pred_len)
+            outputs = outputs[:, :, self.f_dim :]
+            batch_x = batch_x[:, :, self.f_dim :]
+            mask = mask[:, :, self.f_dim :]
 
-                else:
-                    outputs = self.model(inp, batch_x_mark, None, None, mask)
-
-                # eval
-                f_dim = -1 if self.args.features == "MS" else 0
-                outputs = outputs[:, :, f_dim:]
-
-                # add support for MS
-                batch_x = batch_x[:, :, f_dim:]
-                mask = mask[:, :, f_dim:]
-
-                pred = outputs.detach().cpu().numpy()
-                true = batch_x.detach().cpu().numpy()
-                preds.append(pred)
-                trues.append(true)
-                masks.append(mask.detach().cpu())
-
-                if i % 20 == 0 and self.args.viz:
-                    visual(true[0, :, -1], mask, pred, setting, i)
+            preds.append(outputs.detach().cpu().numpy())
+            trues.append(batch_x.detach().cpu().numpy())
+            masks.append(mask.detach().cpu().numpy())
 
         preds = np.concatenate(preds, 0)
         trues = np.concatenate(trues, 0)
         masks = np.concatenate(masks, 0)
 
         preds, trues = preds[masks == 0], trues[masks == 0]
-
         mae, mse, rmse, mape, mspe = metric(preds, trues)
 
-        argsdict = {
-            "mse": float(mse),
-            "mae": float(mae),
-            "rmse": float(rmse),
-            "mape": float(mape),
-            "mspe": float(mspe),
-            "parameters": self.model.parameter_dict,
-        }
+        save_results(
+            self.args.filename or "imputation",
+            setting,
+            {
+                "mse": float(mse),
+                "mae": float(mae),
+                "rmse": float(rmse),
+                "mape": float(mape),
+                "mspe": float(mspe),
+                "parameters": self.model.parameter_dict,
+            },
+        )
 
-        filename = self.args.filename or "imputation"
-        # save_preds(setting, preds, trues)
-        save_results(filename, setting, argsdict)
         return PATH
+
+    def _load_checkpoint(self, path):
+        checkpoint = torch.load(path, map_location=self.device)
+        self.model.load_state_dict(checkpoint, strict=False)

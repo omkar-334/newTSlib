@@ -35,65 +35,50 @@ data_dict = {
 def data_provider(args, flag):
     Data = data_dict[args.data]
     timeenc = 0 if args.embed != "timeF" else 1
-    shuffle_flag = True if args.shuffle_test is True else flag not in {"test", "TEST"}
+    shuffle_flag = True if args.shuffle_test else flag not in {"test", "TEST"}
     drop_last = False
     batch_size = args.batch_size
     freq = args.freq
 
+    # Initialize dataset
     if args.task_name == "anomaly_detection":
-        drop_last = False
         data_set = Data(
             args=args,
             root_path=args.root_path,
             win_size=args.seq_len,
             flag=flag,
         )
-        # print(flag, len(data_set))
-        data_loader = DataLoader(
-            data_set,
-            batch_size=batch_size,
-            shuffle=shuffle_flag,
-            num_workers=args.num_workers,
-            drop_last=drop_last,
-        )
-        return data_set, data_loader
-    if args.task_name == "classification":
-        drop_last = False
+    elif args.task_name == "classification":
         data_set = Data(
             args=args,
             root_path=args.root_path,
             flag=flag,
         )
-
-        data_loader = DataLoader(
-            data_set,
-            batch_size=batch_size,
-            shuffle=shuffle_flag,
-            num_workers=args.num_workers,
-            drop_last=drop_last,
-            collate_fn=partial(collate_fn, max_len=args.seq_len),
+        collate = partial(collate_fn, max_len=args.seq_len)
+    else:
+        data_set = Data(
+            args=args,
+            root_path=args.root_path,
+            data_path=args.data_path,
+            flag=flag,
+            size=[args.seq_len, args.label_len, args.pred_len],
+            features=args.features,
+            target=args.target,
+            timeenc=timeenc,
+            freq=freq,
+            seasonal_patterns=args.seasonal_patterns,
         )
-        return data_set, data_loader
-    if args.data == "m4":
-        drop_last = False
-    data_set = Data(
-        args=args,
-        root_path=args.root_path,
-        data_path=args.data_path,
-        flag=flag,
-        size=[args.seq_len, args.label_len, args.pred_len],
-        features=args.features,
-        target=args.target,
-        timeenc=timeenc,
-        freq=freq,
-        seasonal_patterns=args.seasonal_patterns,
-    )
-    # print(flag, len(data_set))
+
     data_loader = DataLoader(
         data_set,
         batch_size=batch_size,
         shuffle=shuffle_flag,
         num_workers=args.num_workers,
         drop_last=drop_last,
+        collate_fn=collate if args.task_name == "classification" else None,
+        # pin_memory=True,
+        persistent_workers=True,  # 🔹 keep workers alive across epochs
+        prefetch_factor=4,  # 🔹 prefetch batches for faster loading
     )
+
     return data_set, data_loader
