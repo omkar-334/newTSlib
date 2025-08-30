@@ -29,4 +29,5 @@ wandb
 # linear_attention_transformer
 
 ### KAT ###
-# triton
+triton
+timm

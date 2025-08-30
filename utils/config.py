@@ -167,7 +167,7 @@ def get_args():
 
     # optimization
     parser.add_argument(
-        "--num_workers", type=int, default=8, help="data loader num workers"
+        "--num_workers", type=int, default=16, help="data loader num workers"
     )
     parser.add_argument("--itr", type=int, default=1, help="experiments times")
     parser.add_argument("--train_epochs", type=int, default=10, help="train epochs")
