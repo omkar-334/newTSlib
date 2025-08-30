@@ -1,0 +1,28 @@
+
+model_name=TSMixer
+learning_rate=0.001
+
+python -u run.py \
+  --gpu 0 \
+  --task_name long_term_forecast \
+  --is_training 1 \
+  --root_path ./dataset/traffic/ \
+  --data_path traffic.csv \
+  --model_id traffic_96_168 \
+  --model $model_name \
+  --data custom \
+  --features M \
+  --seq_len 96 \
+  --label_len 96 \
+  --pred_len 168 \
+  --e_layers 2 \
+  --d_layers 1 \
+  --factor 3 \
+  --enc_in 862 \
+  --dec_in 862 \
+  --c_out 862 \
+  --d_model 512 \
+  --d_ff 32 \
+  --des 'Exp' \
+  --itr 1 \
+  --learning_rate $learning_rate \
