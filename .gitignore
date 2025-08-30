@@ -164,3 +164,4 @@ results/
 sweeps/
 *.ipynb
 ADplots/
+ad_scripts/

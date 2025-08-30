@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+\centering
+\caption{Multivariate evaluation scores. Best per column bolded, 2nd best underlined, ranks in subscript.}
+\begin{tabular}{l|cccccc|c}
+\toprule
+Method & ECL & ETTh1 & ETTh2 & ETTm1 & ETTm2 & weather & Rank \\
+\midrule
+\textbf{Ours} & \textbf{0.079}\textsubscript{(1)} & 0.085\textsubscript{(3)} & \textbf{0.026}\textsubscript{(1)} & 0.029\textsubscript{(5)} & \textbf{0.009}\textsubscript{(1)} & 0.034\textsubscript{(4)} & 2.5 \\
+\midrule
+Nonstationary\,\textsubscript{NeurIPS '22} & \underline{0.088}\textsubscript{(2)} & \underline{0.075}\textsubscript{(2)} & 0.049\textsubscript{(3)} & \underline{0.026}\textsubscript{(2)} & 0.021\textsubscript{(3)} & \textbf{0.030}\textsubscript{(1)} & 2.17 \\
+TimesNet\,\textsubscript{ICLR '23} & 0.094\textsubscript{(3)} & 0.089\textsubscript{(4)} & 0.051\textsubscript{(4)} & 0.027\textsubscript{(3)} & 0.022\textsubscript{(4)} & \underline{0.030}\textsubscript{(2)} & 3.33 \\
+SSSD\,\textsubscript{TMLR} & 0.208\textsubscript{(15)} & \textbf{0.068}\textsubscript{(1)} & \underline{0.044}\textsubscript{(2)} & \textbf{0.022}\textsubscript{(1)} & \underline{0.014}\textsubscript{(2)} & 0.031\textsubscript{(3)} & 4.0 \\
+Crossformer\,\textsubscript{ICLR '23} & 0.097\textsubscript{(4)} & 0.148\textsubscript{(12)} & 0.151\textsubscript{(6)} & 0.060\textsubscript{(9)} & 0.079\textsubscript{(6)} & 0.043\textsubscript{(9)} & 7.67 \\
+LightTS\,\textsubscript{arxiv '22} & 0.108\textsubscript{(6)} & 0.159\textsubscript{(14)} & 0.152\textsubscript{(7)} & 0.068\textsubscript{(10)} & 0.076\textsubscript{(5)} & 0.046\textsubscript{(10)} & 8.67 \\
+iTransformer\,\textsubscript{ICLR '24} & 0.099\textsubscript{(5)} & 0.148\textsubscript{(13)} & 0.139\textsubscript{(5)} & 0.071\textsubscript{(11)} & 0.082\textsubscript{(7)} & 0.051\textsubscript{(12)} & 8.83 \\
+DLinear\,\textsubscript{AAAI '23} & 0.128\textsubscript{(7)} & 0.170\textsubscript{(16)} & 0.162\textsubscript{(8)} & 0.090\textsubscript{(15)} & 0.101\textsubscript{(9)} & 0.052\textsubscript{(14)} & 11.5 \\
+TiDE\,\textsubscript{arxiv '23} & 0.129\textsubscript{(8)} & 0.169\textsubscript{(15)} & 0.163\textsubscript{(9)} & 0.090\textsubscript{(14)} & 0.101\textsubscript{(8)} & 0.052\textsubscript{(13)} & 11.17 \\
+Pyraformer\,\textsubscript{ICLR '22} & 0.189\textsubscript{(14)} & 0.116\textsubscript{(8)} & 0.201\textsubscript{(11)} & 0.037\textsubscript{(7)} & 0.128\textsubscript{(11)} & 0.034\textsubscript{(5)} & 9.33 \\
+FiLM\,\textsubscript{NeurIPS '22} & 0.129\textsubscript{(9)} & 0.174\textsubscript{(17)} & 0.169\textsubscript{(10)} & 0.090\textsubscript{(16)} & 0.102\textsubscript{(10)} & 0.057\textsubscript{(15)} & 12.83 \\
+Reformer\,\textsubscript{ICLR '20} & 0.162\textsubscript{(11)} & 0.101\textsubscript{(5)} & 0.226\textsubscript{(13)} & 0.029\textsubscript{(4)} & 0.165\textsubscript{(14)} & 0.039\textsubscript{(7)} & 9.0 \\
+Transformer\,\textsubscript{NeurIPS '17} & 0.165\textsubscript{(12)} & 0.108\textsubscript{(6)} & 0.256\textsubscript{(15)} & 0.034\textsubscript{(6)} & 0.203\textsubscript{(15)} & 0.036\textsubscript{(6)} & 10.0 \\
+ETSformer\,\textsubscript{arxiv '22} & 0.136\textsubscript{(10)} & 0.138\textsubscript{(10)} & 0.234\textsubscript{(14)} & 0.073\textsubscript{(13)} & 0.142\textsubscript{(13)} & 0.048\textsubscript{(11)} & 11.83 \\
+FEDformer\,\textsubscript{ICML '22} & 0.215\textsubscript{(16)} & 0.128\textsubscript{(9)} & 0.224\textsubscript{(12)} & 0.072\textsubscript{(12)} & 0.129\textsubscript{(12)} & 0.073\textsubscript{(16)} & 12.83 \\
+Informer\,\textsubscript{AAAI '21} & 0.171\textsubscript{(13)} & 0.114\textsubscript{(7)} & 0.366\textsubscript{(17)} & 0.049\textsubscript{(8)} & 0.245\textsubscript{(16)} & 0.042\textsubscript{(8)} & 11.5 \\
+Autoformer\,\textsubscript{NeurIPS '21} & 0.231\textsubscript{(17)} & 0.147\textsubscript{(11)} & 0.266\textsubscript{(16)} & 0.740\textsubscript{(17)} & 0.862\textsubscript{(17)} & 0.210\textsubscript{(17)} & 15.83 \\
+\bottomrule
+\end{tabular}
+\end{table}

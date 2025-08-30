@@ -1,13 +1,18 @@
+import pandas as pd
+
+
 def df_to_latex_table(
     df, highlight="highest", output_file="table_output.tex", ours_name="Ours"
 ):
     """
     Convert a DataFrame to a LaTeX table with ranks in subscript and bold/underline formatting.
+    Adds Venue as a subscript next to the model name.
 
     Parameters
     ----------
     df : pandas.DataFrame
-        Must contain metric columns and 'Rank'. 'Grand Total' will be ignored if present.
+        Must contain metric columns, 'Rank', and optionally 'Venue'.
+        'Grand Total' will be ignored if present.
     highlight : str
         'highest' or 'lowest' — controls whether higher or lower values are best.
     output_file : str
@@ -16,24 +21,39 @@ def df_to_latex_table(
         Name of the method to highlight with a horizontal line after its row.
     """
     # Drop Grand Total if exists
-    metric_cols = [col for col in df.columns if col not in ["Grand Total", "Rank"]]
+    metric_cols = [
+        col for col in df.columns if col not in ["Grand Total", "Rank", "Venue"]
+    ]
 
     # Rank calculation
     ascending = highlight == "lowest"
     ranks_df = df[metric_cols].rank(ascending=ascending, method="min")
 
     # Sort by overall rank
-    df_sorted = df.sort_values("Rank")
+    df_sorted = df.sort_values("Grand Total", ascending=highlight == "lowest")
 
     # Build LaTeX rows
     latex_rows = []
     for model, row in df_sorted.iterrows():
         row_parts = []
 
-        # Bold model name if overall rank == 1
-        model_display = (
-            f"\\textbf{{{model}}}" if row["Rank"] == df_sorted["Rank"].min() else model
-        )
+        # Handle model name + venue
+        venue = row["Venue"] if "Venue" in df.columns and pd.notna(row["Venue"]) else ""
+        if (
+            highlight == "highest"
+            and row["Grand Total"] == df_sorted["Grand Total"].max()
+        ) or (
+            highlight == "lowest"
+            and row["Grand Total"] == df_sorted["Grand Total"].min()
+        ):
+            model_display = f"\\textbf{{{model}}}"
+        else:
+            model_display = model
+
+        # Add venue as subscript if present and not our submission
+        if venue and model.strip().lower() != ours_name.lower():
+            model_display += f"\\,\\textsubscript{{{venue}}}"
+
         row_parts.append(model_display)
 
         # Format metrics with value + subscript rank
@@ -85,4 +105,3 @@ def df_to_latex_table(
         f.write(latex_table)
 
     print(f"✅ LaTeX table saved to: {output_file}")
-    return latex_table
