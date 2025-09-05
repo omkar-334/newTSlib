@@ -11,6 +11,7 @@ from exp.exp_imputation import Exp_Imputation
 from exp.exp_long_term_forecasting import Exp_Long_Term_Forecast
 from exp.exp_short_term_forecasting import Exp_Short_Term_Forecast
 from utils.config import get_args
+from utils.metrics import save_results
 
 
 def set_seed(seed: int = 42):
@@ -105,13 +106,21 @@ if __name__ == "__main__":
         )
     exp = get_exp(args)
     # print(exp.args)
+    try:
+        if args.is_training:
+            print(f">>>>>>>TRAINING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            exp.train(setting)
 
-    if args.is_training:
-        print(f">>>>>>>TRAINING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        exp.train(setting)
-
-    print(f">>>>>>>TESTING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    ckpt = exp.test(setting)
-    # clean(ckpt)
+        print(f">>>>>>>TESTING : \n{setting}\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        ckpt = exp.test(setting)
+        clean(ckpt)
+    except Exception as e:
+        argsdict = {
+            "parameters": getattr(exp.model, "parameter_dict", None),
+            "error": str(e),
+            "trace": repr(e),
+        }
+        filename = args.filename or "results"
+        save_results(filename, setting, argsdict)
 
     print("-------------------------------------------------")

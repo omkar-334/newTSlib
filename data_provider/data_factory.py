@@ -29,6 +29,8 @@ data_dict = {
     "SMD": SMDSegLoader,
     "SWaT": SWaTSegLoader,
     "UEA": UEAloader,
+    "Norpool": Dataset_Custom,
+    "Caiso": Dataset_Custom,
 }
 
 

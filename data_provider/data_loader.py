@@ -298,10 +298,13 @@ class Dataset_Custom(Dataset):
         """
         df_raw.columns: ['date', ...(other features), target feature]
         """
+        if "caiso" in self.data_path.lower() or "norpool" in self.data_path.lower():
+            # df_raw = df_raw.fillna(method="ffill").fillna(method="bfill")
+            df_raw = df_raw.fillna(0)
         cols = list(df_raw.columns)
-        cols.remove(self.target)
+        # cols.remove(self.target)
         cols.remove("date")
-        df_raw = df_raw[["date", *cols, self.target]]
+        df_raw = df_raw[["date", *cols]]
         num_train = int(len(df_raw) * 0.7)
         num_test = int(len(df_raw) * 0.2)
         num_vali = len(df_raw) - num_train - num_test

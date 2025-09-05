@@ -44,6 +44,7 @@ class Model(nn.Module):
             )
         if self.config.use_tphi == 1:
             self.t_phi = Tphi(config)
+            exit()
         elif self.config.use_tphi == 2:
             self.t_phi = KanTphi(config)
 
