@@ -28,7 +28,7 @@ strides=(24 24 24 24)
 for i in "${!pred_lens[@]}"; do
 	python -u run.py \
 		--is_training 1 \
-		--root_path ./data/ETT/ \
+		--root_path ./dataset/ETT-small/ \
 		--data_path ETTm2.csv \
 		--model_id wpmixer \
 		--model $model_name \

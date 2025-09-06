@@ -43,7 +43,7 @@ def get_args():
     parser.add_argument(
         "--root_path",
         type=str,
-        default="./data/ETT/",
+        default="./dataset/ETT-small/",
         help="root path of the data file",
     )
     parser.add_argument("--data_path", type=str, default="ETTh1.csv", help="data file")
@@ -178,7 +178,7 @@ def get_args():
         "--patience", type=int, default=10, help="early stopping patience"
     )
     parser.add_argument(
-        "--learning_rate", type=float, default=0.001, help="optimizer learning rate"
+        "--learning_rate", type=float, default=0.0001, help="optimizer learning rate"
     )
     parser.add_argument("--des", type=str, default="test", help="exp description")
     parser.add_argument("--loss", type=str, default="MSE", help="loss function")
@@ -357,7 +357,12 @@ def get_args():
         "--shuffle_test", type=bool, default=False, help="shuffle test data"
     )
     parser.add_argument("--sweep", type=bool, default=False, help="sweep mode")
-    parser.add_argument("--wandb", type=bool, default=False, help="use wandb")
+    parser.add_argument(
+        "--wandb",
+        default=False,
+        help="use wandb",
+        type=lambda x: str(x).lower() == "true",
+    )
 
     parser.add_argument(
         "--normalize",
@@ -382,7 +387,6 @@ def get_args():
         default=False,
         help="visualize results",
     )
-
     args = parser.parse_args()
     if torch.cuda.is_available() and args.use_gpu:
         args.device = torch.device(f"cuda:{args.gpu}")

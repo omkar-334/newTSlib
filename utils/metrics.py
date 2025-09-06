@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 from datetime import datetime
@@ -54,6 +55,8 @@ def save_results(task, setting: str, metrics: dict, sweep=False):
 
     task = f"{task}_sweep" if sweep else task
     json_path = f"./results/{task}_results.json"
+    csv_path = f"./results/{task}_results.csv"
+
     if os.path.exists(json_path):
         with open(json_path) as f:
             try:
@@ -72,6 +75,16 @@ def save_results(task, setting: str, metrics: dict, sweep=False):
 
     with open(json_path, "w") as f:
         json.dump(results_dict, f, indent=4)
+
+    fieldnames = ["setting", "time"] + list(metrics.keys())
+    write_header = not os.path.exists(csv_path)
+
+    with open(csv_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        if write_header:
+            writer.writeheader()
+        row = {"setting": setting, "time": results_dict[setting]["time"], **metrics}
+        writer.writerow(row)
 
 
 def save_preds(setting, preds, trues):

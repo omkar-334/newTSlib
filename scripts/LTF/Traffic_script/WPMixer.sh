@@ -26,9 +26,9 @@ strides=(8 8 8 8)
 # Loop over datasets and prediction lengths
 for i in "${!pred_lens[@]}"; do
 	python -u run.py \
-  --gpu 0 \
+  	--gpu 0 \
 		--is_training 1 \
-		--root_path ./data/traffic/ \
+		--root_path ./dataset/traffic/ \
 		--data_path traffic.csv \
 		--model_id wpmixer \
 		--model $model_name \
@@ -44,6 +44,5 @@ for i in "${!pred_lens[@]}"; do
 		--lradj ${lradjs[$i]} \
 		--dropout ${dropouts[$i]} \
 		--patience ${patiences[$i]} \
-		--train_epochs ${epochs[$i]} \
-		--use_amp
+		--train_epochs ${epochs[$i]}
 done
