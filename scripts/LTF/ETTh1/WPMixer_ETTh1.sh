@@ -1,7 +1,5 @@
+#!/bin/bash
 
-# Set the GPU to use
-
-# Model name
 model_name=WPMixer
 
 # Datasets and prediction lengths

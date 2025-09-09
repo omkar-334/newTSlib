@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=PAttn
 
 python -u run.py \

@@ -1,8 +1,8 @@
-
+#!/bin/bash
 model_name=TimesNet
 
 python -u run.py \
-  --gpu 0 \
+  --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
   --root_path ./dataset/weather/ \

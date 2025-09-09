@@ -1,9 +1,9 @@
-
+#!/bin/bash
 model_name=TSMixer
 learning_rate=0.001
 
 python -u run.py \
-  --gpu 0 \
+  --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
   --root_path ./dataset/traffic/ \
@@ -25,4 +25,4 @@ python -u run.py \
   --d_ff 32 \
   --des 'Exp' \
   --itr 1 \
-  --learning_rate $learning_rate \
+  --learning_rate $learning_rate

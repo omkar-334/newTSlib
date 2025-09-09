@@ -1,6 +1,4 @@
-
-
-# Model name
+#!/bin/bash
 model_name=WPMixer
 
 # Datasets and prediction lengths

@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=Crossformer
 
 python -u run.py \

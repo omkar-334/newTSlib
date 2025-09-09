@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=SegRNN
 
 seq_len=96
@@ -23,5 +23,4 @@ python -u run.py \
   --learning_rate 0.001 \
   --des 'Exp' \
   --itr 1
-done
 

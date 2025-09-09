@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=Reformer
 
 python -u run.py \

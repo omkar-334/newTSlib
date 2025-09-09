@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=ETSformer
 
 python -u run.py \

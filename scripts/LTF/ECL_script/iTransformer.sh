@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=iTransformer
 
 python -u run.py \

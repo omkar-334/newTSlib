@@ -1,11 +1,11 @@
-
+#!/bin/bash
 model_name=SegRNN
 
 seq_len=96
 for pred_len in 672
 do
 python -u run.py \
-  --gpu 0 \
+  --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
   --root_path ./dataset/weather/ \

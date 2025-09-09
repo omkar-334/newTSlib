@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=LightTS
 
 python -u run.py \

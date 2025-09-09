@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 model_name=TimeMixer
 
 seq_len=96

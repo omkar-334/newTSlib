@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=TiDE
 
 python -u run.py \

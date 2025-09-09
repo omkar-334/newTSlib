@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 model_name=TimeMixer
 
 seq_len=96
@@ -13,7 +13,7 @@ train_epochs=20
 patience=10
 
 python -u run.py \
-  --gpu 0 \
+  --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
   --root_path ./dataset/weather/ \

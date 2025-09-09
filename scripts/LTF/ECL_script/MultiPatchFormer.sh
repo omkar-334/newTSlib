@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=MultiPatchFormer
 
 python -u run.py \

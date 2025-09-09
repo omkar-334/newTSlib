@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=TimeXer
 
 python -u run.py \

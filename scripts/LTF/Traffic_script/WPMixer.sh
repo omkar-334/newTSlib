@@ -1,10 +1,8 @@
-
-
-# Model name
+#!/bin/bash
 model_name=WPMixer
 
 # Datasets and prediction lengths
-dataset=traffic
+dataset=custom
 seq_lens=(1200 1200 1200 1200)
 pred_lens=(168 168 168 168)
 learning_rates=(0.0010385 0.000567053 0.001026715 0.001496217)
@@ -26,7 +24,7 @@ strides=(8 8 8 8)
 # Loop over datasets and prediction lengths
 for i in "${!pred_lens[@]}"; do
 	python -u run.py \
-  	--gpu 0 \
+  	--gpu 1 \
 		--is_training 1 \
 		--root_path ./dataset/traffic/ \
 		--data_path traffic.csv \

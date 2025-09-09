@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=TimesNet
 
 python -u run.py \

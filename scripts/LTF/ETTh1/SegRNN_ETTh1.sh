@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=SegRNN
 
 seq_len=96

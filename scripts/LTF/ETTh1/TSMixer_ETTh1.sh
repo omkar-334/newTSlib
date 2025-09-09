@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=TSMixer
 
 python -u run.py \

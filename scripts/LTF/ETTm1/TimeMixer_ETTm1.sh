@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=TimeMixer
 
 seq_len=96
@@ -11,7 +11,7 @@ d_ff=32
 batch_size=16
 
 python -u run.py \
-  --gpu 0 \
+  --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
   --root_path  ./dataset/ETT-small/\

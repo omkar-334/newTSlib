@@ -1,4 +1,4 @@
-
+#!/bin/bash
 model_name=MICN
 
 python -u run.py \
