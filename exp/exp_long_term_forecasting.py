@@ -10,7 +10,11 @@ from torch.optim.adam import Adam
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
-from utils.tools import EarlyStopping, get_loader_dims
+from utils.tools import (
+    EarlyStopping,
+    adjust_learning_rate,
+    get_loader_dims,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -50,8 +54,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
     def _select_optimizer(self):
         return Adam(self.model.parameters(), lr=self.args.learning_rate)
 
-    @staticmethod
-    def _select_criterion():
+    def _select_criterion(self):
         return nn.MSELoss()
 
     def train(self, setting):
@@ -69,12 +72,22 @@ class Exp_Long_Term_Forecast(Exp_Basic):
 
             self.model.train()
             epoch_time = time.time()
-            for _, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
+            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
                 self.train_loader
             ):
                 model_optim.zero_grad()
                 batch_x = batch_x.float().to(self.device)
                 batch_y = batch_y.float().to(self.device)
+                batch_x_mark = batch_x_mark.float().to(self.device)
+                batch_y_mark = batch_y_mark.float().to(self.device)
+
+                # decoder input
+                dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len :, :]).float()
+                dec_inp = (
+                    torch.cat([batch_y[:, : self.args.label_len, :], dec_inp], dim=1)
+                    .float()
+                    .to(self.device)
+                )
 
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
@@ -86,19 +99,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    batch_x_mark = batch_x_mark.float().to(self.device)
-                    batch_y_mark = batch_y_mark.float().to(self.device)
-                    # decoder input
-                    dec_inp = torch.zeros_like(
-                        batch_y[:, -self.args.pred_len :, :]
-                    ).float()
-                    dec_inp = (
-                        torch.cat(
-                            [batch_y[:, : self.args.label_len, :], dec_inp], dim=1
-                        )
-                        .float()
-                        .to(self.device)
-                    )
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
                 f_dim = -1 if self.args.features == "MS" else 0
@@ -119,36 +119,45 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 model_optim.step()
 
             print(f"Epoch: {epoch + 1} cost time: {time.time() - epoch_time}")
-            if epoch + 1 >= 5:
-                train_loss = np.average(train_loss)
-                vali_loss = self.vali(criterion)
+            train_loss = np.average(train_loss)
+            vali_loss = self.vali(criterion)
+            test_loss = self.vali(criterion)
 
-                print(
-                    f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f}"
-                )
-                early_stopping(vali_loss, self.model, path)
-                if early_stopping.early_stop:
-                    print("Early stopping")
-                    break
+            print(
+                f"Epoch: {epoch + 1}, Steps: {train_steps} | Train Loss: {train_loss:.7f} Vali Loss: {vali_loss:.7f} Test Loss: {test_loss:.7f}"
+            )
+            early_stopping(vali_loss, self.model, path)
+            if early_stopping.early_stop:
+                print("Early stopping")
+                break
 
-            # adjust_learning_rate(model_optim, epoch + 1, self.args)
+            adjust_learning_rate(model_optim, epoch + 1, self.args)
 
         best_model_path = path + "/" + "checkpoint.pth"
         self.model.load_state_dict(torch.load(best_model_path))
 
         return self.model
 
-    @torch.inference_mode()
     def vali(self, criterion):
         total_loss = []
         self.model.eval()
         with torch.no_grad():
-            for _, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
+            for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(
                 self.vali_loader
             ):
                 batch_x = batch_x.float().to(self.device)
                 batch_y = batch_y.float().to(self.device)
 
+                batch_x_mark = batch_x_mark.float().to(self.device)
+                batch_y_mark = batch_y_mark.float().to(self.device)
+
+                # decoder input
+                dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len :, :]).float()
+                dec_inp = (
+                    torch.cat([batch_y[:, : self.args.label_len, :], dec_inp], dim=1)
+                    .float()
+                    .to(self.device)
+                )
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
@@ -160,20 +169,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    batch_x_mark = batch_x_mark.float().to(self.device)
-                    batch_y_mark = batch_y_mark.float().to(self.device)
-
-                    # decoder input
-                    dec_inp = torch.zeros_like(
-                        batch_y[:, -self.args.pred_len :, :]
-                    ).float()
-                    dec_inp = (
-                        torch.cat(
-                            [batch_y[:, : self.args.label_len, :], dec_inp], dim=1
-                        )
-                        .float()
-                        .to(self.device)
-                    )
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
                 f_dim = -1 if self.args.features == "MS" else 0
@@ -216,6 +211,16 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 batch_x = batch_x.float().to(self.device)
                 batch_y = batch_y.float().to(self.device)
 
+                batch_x_mark = batch_x_mark.float().to(self.device)
+                batch_y_mark = batch_y_mark.float().to(self.device)
+
+                # decoder input
+                dec_inp = torch.zeros_like(batch_y[:, -self.args.pred_len :, :]).float()
+                dec_inp = (
+                    torch.cat([batch_y[:, : self.args.label_len, :], dec_inp], dim=1)
+                    .float()
+                    .to(self.device)
+                )
                 # encoder - decoder
                 if "cndiff" in self.args.model.lower():
                     if self.args.normalize:
@@ -229,19 +234,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                             outputs, x_mean, x_std, self.args.pred_len
                         )
                 else:
-                    batch_x_mark = batch_x_mark.float().to(self.device)
-                    batch_y_mark = batch_y_mark.float().to(self.device)
-                    # decoder input
-                    dec_inp = torch.zeros_like(
-                        batch_y[:, -self.args.pred_len :, :]
-                    ).float()
-                    dec_inp = (
-                        torch.cat(
-                            [batch_y[:, : self.args.label_len, :], dec_inp], dim=1
-                        )
-                        .float()
-                        .to(self.device)
-                    )
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 
                 f_dim = -1 if self.args.features == "MS" else 0

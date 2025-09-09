@@ -80,7 +80,7 @@ def data_provider(args, flag):
         collate_fn=collate if args.task_name == "classification" else None,
         # pin_memory=True,
         persistent_workers=True,  # 🔹 keep workers alive across epochs
-        prefetch_factor=4,  # 🔹 prefetch batches for faster loading
+        # prefetch_factor=4,  # 🔹 prefetch batches for faster loading
     )
 
     return data_set, data_loader

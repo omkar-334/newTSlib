@@ -14,7 +14,7 @@ from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from utils.ad_plot import plot
 from utils.metrics import save_results
-from utils.tools import EarlyStopping, adjust_learning_rate, adjustment, get_loader_dims
+from utils.tools import EarlyStopping, adjustment, get_loader_dims
 
 warnings.filterwarnings("ignore")
 
@@ -167,7 +167,7 @@ class Exp_Anomaly_Detection(Exp_Basic):
                 )
 
                 # (Optional) check grad norm after clipping
-                if not torch.isfinite(torch.tensor(grad_norm)):
+                if not torch.isfinite(torch.as_tensor(grad_norm)):
                     print(f"❌ Non-finite grad norm: {grad_norm}, skipping step")
                     model_optim.zero_grad(set_to_none=True)
                     continue
