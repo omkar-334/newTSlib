@@ -1,5 +1,5 @@
 #!/bin/bash
-model_name=TimesNet
+model_name=iTransformer
 
 python -u run.py \
   --gpu 1 \
@@ -14,14 +14,15 @@ python -u run.py \
   --seq_len 96 \
   --label_len 14 \
   --pred_len 14 \
-  --e_layers 2 \
+  --e_layers 3 \
   --d_layers 1 \
   --factor 3 \
   --enc_in 8 \
   --dec_in 8 \
   --c_out 8 \
+  --des 'Exp' \
   --d_model 64 \
   --d_ff 64 \
-  --top_k 5 \
-  --des 'Exp' \
+  --batch_size 16 \
+  --learning_rate 0.0005 \
   --itr 1

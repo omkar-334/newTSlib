@@ -12,7 +12,7 @@ python -u run.py \
   --data custom \
   --features M \
   --seq_len 96 \
-  --label_len 7 \
+  --label_len 14 \
   --pred_len 14 \
   --e_layers 2 \
   --d_layers 1 \
