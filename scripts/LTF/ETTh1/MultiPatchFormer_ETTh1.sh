@@ -13,7 +13,7 @@ python -u run.py \
   --features M \
   --seq_len 96 \
   --label_len 48 \
-  --pred_len 96 \
+  --pred_len 168 \
   --e_layers 1 \
   --enc_in 7 \
   --dec_in 7 \

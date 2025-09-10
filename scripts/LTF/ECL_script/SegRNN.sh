@@ -2,7 +2,6 @@
 model_name=SegRNN
 
 seq_len=96
-pred_len=168
 
 python -u run.py \
   --gpu 1 \
@@ -10,12 +9,12 @@ python -u run.py \
   --is_training 1 \
   --root_path ./dataset/electricity/ \
   --data_path electricity.csv \
-  --model_id ECL_$seq_len'_'$pred_len \
+  --model_id ECL_96_168 \
   --model $model_name \
   --data custom \
   --features M \
   --seq_len $seq_len \
-  --pred_len $pred_len \
+  --pred_len 168 \
   --seg_len 24 \
   --enc_in 321 \
   --d_model 512 \

@@ -10,7 +10,6 @@ d_model=16
 d_ff=32
 train_epochs=10
 patience=10
-batch_size=16
 
 python -u run.py \
   --gpu 1 \
@@ -18,13 +17,13 @@ python -u run.py \
   --is_training 1 \
   --root_path  ./dataset/ETT-small/\
   --data_path ETTh1.csv \
-  --model_id ETTh1_$seq_len'_'168 \
+  --model_id ETTh1_168_168 \
   --model $model_name \
   --data ETTh1 \
   --features M \
   --seq_len $seq_len \
   --label_len 0 \
-  --pred_len 96 \
+  --pred_len 168 \
   --e_layers $e_layers \
   --enc_in 7 \
   --c_out 7 \
