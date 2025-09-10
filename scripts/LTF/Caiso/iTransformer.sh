@@ -5,21 +5,21 @@ python -u run.py \
   --gpu 1 \
   --task_name long_term_forecast \
   --is_training 1 \
-  --root_path ./dataset/ETT-small/ \
-  --data_path ETTh1.csv \
-  --model_id ETTh1_96_168 \
+  --root_path ./dataset/Caiso/ \
+  --data_path Caiso.csv \
+  --model_id Caiso_96_720 \
   --model $model_name \
-  --data ETTh1 \
+  --data Caiso \
   --features M \
   --seq_len 96 \
   --label_len 48 \
-  --pred_len 168 \
+  --pred_len 720 \
   --e_layers 3 \
   --d_layers 1 \
   --factor 3 \
-  --enc_in 7 \
-  --dec_in 7 \
-  --c_out 7 \
+  --enc_in 10 \
+  --dec_in 10 \
+  --c_out 10 \
   --des 'Exp' \
   --d_model 512 \
   --d_ff 512 \

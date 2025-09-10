@@ -1,7 +1,5 @@
 #!/bin/bash
-model_name=SegRNN
-
-seq_len=96
+model_name=PAttn
 
 python -u run.py \
   --gpu 1 \
@@ -13,14 +11,13 @@ python -u run.py \
   --model $model_name \
   --data custom \
   --features M \
-  --seq_len $seq_len \
+  --seq_len 96 \
+  --label_len 48 \
   --pred_len 168 \
-  --seg_len 24 \
+  --factor 3 \
   --enc_in 862 \
-  --d_model 512 \
-  --dropout 0 \
-  --learning_rate 0.001 \
+  --dec_in 862 \
+  --c_out 862 \
   --des 'Exp' \
+  --n_heads 2 \
   --itr 1
-
-

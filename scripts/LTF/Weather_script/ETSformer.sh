@@ -1,7 +1,5 @@
 #!/bin/bash
-model_name=SegRNN
-
-seq_len=96
+model_name=ETSformer
 
 python -u run.py \
   --gpu 1 \
@@ -9,17 +7,18 @@ python -u run.py \
   --is_training 1 \
   --root_path ./dataset/weather/ \
   --data_path weather.csv \
-  --model_id weather_$seq_len'_'672 \
+  --model_id weather_96_672 \
   --model $model_name \
   --data custom \
   --features M \
-  --seq_len $seq_len \
+  --seq_len 96 \
+  --label_len 48 \
   --pred_len 672 \
-  --seg_len 48 \
+  --e_layers 2 \
+  --d_layers 2 \
+  --factor 3 \
   --enc_in 21 \
-  --d_model 512 \
-  --dropout 0.5 \
-  --learning_rate 0.0001 \
+  --dec_in 21 \
+  --c_out 21 \
   --des 'Exp' \
   --itr 1
-

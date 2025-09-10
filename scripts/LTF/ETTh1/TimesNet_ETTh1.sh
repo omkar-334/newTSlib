@@ -12,7 +12,7 @@ python -u run.py \
   --data ETTh1 \
   --features M \
   --seq_len 96 \
-  --label_len 48 \
+  --label_len 84 \
   --pred_len 168 \
   --e_layers 2 \
   --d_layers 1 \
@@ -22,7 +22,7 @@ python -u run.py \
   --c_out 7 \
   --d_model 16 \
   --d_ff 32 \
-  --des 'Exp' \
+  --des 'Exp2' \
   --itr 1 \
   --top_k 5 
 
