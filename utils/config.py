@@ -183,7 +183,7 @@ def get_args():
     parser.add_argument("--des", type=str, default="test", help="exp description")
     parser.add_argument("--loss", type=str, default="MSE", help="loss function")
     parser.add_argument(
-        "--lradj", type=str, default="type1", help="adjust learning rate"
+        "--lradj", type=str, default="cndiff", help="adjust learning rate"
     )
     parser.add_argument(
         "--use_amp",

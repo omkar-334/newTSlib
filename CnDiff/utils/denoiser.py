@@ -3,6 +3,8 @@ import math
 import torch
 import torch.nn as nn
 
+from rational_kat_cu.kat_rational import KAT_Group
+
 from .katransformer import KanBlock
 from .utils import modulate
 
@@ -85,6 +87,7 @@ class Decoder(nn.Module):
         super().__init__()
         self.norm = nn.LayerNorm(config.d_model, elementwise_affine=True, eps=1e-6)
         self.mlp = nn.Sequential(
+            KAT_Group(num_groups=1, mode="swish"),
             DataEmbedding(config.d_model, config.d_model, config.n_emb - 1),
             nn.Linear(config.d_model, config.pred_len),
         )
@@ -120,12 +123,20 @@ class Denoiser(nn.Module):
         ])
         self.decoder = Decoder(config)
         self.act = nn.Identity()
-
+        self.initialize_weights()
         self.config = config
         if config.use_cond:
             self.cond_embedder = DataEmbedding(
                 config.pred_len, config.hidden_dim, config.n_emb
             )
+
+    def initialize_weights(self):
+        for block in self.blocks:
+            nn.init.constant_(block.adaLN_modulation[-1].weight, 1 / math.sqrt(2))
+            nn.init.constant_(block.adaLN_modulation[-1].bias, 1 / math.sqrt(2))
+
+        nn.init.constant_(self.decoder.adaLN_modulation[-1].weight, 0)
+        nn.init.constant_(self.decoder.adaLN_modulation[-1].bias, 0)
 
     def forward(self, y, k, cond_info):
         """

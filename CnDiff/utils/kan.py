@@ -11,7 +11,7 @@ class KAN(nn.Module):
         in_features,
         hidden_features=None,
         out_features=None,
-        act_cfg=dict(type="KAT", act_init=["identity", "gelu"]),
+        act_cfg=dict(type="KAT", act_init=["sigmoid", "sigmoid"]),
         bias=True,
         drop=0.0,
     ):
@@ -20,9 +20,9 @@ class KAN(nn.Module):
         hidden_features = hidden_features or in_features
 
         self.fc1 = nn.Linear(in_features, hidden_features, bias=bias)
-        self.act1 = KAT_Group(mode=act_cfg["act_init"][0])
+        self.act1 = KAT_Group(num_groups=1, mode=act_cfg["act_init"][0])
         self.drop1 = nn.Dropout(drop)
-        self.act2 = KAT_Group(mode=act_cfg["act_init"][1])
+        self.act2 = KAT_Group(num_groups=1, mode=act_cfg["act_init"][1])
         self.fc2 = nn.Linear(hidden_features, out_features, bias=bias)
         self.drop2 = nn.Dropout(drop)
 

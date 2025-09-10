@@ -36,12 +36,12 @@ class KAN(nn.Module):
         drop_probs = to_2tuple(drop)
         linear_layer = partial(nn.Conv2d, kernel_size=1) if use_conv else nn.Linear
         self.fc1 = linear_layer(in_features, hidden_features, bias=bias[0])
-        self.act1 = KAT_Group(mode="identity", device=device)
+        self.act1 = KAT_Group(num_groups=8, mode="identity")
         self.drop1 = nn.Dropout(drop_probs[0])
         self.norm = (
             norm_layer(hidden_features) if norm_layer is not None else nn.Identity()
         )
-        self.act2 = KAT_Group(mode=act_init, device=device)
+        self.act2 = KAT_Group(num_groups=8, mode="gelu")
         self.fc2 = linear_layer(hidden_features, out_features, bias=bias[1])
         self.drop2 = nn.Dropout(drop_probs[1])
 

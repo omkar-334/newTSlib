@@ -12,7 +12,6 @@ from exp.exp_basic import Exp_Basic
 from utils.metrics import metric, save_results
 from utils.tools import (
     EarlyStopping,
-    adjust_learning_rate,
     get_loader_dims,
 )
 
@@ -131,7 +130,7 @@ class Exp_Long_Term_Forecast(Exp_Basic):
                 print("Early stopping")
                 break
 
-            adjust_learning_rate(model_optim, epoch + 1, self.args)
+            # adjust_learning_rate(model_optim, epoch + 1, self.args)
 
         best_model_path = path + "/" + "checkpoint.pth"
         self.model.load_state_dict(torch.load(best_model_path))

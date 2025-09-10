@@ -31,9 +31,9 @@ def set_seed(seed: int = 42):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
-    torch.autograd.set_detect_anomaly(True)
-    torch.backends.cuda.matmul.allow_tf32 = True
-    torch.backends.cudnn.allow_tf32 = True
+    # torch.autograd.set_detect_anomaly(True)
+    # torch.backends.cuda.matmul.allow_tf32 = True
+    # torch.backends.cudnn.allow_tf32 = True
     torch.backends.cudnn.benchmark = False
 
     os.environ["PYTHONHASHSEED"] = str(seed)
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     import json
 
-    filename = f"results/{args.filename or args.task_name}_results.json"
+    filename = f"results/{args.filename or 'base_forecase'}_results.json"
     if os.path.exists(filename) and args.task_name != "classification":
         resultdict = json.load(open(filename))
         if setting in resultdict:

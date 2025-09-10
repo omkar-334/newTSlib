@@ -44,7 +44,7 @@ class Model(nn.Module):
             )
         if self.config.use_tphi == 1:
             self.t_phi = Tphi(config)
-            exit()
+            # exit()
         elif self.config.use_tphi == 2:
             self.t_phi = KanTphi(config)
 
@@ -77,7 +77,6 @@ class Model(nn.Module):
             self.parameter_dict["classifier"] = sum(
                 p.numel() for p in self.classifier.parameters()
             )
-
         print(self.parameter_dict)
 
     def q_sample(self, batch_y, t):
