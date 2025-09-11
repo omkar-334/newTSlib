@@ -19,12 +19,10 @@ class KAN(nn.Module):
         in_features,
         hidden_features=None,
         out_features=None,
-        act_layer=KAT_Group,
         norm_layer=None,
         bias=True,
         drop=0.0,
         use_conv=False,
-        act_init="gelu",
         device=None,
     ):
         super().__init__()
@@ -137,10 +135,8 @@ class KanBlock(nn.Module):
         attn_drop: float = 0.0,
         init_values: Optional[float] = None,
         drop_path: float = 0.0,
-        act_layer: nn.Module = nn.GELU,
         norm_layer: nn.Module = nn.LayerNorm,
         mlp_layer: nn.Module = KAN,
-        act_init: str = "gelu",
         config=None,
     ) -> None:
         super().__init__()
@@ -163,9 +159,7 @@ class KanBlock(nn.Module):
         self.mlp = mlp_layer(
             in_features=dim,
             hidden_features=int(dim * mlp_ratio),
-            act_layer=act_layer,
             drop=proj_drop,
-            act_init=act_init,
         )
         # self.ls2 = (
         #     LayerScale(dim, init_values=init_values) if init_values else nn.Identity()

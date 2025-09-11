@@ -204,7 +204,7 @@ class Exp_Imputation(Exp_Basic):
                 "rmse": float(rmse),
                 "mape": float(mape),
                 "mspe": float(mspe),
-                "parameters": self.model.parameter_dict,
+                "parameters": getattr(self.model, "parameter_dict", None),
             },
         )
 

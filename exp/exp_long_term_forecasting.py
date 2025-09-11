@@ -279,6 +279,6 @@ class Exp_Long_Term_Forecast(Exp_Basic):
             "parameters": getattr(self.model, "parameter_dict", None),
         }
 
-        filename = self.args.filename or "LTF"
+        filename = self.args.filename or "base_forecase"
         save_results(filename, setting, argsdict)
         return PATH

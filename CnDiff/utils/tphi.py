@@ -4,8 +4,9 @@ import torch
 import torch.nn as nn
 
 from CnDiff.utils import StepEmbedding
+from rational_kat_cu.kat_rational import KAT_Group
 
-from .kan import KAN
+from .katransformer import KAN
 
 
 class Tphi(nn.Module):
@@ -17,7 +18,7 @@ class Tphi(nn.Module):
         super().__init__()
 
         param1 = (
-            config.c_out if config.task_name != "classification" else config.feature_dim
+            config.c_out if config.task_name != "classification" else config.hidden_dim
         )
         param2 = config.pred_len
 
@@ -26,7 +27,7 @@ class Tphi(nn.Module):
 
         self.w2 = nn.Parameter(torch.empty(param2, param2))
         self.b2 = nn.Parameter(torch.empty(param2))
-        self.act = nn.Tanh()
+        self.act = KAT_Group(num_groups=1, mode="sigmoid")
         self.time_emb = StepEmbedding(param1, freq_dim=256)
 
         self.init_weights(self.w2, self.b2)
@@ -60,7 +61,7 @@ class KanTphi(nn.Module):
         super().__init__()
         print("Using KAN as T_phi network")
         param1 = (
-            config.c_out if config.task_name != "classification" else config.feature_dim
+            config.c_out if config.task_name != "classification" else config.num_class
         )
         self.time_emb = StepEmbedding(param1, freq_dim=256)
         self.model = KAN(param1, config.hidden_dim, param1)
