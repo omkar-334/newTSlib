@@ -1,3 +1,4 @@
+#!/bin/bash
 
 model_name=CnDiff
 
@@ -14,7 +15,7 @@ n_emb=2
 n_heads=4
 timesteps=200
 
-filename=our_forecast
+filename=ltf_exchange
 device=1
 
 # Exchange
